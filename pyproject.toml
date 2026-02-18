@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plot-finder"
+version = "0.1.0"
+description = "Query Polish ULDK (GUGiK) API to find land parcels by TERYT ID or coordinates"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Ernest Ilchenko" },
+]
+keywords = ["uldk", "gugik", "parcel", "plot", "geodesy", "poland", "teryt"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pydantic>=2.0",
+    "httpx>=0.24",
+    "shapely>=2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ernestilchenko/plot-finder"
