@@ -26,6 +26,14 @@ class Plot(BaseModel):
 
     @computed_field  # type: ignore[prop-decorator]
     @property
+    def centroid(self) -> tuple[float, float] | None:
+        if not self.geom_wkt:
+            return None
+        geom = shapely.wkt.loads(self.geom_wkt)
+        return geom.centroid.x, geom.centroid.y
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
     def geojson(self) -> dict[str, Any] | None:
         if not self.geom_wkt:
             return None
