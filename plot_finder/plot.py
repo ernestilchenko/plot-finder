@@ -11,7 +11,7 @@ _RESULT_FIELDS = "teryt,voivodeship,county,commune,region,parcel,geom_wkt,geom_e
 
 
 class Plot(BaseModel):
-    plot: str | None = None
+    plot_id: str | None = None
     x: float | None = None
     y: float | None = None
     voivodeship: str | None = None
@@ -44,7 +44,7 @@ class Plot(BaseModel):
     def _auto_fetch(self) -> "Plot":
         if self.voivodeship is not None:
             return self
-        if not self.plot and self.x is None:
+        if not self.plot_id and self.x is None:
             raise ValueError("Either 'plot' or both 'x' and 'y' must be provided")
         if self.x is not None and self.y is None:
             raise ValueError("Both 'x' and 'y' must be provided")
@@ -65,7 +65,7 @@ class Plot(BaseModel):
         else:
             params = {
                 "request": "GetParcelById",
-                "id": self.plot,
+                "id": self.plot_id,
                 "result": _RESULT_FIELDS,
                 "srid": str(self.srid),
             }
@@ -82,7 +82,7 @@ class Plot(BaseModel):
 
         status = lines[0].strip()
         if status.startswith("-1") or len(lines) < 2:
-            query = f"xy={self.x},{self.y}" if self.x is not None else self.plot
+            query = f"xy={self.x},{self.y}" if self.x is not None else self.plot_id
             raise PlotNotFoundError(f"Parcel not found: {query}")
 
         parts = lines[1].split("|")
@@ -90,7 +90,7 @@ class Plot(BaseModel):
         for name, value in zip(field_names, parts):
             val = value.strip() or None
             if name == "teryt":
-                self.plot = val
+                self.plot_id = val
             else:
                 setattr(self, name, val)
 
