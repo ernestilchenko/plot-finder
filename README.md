@@ -18,6 +18,7 @@ Query the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API to get parcel data by T
 ```bash
 pip install plot-finder           # base
 pip install plot-finder[viz]      # + interactive maps & PNG export
+pip install plot-finder[ai]       # + AI-powered analysis (OpenAI)
 ```
 
 **Requirements:** Python 3.10+ | `pydantic` `httpx` `shapely` `pyproj`
@@ -60,6 +61,7 @@ viz.save("map.png")   # static image
 | [Place](docs/place.md) | Result model with travel times |
 | [Report](docs/report.md) | Full structured report (PlotReporter) |
 | [Visualizer](docs/visualizer.md) | Interactive HTML maps & static PNG images |
+| [AI](docs/ai.md) | AI-powered plot analysis (OpenAI) |
 | [API Reference](docs/api.md) | Full API reference |
 | [Errors](docs/errors.md) | Exception handling and hierarchy |
 

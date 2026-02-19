@@ -202,6 +202,46 @@ Auto-detects by extension: `.png`/`.jpg` → static image, `.html` → interacti
 
 ---
 
+## PlotAI
+
+> `from plot_finder.ai import PlotAI` — requires `pip install plot-finder[ai]`
+
+```python
+PlotAI(report, *, api_key, model="gpt-4o-mini")
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `report` | `PlotReport` | required | Report to analyze |
+| `api_key` | `str` | required | OpenAI API key |
+| `model` | `str` | `"gpt-4o-mini"` | OpenAI model to use |
+
+### Methods
+
+All methods return `str`.
+
+#### `summary()`
+
+Natural language summary of the plot and surroundings.
+
+#### `rate(purpose="living")`
+
+Rate the plot 1–10 for a purpose (living / investment / farming) with explanation.
+
+#### `advantages()`
+
+Key advantages of this location.
+
+#### `disadvantages()`
+
+Key disadvantages and risks.
+
+#### `ask(question)`
+
+Freeform Q&A about the plot.
+
+---
+
 ## Exceptions
 
 | Exception | Parent | Description |
@@ -219,4 +259,4 @@ Auto-detects by extension: `.png`/`.jpg` → static image, `.html` → interacti
 
 ---
 
-[Back to README](../README.md) | [Prev: Visualizer](visualizer.md) | [Next: Errors](errors.md)
+[Back to README](../README.md) | [Prev: AI](ai.md) | [Next: Errors](errors.md)
