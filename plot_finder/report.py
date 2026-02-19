@@ -6,7 +6,12 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel
 
 from plot_finder.air import AirQuality
-from plot_finder.exceptions import NothingFoundError, OpenWeatherAuthError
+from plot_finder.exceptions import (
+    NothingFoundError,
+    OSRMError,
+    OpenWeatherAuthError,
+    OverpassError,
+)
 from plot_finder.place import Place
 from plot_finder.sun import SunInfo
 
@@ -27,6 +32,7 @@ class PlotReport(BaseModel):
     water: list[Place] = []
     air_quality: AirQuality | None = None
     sunlight: SunInfo | None = None
+    geometry: list[list[float]] | None = None
 
 
 class PlotReporter:
@@ -42,10 +48,13 @@ class PlotReporter:
             "radius": a.radius,
         }
 
+        if a.plot.geom_wkt:
+            data["geometry"] = self._geometry_wgs84(a.plot.geom_wkt)
+
         for category in ("education", "finance", "transport", "infrastructure", "parks", "water"):
             try:
                 data[category] = getattr(a, category)()
-            except NothingFoundError:
+            except (NothingFoundError, OverpassError, OSRMError):
                 pass
 
         try:
@@ -59,3 +68,17 @@ class PlotReporter:
             pass
 
         return PlotReport(**data)
+
+    @staticmethod
+    def _geometry_wgs84(geom_wkt: str) -> list[list[float]]:
+        import shapely.wkt
+        from pyproj import Transformer
+
+        transformer = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
+        geom = shapely.wkt.loads(geom_wkt)
+        coords = geom.exterior.coords if hasattr(geom, "exterior") else []
+        return [
+            [lat, lon]
+            for x, y in coords
+            for lon, lat in [transformer.transform(x, y)]
+        ]

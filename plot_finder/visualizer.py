@@ -12,9 +12,10 @@ except ImportError:
     folium = None  # type: ignore[assignment]
 
 try:
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageColor, ImageDraw
 except ImportError:
     Image = None  # type: ignore[assignment,misc]
+    ImageColor = None  # type: ignore[assignment,misc]
     ImageDraw = None  # type: ignore[assignment,misc]
 
 if TYPE_CHECKING:
@@ -107,6 +108,18 @@ class PlotVisualizer:
             )
         r = self._report
         m = folium.Map(location=[r.lat, r.lon], zoom_start=15)
+
+        # plot geometry polygon
+        if r.geometry:
+            folium.Polygon(
+                locations=r.geometry,
+                color=self._plot_color,
+                fill=True,
+                fill_color=self._plot_color,
+                fill_opacity=0.15,
+                weight=2,
+                popup=f"<b>{r.plot_id}</b>",
+            ).add_to(m)
 
         folium.Marker(
             location=[r.lat, r.lon],
@@ -218,6 +231,12 @@ class PlotVisualizer:
         def to_px(lat: float, lon: float) -> tuple[int, int]:
             px, py = _latlon_to_pixel(lat, lon, z)
             return int(px - x_min), int(py - y_min)
+
+        # plot geometry polygon
+        if r.geometry:
+            poly_points = [to_px(lat, lon) for lat, lon in r.geometry]
+            rgb = ImageColor.getrgb(self._plot_color)
+            draw.polygon(poly_points, outline=self._plot_color, fill=(*rgb, 40), width=2)
 
         # search radius circle
         mpp = _meters_per_pixel(r.lat, z)
