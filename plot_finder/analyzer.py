@@ -91,6 +91,77 @@ class PlotAnalyzer:
             raise NothingFoundError(f"No transport stops found within {r}m radius")
         return results
 
+    def infrastructure(self, radius: int | None = None) -> list[Place]:
+        """Find shops, pharmacies, hospitals, post offices, fuel stations, etc."""
+        r = radius or self.radius
+        query = f"""
+        [out:json][timeout:25];
+        (
+          nwr["shop"="supermarket"](around:{r},{self._lat},{self._lon});
+          nwr["shop"="convenience"](around:{r},{self._lat},{self._lon});
+          nwr["shop"="mall"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="pharmacy"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="hospital"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="clinic"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="doctors"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="dentist"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="post_office"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="fuel"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="police"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="fire_station"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="place_of_worship"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="restaurant"](around:{r},{self._lat},{self._lon});
+          nwr["amenity"="cafe"](around:{r},{self._lat},{self._lon});
+        );
+        out center;
+        """
+        results = self._run_overpass(query)
+        if not results:
+            raise NothingFoundError(f"No infrastructure found within {r}m radius")
+        return results
+
+    def parks(self, radius: int | None = None) -> list[Place]:
+        """Find parks, gardens, forests, and green areas."""
+        r = radius or self.radius
+        query = f"""
+        [out:json][timeout:25];
+        (
+          nwr["leisure"="park"](around:{r},{self._lat},{self._lon});
+          nwr["leisure"="garden"](around:{r},{self._lat},{self._lon});
+          nwr["leisure"="nature_reserve"](around:{r},{self._lat},{self._lon});
+          nwr["leisure"="playground"](around:{r},{self._lat},{self._lon});
+          nwr["landuse"="forest"](around:{r},{self._lat},{self._lon});
+          nwr["natural"="wood"](around:{r},{self._lat},{self._lon});
+        );
+        out center;
+        """
+        results = self._run_overpass(query)
+        if not results:
+            raise NothingFoundError(f"No parks or green areas found within {r}m radius")
+        return results
+
+    def water(self, radius: int | None = None) -> list[Place]:
+        """Find rivers, lakes, ponds, and reservoirs."""
+        r = radius or self.radius
+        query = f"""
+        [out:json][timeout:25];
+        (
+          nwr["natural"="water"](around:{r},{self._lat},{self._lon});
+          nwr["water"="river"](around:{r},{self._lat},{self._lon});
+          nwr["water"="lake"](around:{r},{self._lat},{self._lon});
+          nwr["water"="pond"](around:{r},{self._lat},{self._lon});
+          nwr["water"="reservoir"](around:{r},{self._lat},{self._lon});
+          nwr["waterway"="river"](around:{r},{self._lat},{self._lon});
+          nwr["waterway"="stream"](around:{r},{self._lat},{self._lon});
+          nwr["waterway"="canal"](around:{r},{self._lat},{self._lon});
+        );
+        out center;
+        """
+        results = self._run_overpass(query)
+        if not results:
+            raise NothingFoundError(f"No water bodies found within {r}m radius")
+        return results
+
     def _run_overpass(self, query: str) -> list[Place]:
         try:
             resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=90)
@@ -118,9 +189,15 @@ class PlotAnalyzer:
             name = tags.get("name")
             kind = (
                 tags.get("amenity")
+                or tags.get("shop")
                 or tags.get("highway")
                 or tags.get("railway")
                 or tags.get("aeroway")
+                or tags.get("leisure")
+                or tags.get("natural")
+                or tags.get("water")
+                or tags.get("waterway")
+                or tags.get("landuse")
                 or "unknown"
             )
             dist = self._haversine(self._lat, self._lon, lat, lon)
