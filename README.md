@@ -14,7 +14,8 @@ Query the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API to get parcel data by T
 ## Installation
 
 ```bash
-pip install plot-finder
+pip install plot-finder           # base
+pip install plot-finder[viz]      # + interactive maps & PNG export
 ```
 
 **Requirements:** Python 3.10+ | `pydantic` `httpx` `shapely` `pyproj`
@@ -22,7 +23,7 @@ pip install plot-finder
 ## Quick Start
 
 ```python
-from plot_finder import Plot, PlotAnalyzer
+from plot_finder import Plot, PlotAnalyzer, PlotReporter
 
 # Find a parcel
 plot = Plot(plot_id="141201_1.0001.6509")
@@ -34,6 +35,16 @@ analyzer = PlotAnalyzer(plot, radius=3000)
 
 for place in analyzer.education():
     print(f"{place.name} — {place.distance_m}m, walk {place.walk_min}min")
+
+# Full report
+report = PlotReporter(analyzer).report()
+report.model_dump_json()
+
+# Visualization (pip install plot-finder[viz])
+from plot_finder.visualizer import PlotVisualizer
+viz = PlotVisualizer(report)
+viz.save("map.html")  # interactive map
+viz.save("map.png")   # static image
 ```
 
 ## Documentation
@@ -45,8 +56,10 @@ for place in analyzer.education():
 | [Air Quality](docs/air.md) | Air pollution data (OpenWeatherMap API) |
 | [Sunlight](docs/sun.md) | Sunrise, sunset, daylight hours |
 | [Place](docs/place.md) | Result model with travel times |
-| [Errors](docs/errors.md) | Exception handling and hierarchy |
+| [Report](docs/report.md) | Full structured report (PlotReporter) |
+| [Visualizer](docs/visualizer.md) | Interactive HTML maps & static PNG images |
 | [API Reference](docs/api.md) | Full API reference |
+| [Errors](docs/errors.md) | Exception handling and hierarchy |
 
 ## License
 

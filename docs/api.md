@@ -135,6 +135,73 @@ Pydantic `BaseModel` returned by all analyzer methods.
 
 ---
 
+## PlotReport
+
+Pydantic `BaseModel` returned by `PlotReporter.report()`.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `plot_id` | `str` | — | TERYT parcel ID |
+| `lat` | `float` | — | Centroid latitude (WGS84) |
+| `lon` | `float` | — | Centroid longitude (WGS84) |
+| `radius` | `int` | — | Search radius in meters |
+| `education` | `list[Place]` | `[]` | Schools, kindergartens, universities |
+| `finance` | `list[Place]` | `[]` | ATMs, banks |
+| `transport` | `list[Place]` | `[]` | Bus stops, stations, airports |
+| `infrastructure` | `list[Place]` | `[]` | Shops, healthcare, services |
+| `parks` | `list[Place]` | `[]` | Parks, gardens, forests |
+| `water` | `list[Place]` | `[]` | Rivers, lakes, ponds |
+| `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
+| `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
+
+## PlotReporter
+
+```python
+PlotReporter(analyzer)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `analyzer` | `PlotAnalyzer` | Analyzer to collect data from |
+
+### Methods
+
+#### `report(for_date=None) -> PlotReport`
+
+Runs all analyzer methods. Catches `NothingFoundError` per category, skips air quality if no API key.
+
+---
+
+## PlotVisualizer
+
+> `from plot_finder.visualizer import PlotVisualizer` — requires `pip install plot-finder[viz]`
+
+```python
+PlotVisualizer(report, *, colors=None, plot_color="red")
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `report` | `PlotReport` | required | Report to visualize |
+| `colors` | `dict[str, str] \| None` | `None` | Override category colours |
+| `plot_color` | `str` | `"red"` | Centre marker and radius circle colour |
+
+### Methods
+
+#### `map() -> folium.Map`
+
+Interactive HTML map with markers, radius circle, and layer control. Requires `folium`.
+
+#### `image(width=800, height=600, zoom=None, marker_radius=6) -> PIL.Image.Image`
+
+Static map image from OpenStreetMap tiles. Requires `Pillow`.
+
+#### `save(path)`
+
+Auto-detects by extension: `.png`/`.jpg` → static image, `.html` → interactive map.
+
+---
+
 ## Exceptions
 
 | Exception | Parent | Description |
@@ -152,4 +219,4 @@ Pydantic `BaseModel` returned by all analyzer methods.
 
 ---
 
-[Back to README](../README.md) | [Prev: Errors](errors.md)
+[Back to README](../README.md) | [Prev: Visualizer](visualizer.md) | [Next: Errors](errors.md)

@@ -89,4 +89,4 @@ except OverpassError as e:
 
 ---
 
-[Back to README](../README.md) | [Prev: Place](place.md) | [Next: API Reference](api.md)
+[Back to README](../README.md) | [Prev: API Reference](api.md)

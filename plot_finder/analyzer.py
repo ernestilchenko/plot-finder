@@ -37,6 +37,14 @@ class PlotAnalyzer:
         self._openweather_api_key = openweather_api_key
         self._lat, self._lon = self._centroid_wgs84()
 
+    @property
+    def lat(self) -> float:
+        return self._lat
+
+    @property
+    def lon(self) -> float:
+        return self._lon
+
     def _centroid_wgs84(self) -> tuple[float, float]:
         centroid = self.plot.centroid
         if centroid is None:

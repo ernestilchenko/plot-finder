@@ -25,5 +25,8 @@ dependencies = [
     "astral>=3.2",
 ]
 
+[project.optional-dependencies]
+viz = ["folium>=0.14", "Pillow>=9.0"]
+
 [project.urls]
 Homepage = "https://github.com/ernestilchenko/plot-finder"

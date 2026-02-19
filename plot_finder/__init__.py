@@ -1,6 +1,7 @@
 from plot_finder.air import AirQuality
 from plot_finder.analyzer import PlotAnalyzer
 from plot_finder.place import Place
+from plot_finder.report import PlotReport, PlotReporter
 from plot_finder.sun import SunInfo
 from plot_finder.exceptions import (
     NothingFoundError,
@@ -25,6 +26,8 @@ __all__ = [
     "Place",
     "Plot",
     "PlotAnalyzer",
+    "PlotReport",
+    "PlotReporter",
     "OSRMError",
     "OSRMTimeoutError",
     "OverpassError",
