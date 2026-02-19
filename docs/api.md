@@ -26,7 +26,7 @@ Fetch parcel data from the ULDK API. Provide either `plot` (TERYT ID) or both `x
 ## PlotAnalyzer
 
 ```python
-PlotAnalyzer(plot, *, radius=1000)
+PlotAnalyzer(plot, *, radius=1000, openweather_api_key=None)
 ```
 
 Create an analyzer for a `Plot`.
@@ -35,10 +35,11 @@ Create an analyzer for a `Plot`.
 |-----------|------|---------|-------------|
 | `plot` | `Plot` | required | Plot to analyze |
 | `radius` | `int` | `1000` | Default search radius in meters |
+| `openweather_api_key` | `str \| None` | `None` | API key for air quality data |
 
 ### Methods
 
-All methods return `list[Place]` sorted by distance. All accept an optional `radius: int` parameter.
+All place methods return `list[Place]` sorted by distance. All accept an optional `radius: int` parameter.
 
 #### `education(radius=None)`
 
@@ -65,6 +66,55 @@ Parks, gardens, nature reserves, playgrounds, forests, woodlands.
 Rivers, lakes, ponds, reservoirs, streams, canals.
 
 **Raises:** `NothingFoundError`, `OverpassError`, `OverpassTimeoutError`, `OverpassRateLimitError`, `OSRMError`, `OSRMTimeoutError`
+
+#### `air_quality() -> AirQuality`
+
+Current air pollution data. Requires `openweather_api_key`.
+
+**Raises:** `OpenWeatherAuthError`, `OpenWeatherError`
+
+#### `sunlight(for_date=None) -> SunInfo`
+
+Sun data (sunrise, sunset, daylight hours, sun position). No API key needed.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `for_date` | `date \| None` | `None` | Date to calculate for (default: today) |
+
+---
+
+## AirQuality
+
+Pydantic `BaseModel` returned by `air_quality()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `aqi` | `int` | Air Quality Index (1-5) |
+| `aqi_label` | `str` | Good / Fair / Moderate / Poor / Very Poor |
+| `co` | `float` | Carbon monoxide (ug/m3) |
+| `no` | `float` | Nitrogen monoxide (ug/m3) |
+| `no2` | `float` | Nitrogen dioxide (ug/m3) |
+| `o3` | `float` | Ozone (ug/m3) |
+| `so2` | `float` | Sulphur dioxide (ug/m3) |
+| `pm2_5` | `float` | Fine particulate matter (ug/m3) |
+| `pm10` | `float` | Coarse particulate matter (ug/m3) |
+| `nh3` | `float` | Ammonia (ug/m3) |
+
+## SunInfo
+
+Pydantic `BaseModel` returned by `sunlight()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `date` | `str` | Date (ISO format) |
+| `dawn` | `time` | Civil dawn |
+| `sunrise` | `time` | Sunrise |
+| `solar_noon` | `time` | Solar noon |
+| `sunset` | `time` | Sunset |
+| `dusk` | `time` | Civil dusk |
+| `daylight_hours` | `float` | Hours of daylight |
+| `sun_elevation` | `float` | Current sun elevation (degrees) |
+| `sun_azimuth` | `float` | Current sun azimuth (degrees) |
 
 ---
 
@@ -97,6 +147,8 @@ Pydantic `BaseModel` returned by all analyzer methods.
 | `OverpassRateLimitError` | `OverpassError` | Overpass rate limit (429) |
 | `OSRMError` | `Exception` | Base OSRM error |
 | `OSRMTimeoutError` | `OSRMError` | OSRM timeout |
+| `OpenWeatherError` | `Exception` | Base OpenWeatherMap error |
+| `OpenWeatherAuthError` | `OpenWeatherError` | Missing/invalid API key |
 
 ---
 

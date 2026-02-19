@@ -14,8 +14,10 @@ Exception
 ├── OverpassError
 │   ├── OverpassTimeoutError
 │   └── OverpassRateLimitError
-└── OSRMError
-    └── OSRMTimeoutError
+├── OSRMError
+│   └── OSRMTimeoutError
+└── OpenWeatherError
+    └── OpenWeatherAuthError
 ```
 
 ## Exceptions
@@ -30,6 +32,8 @@ Exception
 | `OverpassRateLimitError` | Overpass API rate limit exceeded (HTTP 429) |
 | `OSRMError` | OSRM routing request failed |
 | `OSRMTimeoutError` | OSRM request timed out |
+| `OpenWeatherError` | OpenWeatherMap API request failed |
+| `OpenWeatherAuthError` | Missing or invalid OpenWeatherMap API key |
 
 ## Usage
 

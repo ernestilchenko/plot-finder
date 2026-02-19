@@ -67,4 +67,4 @@ school: Zespól Szkolno-Przedszkolny im.M.Konopnickiej
 
 ---
 
-[Back to README](../README.md) | [Prev: PlotAnalyzer](analyzer.md) | [Next: Errors](errors.md)
+[Back to README](../README.md) | [Prev: Sunlight](sun.md) | [Next: Errors](errors.md)
