@@ -28,3 +28,11 @@ class OSRMError(Exception):
 
 class OSRMTimeoutError(OSRMError):
     """Raised when the OSRM API request times out."""
+
+
+class OpenWeatherError(Exception):
+    """Base error for OpenWeatherMap API issues."""
+
+
+class OpenWeatherAuthError(OpenWeatherError):
+    """Raised when the OpenWeatherMap API key is missing or invalid."""

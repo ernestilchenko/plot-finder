@@ -1,14 +1,21 @@
 from __future__ import annotations
 
+from datetime import date, datetime
 from math import asin, ceil, cos, radians, sin, sqrt
 
 import httpx
+from astral import LocationInfo
+from astral.sun import elevation, azimuth, sun
 from pyproj import Transformer
 
+from plot_finder.air import AirQuality
+from plot_finder.sun import SunInfo
 from plot_finder.exceptions import (
     NothingFoundError,
     OSRMError,
     OSRMTimeoutError,
+    OpenWeatherAuthError,
+    OpenWeatherError,
     OverpassError,
     OverpassRateLimitError,
     OverpassTimeoutError,
@@ -18,14 +25,16 @@ from plot_finder.plot import Plot
 
 _OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 _OSRM_URL = "https://router.project-osrm.org/route/v1"
+_OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
 
 _EPSG2180_TO_WGS84 = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
 
 
 class PlotAnalyzer:
-    def __init__(self, plot: Plot, *, radius: int = 1000) -> None:
+    def __init__(self, plot: Plot, *, radius: int = 1000, openweather_api_key: str | None = None) -> None:
         self.plot = plot
         self.radius = radius
+        self._openweather_api_key = openweather_api_key
         self._lat, self._lon = self._centroid_wgs84()
 
     def _centroid_wgs84(self) -> tuple[float, float]:
@@ -161,6 +170,75 @@ class PlotAnalyzer:
         if not results:
             raise NothingFoundError(f"No water bodies found within {r}m radius")
         return results
+
+    def air_quality(self) -> AirQuality:
+        """Get air quality at the plot location. Requires openweather_api_key."""
+        if not self._openweather_api_key:
+            raise OpenWeatherAuthError(
+                "OpenWeatherMap API key is required. "
+                "Get one at https://openweathermap.org/api and pass it as "
+                "PlotAnalyzer(..., openweather_api_key='your_key')"
+            )
+
+        try:
+            resp = httpx.get(
+                _OPENWEATHER_URL,
+                params={"lat": self._lat, "lon": self._lon, "appid": self._openweather_api_key},
+                timeout=10,
+            )
+        except httpx.TimeoutException as exc:
+            raise OpenWeatherError("OpenWeatherMap request timed out") from exc
+        except httpx.HTTPError as exc:
+            raise OpenWeatherError(f"OpenWeatherMap request failed: {exc}") from exc
+
+        if resp.status_code == 401:
+            raise OpenWeatherAuthError("Invalid OpenWeatherMap API key")
+        if resp.status_code != 200:
+            raise OpenWeatherError(f"OpenWeatherMap returned {resp.status_code}")
+
+        data = resp.json()
+        item = data["list"][0]
+        aqi = item["main"]["aqi"]
+        components = item["components"]
+
+        aqi_labels = {1: "Good", 2: "Fair", 3: "Moderate", 4: "Poor", 5: "Very Poor"}
+
+        return AirQuality(
+            aqi=aqi,
+            aqi_label=aqi_labels.get(aqi, "Unknown"),
+            co=components["co"],
+            no=components["no"],
+            no2=components["no2"],
+            o3=components["o3"],
+            so2=components["so2"],
+            pm2_5=components["pm2_5"],
+            pm10=components["pm10"],
+            nh3=components["nh3"],
+        )
+
+    def sunlight(self, for_date: date | None = None) -> SunInfo:
+        """Get sun data (sunrise, sunset, daylight hours, etc.) for the plot location."""
+        d = for_date or date.today()
+        loc = LocationInfo(latitude=self._lat, longitude=self._lon)
+        observer = loc.observer
+
+        s = sun(observer, date=d)
+        elev = elevation(observer, dateandtime=datetime.now(tz=s["noon"].tzinfo))
+        azim = azimuth(observer, dateandtime=datetime.now(tz=s["noon"].tzinfo))
+
+        daylight = (s["sunset"] - s["sunrise"]).total_seconds() / 3600
+
+        return SunInfo(
+            date=d.isoformat(),
+            dawn=s["dawn"].time(),
+            sunrise=s["sunrise"].time(),
+            solar_noon=s["noon"].time(),
+            sunset=s["sunset"].time(),
+            dusk=s["dusk"].time(),
+            daylight_hours=round(daylight, 2),
+            sun_elevation=round(elev, 2),
+            sun_azimuth=round(azim, 2),
+        )
 
     def _run_overpass(self, query: str) -> list[Place]:
         try:
