@@ -36,3 +36,7 @@ class OpenWeatherError(Exception):
 
 class OpenWeatherAuthError(OpenWeatherError):
     """Raised when the OpenWeatherMap API key is missing or invalid."""
+
+
+class OpenMeteoError(Exception):
+    """Base error for Open-Meteo API issues."""

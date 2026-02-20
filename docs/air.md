@@ -78,4 +78,4 @@ The free tier allows 1,000 calls/day.
 
 ---
 
-[Back to README](../README.md) | [Prev: PlotAnalyzer](analyzer.md) | [Next: Sunlight](sun.md)
+[Back to README](../README.md) | [Prev: Climate](climate.md) | [Next: Sunlight](sun.md)

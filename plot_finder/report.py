@@ -6,8 +6,10 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel
 
 from plot_finder.air import AirQuality
+from plot_finder.climate import Climate
 from plot_finder.exceptions import (
     NothingFoundError,
+    OpenMeteoError,
     OSRMError,
     OpenWeatherAuthError,
     OverpassError,
@@ -28,9 +30,11 @@ class PlotReport(BaseModel):
     finance: list[Place] = []
     transport: list[Place] = []
     infrastructure: list[Place] = []
-    parks: list[Place] = []
+    green_areas: list[Place] = []
     water: list[Place] = []
+    nuisances: list[Place] = []
     air_quality: AirQuality | None = None
+    climate: Climate | None = None
     sunlight: SunInfo | None = None
     geometry: list[list[float]] | None = None
 
@@ -51,7 +55,7 @@ class PlotReporter:
         if a.plot.geom_wkt:
             data["geometry"] = self._geometry_wgs84(a.plot.geom_wkt)
 
-        for category in ("education", "finance", "transport", "infrastructure", "parks", "water"):
+        for category in ("education", "finance", "transport", "infrastructure", "green_areas", "water", "nuisances"):
             try:
                 data[category] = getattr(a, category)()
             except (NothingFoundError, OverpassError, OSRMError):
@@ -60,6 +64,11 @@ class PlotReporter:
         try:
             data["air_quality"] = a.air_quality()
         except (OpenWeatherAuthError, Exception):
+            pass
+
+        try:
+            data["climate"] = a.climate()
+        except (OpenMeteoError, Exception):
             pass
 
         try:

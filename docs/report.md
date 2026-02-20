@@ -56,9 +56,11 @@ Pydantic `BaseModel` with all analysis results.
 | `finance` | `list[Place]` | `[]` | ATMs, banks |
 | `transport` | `list[Place]` | `[]` | Bus stops, stations, airports |
 | `infrastructure` | `list[Place]` | `[]` | Shops, healthcare, services |
-| `parks` | `list[Place]` | `[]` | Parks, gardens, forests |
+| `green_areas` | `list[Place]` | `[]` | Parks, gardens, forests |
 | `water` | `list[Place]` | `[]` | Rivers, lakes, ponds |
+| `nuisances` | `list[Place]` | `[]` | Power lines, industrial zones, factories |
 | `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
+| `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
 
 ---
@@ -73,7 +75,7 @@ report.model_dump_json()
 report.model_dump()
 
 # Individual fields
-for place in report.parks:
+for place in report.green_areas:
     print(f"{place.name} — {place.distance_m}m")
 ```
 
@@ -85,7 +87,8 @@ for place in report.parks:
 
 - `NothingFoundError` → category stays `[]`
 - `OpenWeatherAuthError` → `air_quality` stays `None`
-- Any other exception in `air_quality` or `sunlight` → field stays `None`
+- `OpenMeteoError` → `climate` stays `None`
+- Any other exception in `air_quality`, `climate`, or `sunlight` → field stays `None`
 
 If you need to know *why* a category is empty, call the analyzer method directly — it will raise the original exception.
 

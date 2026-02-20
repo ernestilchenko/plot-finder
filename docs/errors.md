@@ -16,8 +16,9 @@ Exception
 │   └── OverpassRateLimitError
 ├── OSRMError
 │   └── OSRMTimeoutError
-└── OpenWeatherError
-    └── OpenWeatherAuthError
+├── OpenWeatherError
+│   └── OpenWeatherAuthError
+└── OpenMeteoError
 ```
 
 ## Exceptions
@@ -34,6 +35,7 @@ Exception
 | `OSRMTimeoutError` | OSRM request timed out |
 | `OpenWeatherError` | OpenWeatherMap API request failed |
 | `OpenWeatherAuthError` | Missing or invalid OpenWeatherMap API key |
+| `OpenMeteoError` | Open-Meteo API request failed or timed out |
 
 ## Usage
 

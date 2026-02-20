@@ -110,12 +110,12 @@ for p in places:
 
 ---
 
-## Parks
+## Green Areas
 
 Find parks, gardens, playgrounds, and forests.
 
 ```python
-places = analyzer.parks()
+places = analyzer.green_areas()
 
 for p in places:
     print(f"{p.kind}: {p.name} — {p.distance_m}m")
@@ -155,6 +155,47 @@ for p in places:
 
 ---
 
+## Nuisances
+
+Find power lines, transformers, industrial zones, and factories.
+
+```python
+places = analyzer.nuisances()
+
+for p in places:
+    print(f"{p.kind}: {p.name} — {p.distance_m}m")
+```
+
+| Kind | Description |
+|------|-------------|
+| `line` | Power lines |
+| `transformer` | Power transformers |
+| `industrial` | Industrial zones |
+| `works` | Factories and plants |
+
+---
+
+## Climate
+
+Get climate data for the plot location (last 365 days). Uses the [Open-Meteo](https://open-meteo.com/) Archive API — no API key needed.
+
+```python
+from plot_finder import Climate
+
+climate = analyzer.climate()
+
+print(f"Avg temp: {climate.avg_temp}°C")
+print(f"Frost days: {climate.frost_days}")
+print(f"Sunshine: {climate.sunshine_hours}h")
+print(f"Total rain: {climate.total_rain_mm}mm")
+```
+
+Returns a [`Climate`](climate.md) model. See the [Climate docs](climate.md) for all fields.
+
+**Raises:** `OpenMeteoError`
+
+---
+
 ## How It Works
 
 1. The plot's centroid is converted from EPSG:2180 to WGS84
@@ -165,4 +206,4 @@ for p in places:
 
 ---
 
-[Back to README](../README.md) | [Prev: Plot](plot.md) | [Next: Air Quality](air.md)
+[Back to README](../README.md) | [Prev: Plot](plot.md) | [Next: Climate](climate.md)

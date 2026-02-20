@@ -6,6 +6,7 @@
 ![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-7EBC6F?logo=openstreetmap&logoColor=white)
 ![OSRM](https://img.shields.io/badge/OSRM-Routing-blue)
 ![OpenWeather](https://img.shields.io/badge/OpenWeather-API-orange?logo=openweathermap&logoColor=white)
+![Open-Meteo](https://img.shields.io/badge/Open--Meteo-Climate-1a73e8)
 
 > Python library to find Polish land parcels and analyze their surroundings.
 
@@ -56,6 +57,7 @@ viz.save("map.png")   # static image
 |------|-------------|
 | [Plot](docs/plot.md) | Finding parcels by TERYT ID or coordinates |
 | [PlotAnalyzer](docs/analyzer.md) | Analyzing surroundings (education, shops, transport, etc.) |
+| [Climate](docs/climate.md) | Temperature, precipitation, wind, frost/hot days (Open-Meteo) |
 | [Air Quality](docs/air.md) | Air pollution data (OpenWeatherMap API) |
 | [Sunlight](docs/sun.md) | Sunrise, sunset, daylight hours |
 | [Place](docs/place.md) | Result model with travel times |

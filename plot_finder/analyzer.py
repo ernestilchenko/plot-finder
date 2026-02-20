@@ -9,9 +9,11 @@ from astral.sun import elevation, azimuth, sun
 from pyproj import Transformer
 
 from plot_finder.air import AirQuality
+from plot_finder.climate import Climate
 from plot_finder.sun import SunInfo
 from plot_finder.exceptions import (
     NothingFoundError,
+    OpenMeteoError,
     OSRMError,
     OSRMTimeoutError,
     OpenWeatherAuthError,
@@ -26,6 +28,7 @@ from plot_finder.plot import Plot
 _OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 _OSRM_URL = "https://router.project-osrm.org/route/v1"
 _OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
+_OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
 _EPSG2180_TO_WGS84 = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
 
@@ -137,7 +140,7 @@ class PlotAnalyzer:
             raise NothingFoundError(f"No infrastructure found within {r}m radius")
         return results
 
-    def parks(self, radius: int | None = None) -> list[Place]:
+    def green_areas(self, radius: int | None = None) -> list[Place]:
         """Find parks, gardens, forests, and green areas."""
         r = radius or self.radius
         query = f"""
@@ -178,6 +181,91 @@ class PlotAnalyzer:
         if not results:
             raise NothingFoundError(f"No water bodies found within {r}m radius")
         return results
+
+    def nuisances(self, radius: int | None = None) -> list[Place]:
+        """Find power lines, transformers, industrial zones, and factories."""
+        r = radius or self.radius
+        query = f"""
+        [out:json][timeout:25];
+        (
+          nwr["power"="line"](around:{r},{self._lat},{self._lon});
+          nwr["power"="transformer"](around:{r},{self._lat},{self._lon});
+          nwr["landuse"="industrial"](around:{r},{self._lat},{self._lon});
+          nwr["man_made"="works"](around:{r},{self._lat},{self._lon});
+        );
+        out center;
+        """
+        results = self._run_overpass(query)
+        if not results:
+            raise NothingFoundError(f"No nuisances found within {r}m radius")
+        return results
+
+    def climate(self) -> Climate:
+        """Get climate data for the plot location (last 365 days from Open-Meteo)."""
+        end = date.today()
+        start = date(end.year - 1, end.month, end.day)
+
+        params = {
+            "latitude": self._lat,
+            "longitude": self._lon,
+            "start_date": start.isoformat(),
+            "end_date": end.isoformat(),
+            "daily": ",".join([
+                "temperature_2m_mean",
+                "temperature_2m_max",
+                "temperature_2m_min",
+                "precipitation_sum",
+                "rain_sum",
+                "snowfall_sum",
+                "sunshine_duration",
+                "wind_speed_10m_max",
+            ]),
+            "timezone": "auto",
+        }
+
+        try:
+            resp = httpx.get(_OPEN_METEO_URL, params=params, timeout=15)
+        except httpx.TimeoutException as exc:
+            raise OpenMeteoError("Open-Meteo request timed out") from exc
+        except httpx.HTTPError as exc:
+            raise OpenMeteoError(f"Open-Meteo request failed: {exc}") from exc
+
+        if resp.status_code != 200:
+            raise OpenMeteoError(f"Open-Meteo returned {resp.status_code}")
+
+        data = resp.json()
+        if "daily" not in data:
+            raise OpenMeteoError("Open-Meteo returned no daily data")
+
+        daily = data["daily"]
+
+        def _safe(values: list | None) -> list[float]:
+            return [v for v in (values or []) if v is not None]
+
+        temps_mean = _safe(daily.get("temperature_2m_mean"))
+        temps_max = _safe(daily.get("temperature_2m_max"))
+        temps_min = _safe(daily.get("temperature_2m_min"))
+        precip = _safe(daily.get("precipitation_sum"))
+        rain = _safe(daily.get("rain_sum"))
+        snow = _safe(daily.get("snowfall_sum"))
+        sunshine = _safe(daily.get("sunshine_duration"))
+        wind = _safe(daily.get("wind_speed_10m_max"))
+
+        return Climate(
+            avg_temp=round(sum(temps_mean) / len(temps_mean), 1) if temps_mean else None,
+            max_temp=round(max(temps_max), 1) if temps_max else None,
+            min_temp=round(min(temps_min), 1) if temps_min else None,
+            total_precipitation_mm=round(sum(precip), 1) if precip else None,
+            total_rain_mm=round(sum(rain), 1) if rain else None,
+            total_snow_cm=round(sum(snow), 1) if snow else None,
+            sunshine_hours=round(sum(sunshine) / 3600, 1) if sunshine else None,
+            avg_wind_speed=round(sum(wind) / len(wind), 1) if wind else None,
+            max_wind_speed=round(max(wind), 1) if wind else None,
+            frost_days=sum(1 for t in _safe(daily.get("temperature_2m_min")) if t < 0),
+            hot_days=sum(1 for t in _safe(daily.get("temperature_2m_max")) if t > 30),
+            rainy_days=sum(1 for r in _safe(daily.get("rain_sum")) if r > 0.1),
+            snow_days=sum(1 for s in _safe(daily.get("snowfall_sum")) if s > 0),
+        )
 
     def air_quality(self) -> AirQuality:
         """Get air quality at the plot location. Requires openweather_api_key."""
@@ -284,6 +372,8 @@ class PlotAnalyzer:
                 or tags.get("water")
                 or tags.get("waterway")
                 or tags.get("landuse")
+                or tags.get("power")
+                or tags.get("man_made")
                 or "unknown"
             )
             dist = self._haversine(self._lat, self._lon, lat, lon)

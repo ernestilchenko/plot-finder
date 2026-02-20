@@ -57,7 +57,7 @@ Bus stops, tram stops, train stations, airports, ferry terminals.
 
 Supermarkets, convenience stores, malls, pharmacies, hospitals, clinics, doctors, dentists, post offices, fuel stations, police, fire stations, places of worship, restaurants, cafes.
 
-#### `parks(radius=None)`
+#### `green_areas(radius=None)`
 
 Parks, gardens, nature reserves, playgrounds, forests, woodlands.
 
@@ -65,7 +65,17 @@ Parks, gardens, nature reserves, playgrounds, forests, woodlands.
 
 Rivers, lakes, ponds, reservoirs, streams, canals.
 
+#### `nuisances(radius=None)`
+
+Power lines, transformers, industrial zones, factories.
+
 **Raises:** `NothingFoundError`, `OverpassError`, `OverpassTimeoutError`, `OverpassRateLimitError`, `OSRMError`, `OSRMTimeoutError`
+
+#### `climate() -> Climate`
+
+Historical climate data (last 365 days). Uses Open-Meteo Archive API — no API key needed.
+
+**Raises:** `OpenMeteoError`
 
 #### `air_quality() -> AirQuality`
 
@@ -99,6 +109,26 @@ Pydantic `BaseModel` returned by `air_quality()`.
 | `pm2_5` | `float` | Fine particulate matter (ug/m3) |
 | `pm10` | `float` | Coarse particulate matter (ug/m3) |
 | `nh3` | `float` | Ammonia (ug/m3) |
+
+## Climate
+
+Pydantic `BaseModel` returned by `climate()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `avg_temp` | `float \| None` | Average daily temperature (°C) |
+| `max_temp` | `float \| None` | Highest recorded temperature (°C) |
+| `min_temp` | `float \| None` | Lowest recorded temperature (°C) |
+| `total_precipitation_mm` | `float \| None` | Total precipitation (mm) |
+| `total_rain_mm` | `float \| None` | Total rain (mm) |
+| `total_snow_cm` | `float \| None` | Total snowfall (cm) |
+| `sunshine_hours` | `float \| None` | Total sunshine hours |
+| `avg_wind_speed` | `float \| None` | Average daily max wind speed (km/h) |
+| `max_wind_speed` | `float \| None` | Highest recorded wind speed (km/h) |
+| `frost_days` | `int \| None` | Days with min temp below 0°C |
+| `hot_days` | `int \| None` | Days with max temp above 30°C |
+| `rainy_days` | `int \| None` | Days with rain > 0.1mm |
+| `snow_days` | `int \| None` | Days with snowfall > 0cm |
 
 ## SunInfo
 
@@ -149,9 +179,11 @@ Pydantic `BaseModel` returned by `PlotReporter.report()`.
 | `finance` | `list[Place]` | `[]` | ATMs, banks |
 | `transport` | `list[Place]` | `[]` | Bus stops, stations, airports |
 | `infrastructure` | `list[Place]` | `[]` | Shops, healthcare, services |
-| `parks` | `list[Place]` | `[]` | Parks, gardens, forests |
+| `green_areas` | `list[Place]` | `[]` | Parks, gardens, forests |
 | `water` | `list[Place]` | `[]` | Rivers, lakes, ponds |
+| `nuisances` | `list[Place]` | `[]` | Power lines, industrial zones, factories |
 | `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
+| `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
 
 ## PlotReporter
@@ -256,6 +288,7 @@ Freeform Q&A about the plot.
 | `OSRMTimeoutError` | `OSRMError` | OSRM timeout |
 | `OpenWeatherError` | `Exception` | Base OpenWeatherMap error |
 | `OpenWeatherAuthError` | `OpenWeatherError` | Missing/invalid API key |
+| `OpenMeteoError` | `Exception` | Open-Meteo API error |
 
 ---
 
