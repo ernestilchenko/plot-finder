@@ -29,5 +29,8 @@ dependencies = [
 viz = ["folium>=0.14", "Pillow>=9.0"]
 ai = ["openai>=1.0"]
 
+[tool.setuptools.packages.find]
+include = ["plot_finder*"]
+
 [project.urls]
 Homepage = "https://github.com/ernestilchenko/plot-finder"
