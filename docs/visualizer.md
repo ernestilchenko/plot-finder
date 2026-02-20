@@ -181,5 +181,3 @@ viz.map()  # displays inline
 ```
 
 ---
-
-[Back to README](../README.md) | [Prev: Report](report.md) | [Next: AI](ai.md)

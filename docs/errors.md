@@ -10,6 +10,8 @@ All custom exceptions are importable from `plot_finder`.
 Exception
 ├── ULDKError
 │   └── PlotNotFoundError
+├── GeocodeError
+│   └── AddressNotFoundError
 ├── NothingFoundError
 ├── OverpassError
 │   ├── OverpassTimeoutError
@@ -27,6 +29,8 @@ Exception
 |-----------|------|
 | `ULDKError` | Base error for ULDK API issues |
 | `PlotNotFoundError` | No parcel found for given TERYT ID or coordinates |
+| `GeocodeError` | Nominatim geocoding request failed |
+| `AddressNotFoundError` | No results for the given address |
 | `NothingFoundError` | No places found within the given radius |
 | `OverpassError` | Overpass API (OpenStreetMap) request failed |
 | `OverpassTimeoutError` | Overpass API timed out — server is busy |
@@ -48,6 +52,19 @@ try:
     plot = Plot(plot_id="000000_0.0000.0000")
 except PlotNotFoundError:
     print("Parcel not found")
+```
+
+### Handling address geocoding errors
+
+```python
+from plot_finder import Plot, AddressNotFoundError, GeocodeError
+
+try:
+    plot = Plot(address="nonexistent address 12345")
+except AddressNotFoundError:
+    print("Address not found")
+except GeocodeError:
+    print("Geocoding service error")
 ```
 
 ### Handling analyzer errors
@@ -90,5 +107,3 @@ except OverpassError as e:
 ```
 
 ---
-
-[Back to README](../README.md) | [Prev: API Reference](api.md)

@@ -7,19 +7,20 @@ Full reference for all public classes, methods, and exceptions.
 ## Plot
 
 ```python
-Plot(*, plot_id=None, x=None, y=None, srid=2180)
+Plot(*, plot_id=None, address=None, x=None, y=None, srid=2180)
 ```
 
-Fetch parcel data from the ULDK API. Provide either `plot` (TERYT ID) or both `x` and `y`.
+Fetch parcel data from the ULDK API. Provide `plot_id` (TERYT ID), `address` (street address), or both `x` and `y`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `plot_id` | `str \| None` | `None` | TERYT parcel ID |
+| `address` | `str \| None` | `None` | Street address (geocoded via Nominatim) |
 | `x` | `float \| None` | `None` | X coordinate |
 | `y` | `float \| None` | `None` | Y coordinate |
 | `srid` | `int` | `2180` | Coordinate reference system |
 
-**Raises:** `PlotNotFoundError`, `ULDKError`
+**Raises:** `PlotNotFoundError`, `ULDKError`, `GeocodeError`, `AddressNotFoundError`
 
 ---
 
@@ -289,7 +290,7 @@ Freeform Q&A about the plot.
 | `OpenWeatherError` | `Exception` | Base OpenWeatherMap error |
 | `OpenWeatherAuthError` | `OpenWeatherError` | Missing/invalid API key |
 | `OpenMeteoError` | `Exception` | Open-Meteo API error |
+| `GeocodeError` | `Exception` | Base Nominatim geocoding error |
+| `AddressNotFoundError` | `GeocodeError` | No results for address |
 
 ---
-
-[Back to README](../README.md) | [Prev: AI](ai.md) | [Next: Errors](errors.md)

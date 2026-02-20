@@ -205,5 +205,3 @@ Returns a [`Climate`](climate.md) model. See the [Climate docs](climate.md) for 
 5. Results are sorted by straight-line distance (closest first)
 
 ---
-
-[Back to README](../README.md) | [Prev: Plot](plot.md) | [Next: Climate](climate.md)

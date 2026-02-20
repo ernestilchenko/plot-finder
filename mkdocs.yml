@@ -1,0 +1,73 @@
+site_name: plot-finder
+site_description: Python library to find Polish land parcels and analyze their surroundings
+site_url: https://ernestilchenko.github.io/plot-finder/
+repo_url: https://github.com/ernestilchenko/plot-finder
+repo_name: ernestilchenko/plot-finder
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Plot: plot.md
+      - PlotAnalyzer: analyzer.md
+      - Place: place.md
+  - Data:
+      - Climate: climate.md
+      - Air Quality: air.md
+      - Sunlight: sun.md
+  - Report & Visualization:
+      - PlotReporter: report.md
+      - PlotVisualizer: visualizer.md
+      - PlotAI: ai.md
+  - Reference:
+      - API: api.md
+      - Errors: errors.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+plugins:
+  - search

@@ -65,5 +65,3 @@ except OpenMeteoError as e:
 | `OpenMeteoError` | Open-Meteo API request failed or timed out |
 
 ---
-
-[Back to README](../README.md) | [Prev: Analyzer](analyzer.md) | [Next: Air Quality](air.md)

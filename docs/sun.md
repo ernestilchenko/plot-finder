@@ -55,5 +55,3 @@ print(sun.daylight_hours)  # ~8.0
 All calculations are done locally using astronomical formulas — no API calls, no API keys, works offline. The [astral](https://github.com/sffjunkie/astral) library computes sun positions based on latitude, longitude, and date.
 
 ---
-
-[Back to README](../README.md) | [Prev: Air Quality](air.md) | [Next: Place](place.md)

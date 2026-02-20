@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plot-finder"
-version = "0.1.0"
+version = "0.2.0"
 description = "Query Polish ULDK (GUGiK) API to find land parcels by TERYT ID or coordinates"
 readme = "README.md"
 license = "MIT"
@@ -34,3 +34,4 @@ include = ["plot_finder*"]
 
 [project.urls]
 Homepage = "https://github.com/ernestilchenko/plot-finder"
+Documentation = "https://ernestilchenko.github.io/plot-finder/"

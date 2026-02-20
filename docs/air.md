@@ -77,5 +77,3 @@ except OpenWeatherError:
 The free tier allows 1,000 calls/day.
 
 ---
-
-[Back to README](../README.md) | [Prev: Climate](climate.md) | [Next: Sunlight](sun.md)

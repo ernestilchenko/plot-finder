@@ -66,5 +66,3 @@ school: Zespól Szkolno-Przedszkolny im.M.Konopnickiej
 ```
 
 ---
-
-[Back to README](../README.md) | [Prev: Sunlight](sun.md) | [Next: Report](report.md)

@@ -21,6 +21,17 @@ print(plot.geojson)      # {"type": "Polygon", "coordinates": [...]}
 print(plot.centroid)     # (460149.55, 313348.56)
 ```
 
+## Search by Address
+
+```python
+plot = Plot(address="ul. Nowy Świat 1, Warszawa")
+
+print(plot.plot_id)      # TERYT ID
+print(plot.voivodeship)  # mazowieckie
+```
+
+The address is geocoded to coordinates via [Nominatim](https://nominatim.openstreetmap.org/) (free, no API key required), then used to find the parcel.
+
 ## Search by Coordinates
 
 ```python
@@ -49,6 +60,7 @@ print(plot.geojson)  # coordinates in WGS84
 | Field | Type | Description |
 |-------|------|-------------|
 | `plot_id` | `str \| None` | TERYT parcel ID |
+| `address` | `str \| None` | Street address (geocoded via Nominatim) |
 | `x`, `y` | `float \| None` | Search coordinates |
 | `srid` | `int` | Coordinate system (default: `2180`) |
 | `voivodeship` | `str \| None` | Voivodeship (wojewodztwo) |
@@ -72,5 +84,3 @@ plot.model_dump_json()  # JSON string
 ```
 
 ---
-
-[Back to README](../README.md) | [Next: PlotAnalyzer](analyzer.md)

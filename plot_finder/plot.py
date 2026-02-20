@@ -4,14 +4,16 @@ import httpx
 import shapely.wkt
 from pydantic import BaseModel, computed_field, model_validator
 
-from plot_finder.exceptions import PlotNotFoundError, ULDKError
+from plot_finder.exceptions import AddressNotFoundError, GeocodeError, PlotNotFoundError, ULDKError
 
 _ULDK_URL = "https://uldk.gugik.gov.pl/"
+_NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 _RESULT_FIELDS = "teryt,voivodeship,county,commune,region,parcel,geom_wkt,geom_extent,datasource"
 
 
 class Plot(BaseModel):
     plot_id: str | None = None
+    address: str | None = None
     x: float | None = None
     y: float | None = None
     voivodeship: str | None = None
@@ -44,12 +46,31 @@ class Plot(BaseModel):
     def _auto_fetch(self) -> "Plot":
         if self.voivodeship is not None:
             return self
+        if self.address and not self.plot_id and self.x is None:
+            self._geocode()
         if not self.plot_id and self.x is None:
-            raise ValueError("Either 'plot' or both 'x' and 'y' must be provided")
+            raise ValueError("Either 'plot_id', 'address', or both 'x' and 'y' must be provided")
         if self.x is not None and self.y is None:
             raise ValueError("Both 'x' and 'y' must be provided")
         self._fetch()
         return self
+
+    def _geocode(self) -> None:
+        params = {"q": self.address, "format": "json", "limit": 1}
+        headers = {"User-Agent": "plot-finder/1.0"}
+        try:
+            resp = httpx.get(_NOMINATIM_URL, params=params, headers=headers, timeout=10)
+            resp.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise GeocodeError(f"Geocoding request failed: {exc}") from exc
+
+        results = resp.json()
+        if not results:
+            raise AddressNotFoundError(f"No results for address: {self.address}")
+
+        self.y = float(results[0]["lat"])
+        self.x = float(results[0]["lon"])
+        self.srid = 4326
 
     def _fetch(self) -> None:
         if self.x is not None:

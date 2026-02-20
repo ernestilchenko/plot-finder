@@ -93,5 +93,3 @@ for place in report.green_areas:
 If you need to know *why* a category is empty, call the analyzer method directly — it will raise the original exception.
 
 ---
-
-[Back to README](../README.md) | [Prev: Place](place.md) | [Next: Visualizer](visualizer.md)

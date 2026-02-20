@@ -40,3 +40,11 @@ class OpenWeatherAuthError(OpenWeatherError):
 
 class OpenMeteoError(Exception):
     """Base error for Open-Meteo API issues."""
+
+
+class GeocodeError(Exception):
+    """Base error for geocoding issues."""
+
+
+class AddressNotFoundError(GeocodeError):
+    """Raised when Nominatim returns no results for the given address."""

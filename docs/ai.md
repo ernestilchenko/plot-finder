@@ -154,5 +154,3 @@ ai = PlotAI(report, api_key=os.environ["OPENAI_API_KEY"])
 ```
 
 ---
-
-[Back to README](../README.md) | [Prev: Visualizer](visualizer.md) | [Next: API Reference](api.md)
