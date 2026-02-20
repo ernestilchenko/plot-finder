@@ -4,8 +4,6 @@
 
 Query the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API to get parcel data by TERYT ID or coordinates, then analyze nearby infrastructure using OpenStreetMap.
 
-![Plot with geometry, radius and nearby places](assets/showcase.png)
-
 ## Installation
 
 === "Base"

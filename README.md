@@ -53,19 +53,7 @@ viz.save("map.png")   # static image
 
 ## Documentation
 
-| Page | Description |
-|------|-------------|
-| [Plot](docs/plot.md) | Finding parcels by TERYT ID or coordinates |
-| [PlotAnalyzer](docs/analyzer.md) | Analyzing surroundings (education, shops, transport, etc.) |
-| [Climate](docs/climate.md) | Temperature, precipitation, wind, frost/hot days (Open-Meteo) |
-| [Air Quality](docs/air.md) | Air pollution data (OpenWeatherMap API) |
-| [Sunlight](docs/sun.md) | Sunrise, sunset, daylight hours |
-| [Place](docs/place.md) | Result model with travel times |
-| [Report](docs/report.md) | Full structured report (PlotReporter) |
-| [Visualizer](docs/visualizer.md) | Interactive HTML maps & static PNG images |
-| [AI](docs/ai.md) | AI-powered plot analysis (OpenAI) |
-| [API Reference](docs/api.md) | Full API reference |
-| [Errors](docs/errors.md) | Exception handling and hierarchy |
+Full documentation: [ernestilchenko.github.io/plot-finder](https://ernestilchenko.github.io/plot-finder/)
 
 ## License
 
