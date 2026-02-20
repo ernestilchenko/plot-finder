@@ -24,6 +24,12 @@ Query the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API to get parcel data by T
     pip install plot-finder[ai]
     ```
 
+=== "With geo extras (MPZP, GUGiK)"
+
+    ```bash
+    pip install plot-finder[geo]
+    ```
+
 **Requirements:** Python 3.10+ | `pydantic` `httpx` `shapely` `pyproj`
 
 ## Quick Start
@@ -66,7 +72,11 @@ report.model_dump_json()
 | [PlotAnalyzer](analyzer.md) | Analyze surroundings — education, shops, transport, etc. |
 | [Climate](climate.md) | Temperature, precipitation, wind, frost/hot days |
 | [Air Quality](air.md) | Air pollution data (OpenWeatherMap) |
-| [Sunlight](sun.md) | Sunrise, sunset, daylight hours |
+| [Sunlight](sun.md) | Sunrise, sunset, daylight hours, seasonal data |
+| [Noise](noise.md) | Noise levels from GDDKiA maps & OSM estimation |
+| [Risks](risks.md) | Flood, seismic, soil, landslide, noise, mining risks |
+| [MPZP](mpzp.md) | Local spatial development plan from Geoportal |
+| [GUGiK](gugik.md) | Spatial data services from GUGiK integration portal |
 | [PlotReporter](report.md) | Full structured report in one call |
 | [PlotVisualizer](visualizer.md) | Interactive HTML maps & static PNG images |
 | [PlotAI](ai.md) | AI-powered analysis (OpenAI) |

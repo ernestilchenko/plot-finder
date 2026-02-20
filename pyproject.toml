@@ -28,6 +28,7 @@ dependencies = [
 [project.optional-dependencies]
 viz = ["folium>=0.14", "Pillow>=9.0"]
 ai = ["openai>=1.0"]
+geo = ["beautifulsoup4>=4.12"]
 
 [tool.setuptools.packages.find]
 include = ["plot_finder*"]

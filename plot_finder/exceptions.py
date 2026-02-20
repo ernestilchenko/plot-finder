@@ -48,3 +48,19 @@ class GeocodeError(Exception):
 
 class AddressNotFoundError(GeocodeError):
     """Raised when Nominatim returns no results for the given address."""
+
+
+class GeoportalError(Exception):
+    """Base error for Geoportal WMS/WFS issues."""
+
+
+class GDDKiAError(Exception):
+    """Base error for GDDKiA noise map issues."""
+
+
+class SOPOError(Exception):
+    """Base error for PIG-PIB SOPO landslide API issues."""
+
+
+class GugikError(Exception):
+    """Base error for GUGiK integration portal issues."""

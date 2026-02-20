@@ -20,7 +20,11 @@ Exception
 │   └── OSRMTimeoutError
 ├── OpenWeatherError
 │   └── OpenWeatherAuthError
-└── OpenMeteoError
+├── OpenMeteoError
+├── GeoportalError
+├── GDDKiAError
+├── SOPOError
+└── GugikError
 ```
 
 ## Exceptions
@@ -40,6 +44,10 @@ Exception
 | `OpenWeatherError` | OpenWeatherMap API request failed |
 | `OpenWeatherAuthError` | Missing or invalid OpenWeatherMap API key |
 | `OpenMeteoError` | Open-Meteo API request failed or timed out |
+| `GeoportalError` | Geoportal WMS/WFS request failed |
+| `GDDKiAError` | GDDKiA noise map request failed |
+| `SOPOError` | PIG-PIB SOPO landslide API request failed |
+| `GugikError` | GUGiK integration portal request failed |
 
 ## Usage
 

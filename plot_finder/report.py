@@ -14,8 +14,12 @@ from plot_finder.exceptions import (
     OpenWeatherAuthError,
     OverpassError,
 )
+from plot_finder.gugik import GugikEntry
+from plot_finder.mpzp import MPZP
+from plot_finder.noise import Noise
 from plot_finder.place import Place
-from plot_finder.sun import SunInfo
+from plot_finder.risks import RiskReport
+from plot_finder.sun import SeasonalSun, SunInfo
 
 if TYPE_CHECKING:
     from plot_finder.analyzer import PlotAnalyzer
@@ -36,6 +40,11 @@ class PlotReport(BaseModel):
     air_quality: AirQuality | None = None
     climate: Climate | None = None
     sunlight: SunInfo | None = None
+    seasonal_sun: SeasonalSun | None = None
+    noise: Noise | None = None
+    risks: RiskReport | None = None
+    mpzp: MPZP | None = None
+    gugik: list[GugikEntry] | None = None
     geometry: list[list[float]] | None = None
 
 
@@ -73,6 +82,31 @@ class PlotReporter:
 
         try:
             data["sunlight"] = a.sunlight(for_date=for_date)
+        except Exception:
+            pass
+
+        try:
+            data["seasonal_sun"] = a.sunlight_seasonal()
+        except Exception:
+            pass
+
+        try:
+            data["noise"] = a.noise()
+        except Exception:
+            pass
+
+        try:
+            data["risks"] = a.risks()
+        except Exception:
+            pass
+
+        try:
+            data["mpzp"] = a.mpzp()
+        except Exception:
+            pass
+
+        try:
+            data["gugik"] = a.plot.gugik()
         except Exception:
             pass
 

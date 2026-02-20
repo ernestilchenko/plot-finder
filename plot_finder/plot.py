@@ -4,7 +4,7 @@ import httpx
 import shapely.wkt
 from pydantic import BaseModel, computed_field, model_validator
 
-from plot_finder.exceptions import AddressNotFoundError, GeocodeError, PlotNotFoundError, ULDKError
+from plot_finder.exceptions import AddressNotFoundError, GeocodeError, GugikError, PlotNotFoundError, ULDKError
 
 _ULDK_URL = "https://uldk.gugik.gov.pl/"
 _NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
@@ -25,6 +25,14 @@ class Plot(BaseModel):
     geom_wkt: str | None = None
     geom_extent: str | None = None
     datasource: str | None = None
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def area(self) -> float | None:
+        if not self.geom_wkt:
+            return None
+        geom = shapely.wkt.loads(self.geom_wkt)
+        return round(geom.area, 2)
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -118,3 +126,50 @@ class Plot(BaseModel):
         if self.geom_wkt and ";" in self.geom_wkt:
             _, wkt = self.geom_wkt.split(";", 1)
             self.geom_wkt = wkt
+
+    def gugik(self) -> list["GugikEntry"]:
+        """Fetch GUGiK integration data for this plot's TERYT ID.
+
+        Requires ``beautifulsoup4``: ``pip install plot-finder[geo]``
+        """
+        from plot_finder.gugik import GugikEntry
+
+        try:
+            from bs4 import BeautifulSoup
+        except ImportError:
+            raise ImportError(
+                "beautifulsoup4 is required for GUGiK queries. "
+                "Install it with: pip install plot-finder[geo]"
+            )
+
+        if not self.plot_id:
+            raise GugikError("plot_id is required for GUGiK queries")
+
+        teryt = self.plot_id
+        url = (
+            f"https://integracja.gugik.gov.pl/eziudp/index.php"
+            f"?teryt={teryt}&rodzaj=&nazwa=&zbior=&temat=&usluga=&adres="
+        )
+
+        try:
+            resp = httpx.get(url, timeout=30)
+        except httpx.HTTPError as exc:
+            raise GugikError(f"GUGiK request failed: {exc}") from exc
+
+        if resp.status_code != 200:
+            raise GugikError(f"GUGiK returned {resp.status_code}")
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        rows = soup.find_all("tr", class_="row")
+        entries: list[GugikEntry] = []
+
+        for row in rows:
+            cols = row.find_all("td")
+            if len(cols) >= 7:
+                organ = cols[1].get_text(strip=True)
+                nazwa = cols[2].get_text(strip=True)
+                wms = cols[5].find("a")["href"] if cols[5].find("a") else None
+                wfs = cols[6].find("a")["href"] if cols[6].find("a") else None
+                entries.append(GugikEntry(organ=organ, nazwa=nazwa, wms=wms, wfs=wfs))
+
+        return entries

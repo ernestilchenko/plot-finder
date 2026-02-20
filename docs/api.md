@@ -86,11 +86,31 @@ Current air pollution data. Requires `openweather_api_key`.
 
 #### `sunlight(for_date=None) -> SunInfo`
 
-Sun data (sunrise, sunset, daylight hours, sun position). No API key needed.
+Sun data (sunrise, sunset, daylight hours, golden hour, shadow length). No API key needed.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `for_date` | `date \| None` | `None` | Date to calculate for (default: today) |
+
+#### `sunlight_seasonal() -> SeasonalSun`
+
+Sun data for all four seasonal reference dates (summer/winter solstice, spring/autumn equinox).
+
+#### `noise(voivodeship=None) -> Noise`
+
+Noise level from GDDKiA strategic noise maps, with OSM fallback estimation.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `voivodeship` | `str \| None` | `None` | Override voivodeship (default: from plot data) |
+
+#### `risks() -> RiskReport`
+
+Environmental and geological risk assessment (flood, seismic, soil, landslide, noise, mining).
+
+#### `mpzp() -> MPZP`
+
+Local spatial development plan data from Geoportal. Requires `pip install plot-finder[geo]`.
 
 ---
 
@@ -146,6 +166,92 @@ Pydantic `BaseModel` returned by `sunlight()`.
 | `daylight_hours` | `float` | Hours of daylight |
 | `sun_elevation` | `float` | Current sun elevation (degrees) |
 | `sun_azimuth` | `float` | Current sun azimuth (degrees) |
+| `golden_hour_morning` | `time \| None` | End of morning golden hour |
+| `golden_hour_evening` | `time \| None` | Start of evening golden hour |
+| `shadow_length_10m` | `float \| None` | Shadow length (m) for 10m object at noon |
+
+## SeasonalSun
+
+Pydantic `BaseModel` returned by `sunlight_seasonal()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `summer_solstice` | `SunInfo` | June 21 |
+| `winter_solstice` | `SunInfo` | December 21 |
+| `spring_equinox` | `SunInfo` | March 20 |
+| `autumn_equinox` | `SunInfo` | September 22 |
+
+## Noise
+
+Pydantic `BaseModel` returned by `noise()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `noise_level_db` | `float` | Noise level in dB |
+| `quality` | `str` | Polish quality label |
+| `level` | `str` | English level key |
+| `description` | `str` | Polish description |
+| `color` | `str` | Indicator color |
+| `sources` | `list[NoiseSource]` | Detected sources |
+| `data_source` | `str` | Data origin |
+
+## NoiseSource
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | `str` | Source type |
+| `name` | `str` | Source name |
+| `distance_km` | `float` | Distance (km) |
+| `impact_db` | `float` | Noise impact (dB) |
+| `lat` | `float` | Latitude |
+| `lon` | `float` | Longitude |
+
+## RiskReport
+
+Pydantic `BaseModel` returned by `risks()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `risks` | `list[RiskInfo]` | Detected risks |
+| `total_risks` | `int` | Count |
+
+## RiskInfo
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `risk_type` | `str` | flood / seismic / soil / landslide / noise / mining |
+| `name` | `str` | Polish name |
+| `level` | `str` | low / medium / high / unknown |
+| `is_at_risk` | `bool` | Whether affected |
+| `description` | `str` | Polish description |
+| `color` | `str` | Indicator color |
+
+## MPZP
+
+Pydantic `BaseModel` returned by `mpzp()`. Requires `pip install plot-finder[geo]`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `has_plan` | `bool` | Whether MPZP exists |
+| `zone_symbol` | `str \| None` | Zone symbol |
+| `zone_name` | `str \| None` | Zone description |
+| `plan_name` | `str \| None` | Plan name |
+| `resolution` | `str \| None` | Resolution number |
+| `resolution_date` | `str \| None` | Resolution date |
+| `publication` | `str \| None` | Publication reference |
+| `effective_date` | `str \| None` | Effective date |
+| `wms_url` | `str \| None` | WMS map URL |
+
+## GugikEntry
+
+Pydantic `BaseModel` returned by `Plot.gugik()`. Requires `pip install plot-finder[geo]`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `organ` | `str` | Authority name |
+| `nazwa` | `str` | Dataset name |
+| `wms` | `str \| None` | WMS URL |
+| `wfs` | `str \| None` | WFS URL |
 
 ---
 
@@ -186,6 +292,11 @@ Pydantic `BaseModel` returned by `PlotReporter.report()`.
 | `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
 | `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
+| `seasonal_sun` | `SeasonalSun \| None` | `None` | Seasonal sun data (4 dates) |
+| `noise` | `Noise \| None` | `None` | Noise level data |
+| `risks` | `RiskReport \| None` | `None` | Environmental risk assessment |
+| `mpzp` | `MPZP \| None` | `None` | Spatial development plan |
+| `gugik` | `list[GugikEntry] \| None` | `None` | GUGiK integration data |
 
 ## PlotReporter
 
@@ -290,6 +401,10 @@ Freeform Q&A about the plot.
 | `OpenWeatherError` | `Exception` | Base OpenWeatherMap error |
 | `OpenWeatherAuthError` | `OpenWeatherError` | Missing/invalid API key |
 | `OpenMeteoError` | `Exception` | Open-Meteo API error |
+| `GeoportalError` | `Exception` | Geoportal WMS/WFS error |
+| `GDDKiAError` | `Exception` | GDDKiA noise map error |
+| `SOPOError` | `Exception` | PIG-PIB SOPO landslide error |
+| `GugikError` | `Exception` | GUGiK integration error |
 | `GeocodeError` | `Exception` | Base Nominatim geocoding error |
 | `AddressNotFoundError` | `GeocodeError` | No results for address |
 

@@ -46,6 +46,10 @@ nav:
       - Climate: climate.md
       - Air Quality: air.md
       - Sunlight: sun.md
+      - Noise: noise.md
+      - Risks: risks.md
+      - MPZP: mpzp.md
+      - GUGiK: gugik.md
   - Report & Visualization:
       - PlotReporter: report.md
       - PlotVisualizer: visualizer.md
