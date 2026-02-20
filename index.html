@@ -654,6 +654,118 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Noise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="risks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Risks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="mpzp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MPZP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gugik/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUGiK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1018,9 +1130,8 @@
 <p>Python library to find Polish land parcels and analyze their surroundings.</p>
 </blockquote>
 <p>Query the <a href="https://uldk.gugik.gov.pl/">ULDK (GUGiK)</a> API to get parcel data by TERYT ID or coordinates, then analyze nearby infrastructure using OpenStreetMap.</p>
-<p><img alt="Plot with geometry, radius and nearby places" src="assets/showcase.png" /></p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Base</label><label for="__tabbed_1_2">With visualization</label><label for="__tabbed_1_3">With AI analysis</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Base</label><label for="__tabbed_1_2">With visualization</label><label for="__tabbed_1_3">With AI analysis</label><label for="__tabbed_1_4">With geo extras (MPZP, GUGiK)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder
@@ -1034,35 +1145,39 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder<span class="o">[</span>ai<span class="o">]</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder<span class="o">[</span>geo<span class="o">]</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 <p><strong>Requirements:</strong> Python 3.10+ | <code>pydantic</code> <code>httpx</code> <code>shapely</code> <code>pyproj</code></p>
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span><span class="p">,</span> <span class="n">PlotReporter</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Find a parcel</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">voivodeship</span><span class="p">)</span>  <span class="c1"># mazowieckie</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">centroid</span><span class="p">)</span>     <span class="c1"># (x, y)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Analyze surroundings</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">education</span><span class="p">():</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">distance_m</span><span class="si">}</span><span class="s2">m, walk </span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">walk_min</span><span class="si">}</span><span class="s2">min&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># Full report</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">report</span> <span class="o">=</span> <span class="n">PlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">report</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span><span class="p">,</span> <span class="n">PlotReporter</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Find a parcel</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">voivodeship</span><span class="p">)</span>  <span class="c1"># mazowieckie</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">centroid</span><span class="p">)</span>     <span class="c1"># (x, y)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># Analyze surroundings</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">education</span><span class="p">():</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">distance_m</span><span class="si">}</span><span class="s2">m, walk </span><span class="si">{</span><span class="n">place</span><span class="o">.</span><span class="n">walk_min</span><span class="si">}</span><span class="s2">min&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="c1"># Full report</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="n">report</span> <span class="o">=</span> <span class="n">PlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="n">report</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Visualization</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># pip install plot-finder[viz]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder.visualizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotVisualizer</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">viz</span> <span class="o">=</span> <span class="n">PlotVisualizer</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">viz</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;map.html&quot;</span><span class="p">)</span>  <span class="c1"># interactive map</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">viz</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;map.png&quot;</span><span class="p">)</span>   <span class="c1"># static image</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># pip install plot-finder[viz]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder.visualizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotVisualizer</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">viz</span> <span class="o">=</span> <span class="n">PlotVisualizer</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">viz</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;map.html&quot;</span><span class="p">)</span>  <span class="c1"># interactive map</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">viz</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;map.png&quot;</span><span class="p">)</span>   <span class="c1"># static image</span>
 </code></pre></div>
 </div>
 <h2 id="whats-inside">What's Inside<a class="headerlink" href="#whats-inside" title="Permanent link">&para;</a></h2>
@@ -1092,7 +1207,23 @@
 </tr>
 <tr>
 <td><a href="sun/">Sunlight</a></td>
-<td>Sunrise, sunset, daylight hours</td>
+<td>Sunrise, sunset, daylight hours, seasonal data</td>
+</tr>
+<tr>
+<td><a href="noise/">Noise</a></td>
+<td>Noise levels from GDDKiA maps &amp; OSM estimation</td>
+</tr>
+<tr>
+<td><a href="risks/">Risks</a></td>
+<td>Flood, seismic, soil, landslide, noise, mining risks</td>
+</tr>
+<tr>
+<td><a href="mpzp/">MPZP</a></td>
+<td>Local spatial development plan from Geoportal</td>
+</tr>
+<tr>
+<td><a href="gugik/">GUGiK</a></td>
+<td>Spatial data services from GUGiK integration portal</td>
 </tr>
 <tr>
 <td><a href="report/">PlotReporter</a></td>
