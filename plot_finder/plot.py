@@ -29,9 +29,15 @@ class Plot(BaseModel):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def area(self) -> float | None:
+        """Area in m². Transforms to EPSG:2180 if needed."""
         if not self.geom_wkt:
             return None
         geom = shapely.wkt.loads(self.geom_wkt)
+        if self.srid != 2180:
+            from pyproj import Transformer
+            from shapely.ops import transform
+            t = Transformer.from_crs(f"EPSG:{self.srid}", "EPSG:2180", always_xy=True)
+            geom = transform(t.transform, geom)
         return round(geom.area, 2)
 
     @computed_field  # type: ignore[prop-decorator]

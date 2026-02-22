@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from plot_finder.air import AirQuality
 from plot_finder.climate import Climate
 from plot_finder.exceptions import (
-    NothingFoundError,
     OpenMeteoError,
     OSRMError,
     OpenWeatherAuthError,
@@ -64,11 +63,13 @@ class PlotReporter:
         if a.plot.geom_wkt:
             data["geometry"] = self._geometry_wgs84(a.plot.geom_wkt)
 
-        for category in ("education", "finance", "transport", "infrastructure", "green_areas", "water", "nuisances"):
-            try:
-                data[category] = getattr(a, category)()
-            except (NothingFoundError, OverpassError, OSRMError):
-                pass
+        try:
+            places = a.all_places()
+            for category in ("education", "finance", "transport", "infrastructure", "green_areas", "water", "nuisances"):
+                if places.get(category):
+                    data[category] = places[category]
+        except (OverpassError, OSRMError):
+            pass
 
         try:
             data["air_quality"] = a.air_quality()

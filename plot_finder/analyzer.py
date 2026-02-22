@@ -61,6 +61,43 @@ _VOIVODESHIP_MAP = {
 }
 
 
+_PLACE_CATEGORIES: dict[str, str] = {
+    # education
+    "school": "education", "kindergarten": "education",
+    "university": "education", "college": "education",
+    # finance
+    "atm": "finance", "bank": "finance",
+    # transport
+    "bus_stop": "transport", "bus_station": "transport",
+    "platform": "transport", "stop_position": "transport",
+    "tram_stop": "transport", "station": "transport", "halt": "transport",
+    "ferry_terminal": "transport", "aerodrome": "transport",
+    # infrastructure
+    "supermarket": "infrastructure", "convenience": "infrastructure",
+    "mall": "infrastructure", "pharmacy": "infrastructure",
+    "hospital": "infrastructure", "clinic": "infrastructure",
+    "doctors": "infrastructure", "dentist": "infrastructure",
+    "post_office": "infrastructure", "fuel": "infrastructure",
+    "police": "infrastructure", "fire_station": "infrastructure",
+    "place_of_worship": "infrastructure", "restaurant": "infrastructure",
+    "cafe": "infrastructure",
+    # green_areas
+    "park": "green_areas", "garden": "green_areas",
+    "nature_reserve": "green_areas", "playground": "green_areas",
+    "forest": "green_areas", "wood": "green_areas",
+    # water
+    "water": "water", "river": "water", "lake": "water",
+    "pond": "water", "reservoir": "water",
+    "stream": "water", "canal": "water",
+    # nuisances
+    "line": "nuisances", "transformer": "nuisances",
+    "plant": "nuisances", "generator": "nuisances",
+    "industrial": "nuisances", "landfill": "nuisances",
+    "quarry": "nuisances", "works": "nuisances",
+    "wastewater_plant": "nuisances", "sawmill": "nuisances",
+}
+
+
 class PlotAnalyzer:
     def __init__(self, plot: Plot, *, radius: int = 1000, openweather_api_key: str | None = None) -> None:
         self.plot = plot
@@ -86,6 +123,63 @@ class PlotAnalyzer:
             return y, x  # centroid already (lon, lat) in WGS84
         lon, lat = _EPSG2180_TO_WGS84.transform(x, y)
         return lat, lon
+
+    # ------------------------------------------------------------------
+    # Bulk fetch — one Overpass request for all categories
+    # ------------------------------------------------------------------
+
+    def all_places(self, radius: int | None = None) -> dict[str, list[Place]]:
+        """Fetch all POI categories in a single Overpass request.
+
+        Returns a dict with keys: education, finance, transport,
+        infrastructure, green_areas, water, nuisances.
+        Also populates the cache so subsequent calls to individual
+        methods (e.g. education()) return instantly.
+        """
+        r = radius or self.radius
+        key = ("all_places", r)
+        if key in self._cache:
+            return self._cache[key]
+
+        query = f"""
+        [out:json][timeout:60];
+        (
+          nwr["amenity"~"school|kindergarten|university|college|atm|bank|bus_station|pharmacy|hospital|clinic|doctors|dentist|post_office|fuel|police|fire_station|place_of_worship|restaurant|cafe|ferry_terminal"](around:{r},{self._lat},{self._lon});
+          nwr["shop"~"supermarket|convenience|mall"](around:{r},{self._lat},{self._lon});
+          nwr["highway"="bus_stop"](around:{r},{self._lat},{self._lon});
+          nwr["public_transport"~"platform|stop_position"](around:{r},{self._lat},{self._lon});
+          nwr["railway"~"tram_stop|station|halt"](around:{r},{self._lat},{self._lon});
+          nwr["aeroway"="aerodrome"](around:{r},{self._lat},{self._lon});
+          nwr["leisure"~"park|garden|nature_reserve|playground"](around:{r},{self._lat},{self._lon});
+          nwr["landuse"~"forest|industrial|landfill|quarry"](around:{r},{self._lat},{self._lon});
+          nwr["natural"~"water|wood"](around:{r},{self._lat},{self._lon});
+          nwr["water"~"river|lake|pond|reservoir"](around:{r},{self._lat},{self._lon});
+          nwr["waterway"~"river|stream|canal"](around:{r},{self._lat},{self._lon});
+          nwr["power"~"line|transformer|plant|generator"](around:{r},{self._lat},{self._lon});
+          nwr["man_made"~"works|wastewater_plant"](around:{r},{self._lat},{self._lon});
+          nwr["craft"="sawmill"](around:{r},{self._lat},{self._lon});
+        );
+        out center;
+        """
+
+        all_results = self._run_overpass(query)
+
+        categories: dict[str, list[Place]] = {
+            "education": [], "finance": [], "transport": [],
+            "infrastructure": [], "green_areas": [], "water": [],
+            "nuisances": [],
+        }
+
+        for place in all_results:
+            cat = _PLACE_CATEGORIES.get(place.kind)
+            if cat:
+                categories[cat].append(place)
+
+        for cat_name, places in categories.items():
+            self._cache[(cat_name, r)] = places
+
+        self._cache[key] = categories
+        return categories
 
     # ------------------------------------------------------------------
     # Overpass-based place methods (cached)
