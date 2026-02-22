@@ -142,6 +142,8 @@ class PlotAnalyzer:
         (
           nwr["highway"="bus_stop"](around:{r},{self._lat},{self._lon});
           nwr["amenity"="bus_station"](around:{r},{self._lat},{self._lon});
+          nwr["public_transport"="platform"](around:{r},{self._lat},{self._lon});
+          nwr["public_transport"="stop_position"](around:{r},{self._lat},{self._lon});
           nwr["railway"="tram_stop"](around:{r},{self._lat},{self._lon});
           nwr["railway"="station"](around:{r},{self._lat},{self._lon});
           nwr["railway"="halt"](around:{r},{self._lat},{self._lon});
@@ -250,8 +252,14 @@ class PlotAnalyzer:
         (
           nwr["power"="line"](around:{r},{self._lat},{self._lon});
           nwr["power"="transformer"](around:{r},{self._lat},{self._lon});
+          nwr["power"="plant"](around:{r},{self._lat},{self._lon});
+          nwr["power"="generator"](around:{r},{self._lat},{self._lon});
           nwr["landuse"="industrial"](around:{r},{self._lat},{self._lon});
+          nwr["landuse"="landfill"](around:{r},{self._lat},{self._lon});
+          nwr["landuse"="quarry"](around:{r},{self._lat},{self._lon});
           nwr["man_made"="works"](around:{r},{self._lat},{self._lon});
+          nwr["man_made"="wastewater_plant"](around:{r},{self._lat},{self._lon});
+          nwr["craft"="sawmill"](around:{r},{self._lat},{self._lon});
         );
         out center;
         """
@@ -557,8 +565,10 @@ class PlotAnalyzer:
         query = f"""
         [out:json][timeout:30];
         (
-          way["highway"~"motorway|trunk|primary|secondary"](around:1000,{self._lat},{self._lon});
-          way["railway"~"rail|light_rail"](around:1000,{self._lat},{self._lon});
+          way["highway"~"motorway|trunk|primary|secondary"](around:2000,{self._lat},{self._lon});
+          way["highway"="tertiary"](around:1000,{self._lat},{self._lon});
+          way["highway"="residential"](around:500,{self._lat},{self._lon});
+          way["railway"~"rail|light_rail"](around:2000,{self._lat},{self._lon});
           node["aeroway"="aerodrome"](around:10000,{self._lat},{self._lon});
           way["landuse"="industrial"](around:2000,{self._lat},{self._lon});
         );
@@ -592,6 +602,10 @@ class PlotAnalyzer:
                 source_type, noise_impact = "Droga glowna", max(0, 70 - dist * 12)
             elif tags.get("highway") in ("primary", "secondary"):
                 source_type, noise_impact = "Droga krajowa/wojewodzka", max(0, 65 - dist * 15)
+            elif tags.get("highway") == "tertiary":
+                source_type, noise_impact = "Droga powiatowa", max(0, 55 - dist * 20)
+            elif tags.get("highway") == "residential":
+                source_type, noise_impact = "Droga lokalna", max(0, 45 - dist * 30)
             elif tags.get("railway"):
                 source_type, noise_impact = "Linia kolejowa", max(0, 70 - dist * 8)
             elif tags.get("aeroway"):
@@ -1187,6 +1201,7 @@ class PlotAnalyzer:
             kind = (
                 tags.get("amenity")
                 or tags.get("shop")
+                or tags.get("public_transport")
                 or tags.get("highway")
                 or tags.get("railway")
                 or tags.get("aeroway")
@@ -1197,6 +1212,7 @@ class PlotAnalyzer:
                 or tags.get("landuse")
                 or tags.get("power")
                 or tags.get("man_made")
+                or tags.get("craft")
                 or "unknown"
             )
             dist = self._haversine(self._lat, self._lon, lat, lon)
