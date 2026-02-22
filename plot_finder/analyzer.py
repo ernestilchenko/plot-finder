@@ -82,6 +82,8 @@ class PlotAnalyzer:
         if centroid is None:
             raise ValueError("Plot has no geometry — cannot compute centroid")
         x, y = centroid
+        if self.plot.srid == 4326:
+            return y, x  # centroid already (lon, lat) in WGS84
         lon, lat = _EPSG2180_TO_WGS84.transform(x, y)
         return lat, lon
 
