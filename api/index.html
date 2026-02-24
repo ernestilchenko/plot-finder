@@ -399,6 +399,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../async/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../place/" class="md-nav__link">
         
   
@@ -985,6 +1013,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#all_placesradiusnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        all_places(radius=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#educationradiusnone" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1140,6 +1179,56 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Async API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create_plot_async" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_plot_async
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asyncplotanalyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AsyncPlotAnalyzer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asyncplotreporter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AsyncPlotReporter
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1598,6 +1687,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#all_placesradiusnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        all_places(radius=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#educationradiusnone" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1753,6 +1853,56 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Async API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create_plot_async" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_plot_async
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asyncplotanalyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AsyncPlotAnalyzer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asyncplotreporter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AsyncPlotReporter
+      
+    </span>
+  </a>
   
 </li>
         
@@ -2212,6 +2362,8 @@
 </table>
 <h3 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h3>
 <p>All place methods return <code>list[Place]</code> sorted by distance. All accept an optional <code>radius: int</code> parameter.</p>
+<h4 id="all_placesradiusnone"><code>all_places(radius=None)</code><a class="headerlink" href="#all_placesradiusnone" title="Permanent link">&para;</a></h4>
+<p>All categories in a single Overpass query. Returns <code>dict[str, list[Place]]</code>.</p>
 <h4 id="educationradiusnone"><code>education(radius=None)</code><a class="headerlink" href="#educationradiusnone" title="Permanent link">&para;</a></h4>
 <p>Schools, kindergartens, universities, colleges.</p>
 <h4 id="financeradiusnone"><code>finance(radius=None)</code><a class="headerlink" href="#financeradiusnone" title="Permanent link">&para;</a></h4>
@@ -2279,6 +2431,23 @@
 <p>Environmental and geological risk assessment (flood, seismic, soil, landslide, noise, mining).</p>
 <h4 id="mpzp-mpzp"><code>mpzp() -&gt; MPZP</code><a class="headerlink" href="#mpzp-mpzp" title="Permanent link">&para;</a></h4>
 <p>Local spatial development plan data from Geoportal. Requires <code>pip install plot-finder[geo]</code>.</p>
+<hr />
+<h2 id="async-api">Async API<a class="headerlink" href="#async-api" title="Permanent link">&para;</a></h2>
+<h3 id="create_plot_async"><code>create_plot_async</code><a class="headerlink" href="#create_plot_async" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">plot</span> <span class="o">=</span> <span class="k">await</span> <span class="n">create_plot_async</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Async factory — same parameters as <code>Plot(...)</code>, returns a <code>Plot</code>.</p>
+<p><strong>Raises:</strong> <code>PlotNotFoundError</code>, <code>ULDKError</code>, <code>GeocodeError</code>, <code>AddressNotFoundError</code></p>
+<h3 id="asyncplotanalyzer"><code>AsyncPlotAnalyzer</code><a class="headerlink" href="#asyncplotanalyzer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">async</span> <span class="k">with</span> <span class="n">AsyncPlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">openweather_api_key</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="k">as</span> <span class="n">analyzer</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>Async context manager. Same methods as <code>PlotAnalyzer</code> — all <code>async</code> except <code>sunlight()</code> and <code>sunlight_seasonal()</code>. OSRM calls run concurrently via <code>asyncio.gather()</code>.</p>
+<h3 id="asyncplotreporter"><code>AsyncPlotReporter</code><a class="headerlink" href="#asyncplotreporter" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">report</span> <span class="o">=</span> <span class="k">await</span> <span class="n">AsyncPlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">for_date</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Runs all analyses concurrently. Returns <code>PlotReport</code>.</p>
+<p>See <a href="../async/">Async API docs</a> for full details and performance benchmarks.</p>
 <hr />
 <h2 id="airquality">AirQuality<a class="headerlink" href="#airquality" title="Permanent link">&para;</a></h2>
 <p>Pydantic <code>BaseModel</code> returned by <code>air_quality()</code>.</p>
@@ -2957,7 +3126,7 @@
 </tbody>
 </table>
 <h2 id="plotreporter">PlotReporter<a class="headerlink" href="#plotreporter" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">PlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">PlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2983,7 +3152,7 @@
 <blockquote>
 <p><code>from plot_finder.visualizer import PlotVisualizer</code> — requires <code>pip install plot-finder[viz]</code></p>
 </blockquote>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">PlotVisualizer</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">PlotVisualizer</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3027,7 +3196,7 @@
 <blockquote>
 <p><code>from plot_finder.ai import PlotAI</code> — requires <code>pip install plot-finder[ai]</code></p>
 </blockquote>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">PlotAI</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">PlotAI</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
