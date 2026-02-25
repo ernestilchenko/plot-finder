@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
     
     
       
@@ -712,6 +712,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../suikzp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SUIKZP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    POG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../gugik/" class="md-nav__link">
         
   
@@ -1244,6 +1300,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#suikzp-suikzp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suikzp() -&gt; SUIKZP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pog-pog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pog() -&gt; POG
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1408,6 +1486,39 @@
     <span class="md-ellipsis">
       
         MPZP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suikzp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUIKZP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POG
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanZone
       
     </span>
   </a>
@@ -1951,6 +2062,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#suikzp-suikzp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suikzp() -&gt; SUIKZP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pog-pog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pog() -&gt; POG
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2115,6 +2248,39 @@
     <span class="md-ellipsis">
       
         MPZP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suikzp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUIKZP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POG
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanZone
       
     </span>
   </a>
@@ -2556,6 +2722,10 @@
 <p>Environmental and geological risk assessment (flood, seismic, soil, landslide, noise, mining).</p>
 <h4 id="mpzp-mpzp"><code>mpzp() -&gt; MPZP</code><a class="headerlink" href="#mpzp-mpzp" title="Permanent link">&para;</a></h4>
 <p>Local spatial development plan data from Geoportal. Requires <code>pip install plot-finder[geo]</code>.</p>
+<h4 id="suikzp-suikzp"><code>suikzp() -&gt; SUIKZP</code><a class="headerlink" href="#suikzp-suikzp" title="Permanent link">&para;</a></h4>
+<p>Study of Conditions and Directions of Spatial Development from Geoportal.</p>
+<h4 id="pog-pog"><code>pog() -&gt; POG</code><a class="headerlink" href="#pog-pog" title="Permanent link">&para;</a></h4>
+<p>General Municipal Plan (adopted or projected) from Geoportal.</p>
 <hr />
 <h2 id="async-api">Async API<a class="headerlink" href="#async-api" title="Permanent link">&para;</a></h2>
 <h3 id="create_plot_async"><code>create_plot_async</code><a class="headerlink" href="#create_plot_async" title="Permanent link">&para;</a></h3>
@@ -3067,6 +3237,169 @@
 </tr>
 </tbody>
 </table>
+<h2 id="suikzp">SUIKZP<a class="headerlink" href="#suikzp" title="Permanent link">&para;</a></h2>
+<p>Pydantic <code>BaseModel</code> returned by <code>suikzp()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_plan</code></td>
+<td><code>bool</code></td>
+<td>Whether Studium exists</td>
+</tr>
+<tr>
+<td><code>plan_name</code></td>
+<td><code>str \| None</code></td>
+<td>Full plan name</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td><code>str \| None</code></td>
+<td>Resolution number</td>
+</tr>
+<tr>
+<td><code>resolution_date</code></td>
+<td><code>str \| None</code></td>
+<td>Adoption date</td>
+</tr>
+<tr>
+<td><code>plan_type</code></td>
+<td><code>str \| None</code></td>
+<td>Document type</td>
+</tr>
+<tr>
+<td><code>legend_url</code></td>
+<td><code>str \| None</code></td>
+<td>Legend image URL</td>
+</tr>
+<tr>
+<td><code>document_url</code></td>
+<td><code>str \| None</code></td>
+<td>Resolution document URL</td>
+</tr>
+<tr>
+<td><code>wms_url</code></td>
+<td><code>str \| None</code></td>
+<td>WMS map URL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pog">POG<a class="headerlink" href="#pog" title="Permanent link">&para;</a></h2>
+<p>Pydantic <code>BaseModel</code> returned by <code>pog()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_plan</code></td>
+<td><code>bool</code></td>
+<td>Whether POG exists</td>
+</tr>
+<tr>
+<td><code>plan_name</code></td>
+<td><code>str \| None</code></td>
+<td>Plan title</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td><code>str \| None</code></td>
+<td>Validity date</td>
+</tr>
+<tr>
+<td><code>document_url</code></td>
+<td><code>str \| None</code></td>
+<td>Legal act URL</td>
+</tr>
+<tr>
+<td><code>is_draft</code></td>
+<td><code>bool</code></td>
+<td>Whether this is a projected/draft plan</td>
+</tr>
+<tr>
+<td><code>zones</code></td>
+<td><code>list[PlanZone]</code></td>
+<td>Planning zones</td>
+</tr>
+<tr>
+<td><code>infill_area</code></td>
+<td><code>bool</code></td>
+<td>Building infill area</td>
+</tr>
+<tr>
+<td><code>downtown_area</code></td>
+<td><code>bool</code></td>
+<td>Downtown development area</td>
+</tr>
+<tr>
+<td><code>wms_url</code></td>
+<td><code>str \| None</code></td>
+<td>WMS map URL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="planzone">PlanZone<a class="headerlink" href="#planzone" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>designation</code></td>
+<td><code>str \| None</code></td>
+<td>Zone designation (e.g. "63SW")</td>
+</tr>
+<tr>
+<td><code>symbol</code></td>
+<td><code>str \| None</code></td>
+<td>Zone type code (e.g. "SW")</td>
+</tr>
+<tr>
+<td><code>symbol_name</code></td>
+<td><code>str \| None</code></td>
+<td>Human-readable zone name</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td><code>str \| None</code></td>
+<td>Zone validity date</td>
+</tr>
+<tr>
+<td><code>max_building_intensity</code></td>
+<td><code>float \| None</code></td>
+<td>Max building intensity</td>
+</tr>
+<tr>
+<td><code>max_building_coverage_pct</code></td>
+<td><code>float \| None</code></td>
+<td>Max building coverage (%)</td>
+</tr>
+<tr>
+<td><code>max_building_height_m</code></td>
+<td><code>float \| None</code></td>
+<td>Max building height (m)</td>
+</tr>
+<tr>
+<td><code>min_bio_active_pct</code></td>
+<td><code>float \| None</code></td>
+<td>Min biologically active surface (%)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="gugikentry">GugikEntry<a class="headerlink" href="#gugikentry" title="Permanent link">&para;</a></h2>
 <p>Pydantic <code>BaseModel</code> returned by <code>Plot.gugik()</code>. Requires <code>pip install plot-finder[geo]</code>.</p>
 <table>
@@ -3279,7 +3612,19 @@
 <td><code>mpzp</code></td>
 <td><code>MPZP \| None</code></td>
 <td><code>None</code></td>
-<td>Spatial development plan</td>
+<td>Local spatial development plan</td>
+</tr>
+<tr>
+<td><code>suikzp</code></td>
+<td><code>SUIKZP \| None</code></td>
+<td><code>None</code></td>
+<td>Study of conditions and directions</td>
+</tr>
+<tr>
+<td><code>pog</code></td>
+<td><code>POG \| None</code></td>
+<td><code>None</code></td>
+<td>General municipal plan</td>
 </tr>
 <tr>
 <td><code>gugik</code></td>

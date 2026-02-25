@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/gugik/">
+        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/pog/">
       
       
-        <link rel="prev" href="../pog/">
+        <link rel="prev" href="../suikzp/">
       
       
-        <link rel="next" href="../report/">
+        <link rel="next" href="../gugik/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>GUGiK - plot-finder</title>
+        <title>POG - plot-finder</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gugik-integration" class="md-skip">
+        <a href="#pog" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              GUGiK
+              POG
             
           </span>
         </div>
@@ -737,34 +737,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../pog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    POG
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -784,7 +756,7 @@
   <span class="md-ellipsis">
     
   
-    GUGiK
+    POG
   
 
     
@@ -802,7 +774,7 @@
   <span class="md-ellipsis">
     
   
-    GUGiK
+    POG
   
 
     
@@ -828,10 +800,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Usage
       
     </span>
   </a>
@@ -839,10 +811,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#planning-zones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Planning Zones
       
     </span>
   </a>
@@ -861,10 +833,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gugikentry-model" class="md-nav__link">
+  <a href="#pog-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GugikEntry Model
+        POG Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planzone-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanZone Model
       
     </span>
   </a>
@@ -875,6 +858,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gugik/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GUGiK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1204,10 +1215,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Usage
       
     </span>
   </a>
@@ -1215,10 +1226,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#planning-zones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Planning Zones
       
     </span>
   </a>
@@ -1237,10 +1248,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gugikentry-model" class="md-nav__link">
+  <a href="#pog-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GugikEntry Model
+        POG Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#planzone-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanZone Model
       
     </span>
   </a>
@@ -1267,28 +1289,105 @@
   
 
 
-<h1 id="gugik-integration">GUGiK Integration<a class="headerlink" href="#gugik-integration" title="Permanent link">&para;</a></h1>
-<p>Fetch spatial data services registered in the GUGiK integration portal (eziudp) for a given plot's TERYT identifier.</p>
+<h1 id="pog">POG<a class="headerlink" href="#pog" title="Permanent link">&para;</a></h1>
+<p>Query the General Municipal Plan (Plan Ogolny Gminy) from the national Geoportal service. POG is a new spatial planning document introduced by the 2023 planning reform, gradually replacing SUIKZP.</p>
+<p>The library checks adopted plans first, then falls back to projected/draft plans.</p>
 <hr />
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>GUGiK queries require the <code>geo</code> extra:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder<span class="o">[</span>geo<span class="o">]</span>
-</code></pre></div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">plot</span><span class="o">.</span><span class="n">gugik</span><span class="p">():</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">organ</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">nazwa</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">wms</span><span class="p">:</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WMS: </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">wms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">wfs</span><span class="p">:</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WFS: </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">wfs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">pog</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">pog</span><span class="p">()</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">has_plan</span><span class="p">)</span>       <span class="c1"># True</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">plan_name</span><span class="p">)</span>      <span class="c1"># &quot;Plan ogolny Opola&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">is_draft</span><span class="p">)</span>       <span class="c1"># False (adopted) or True (projected)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">valid_from</span><span class="p">)</span>     <span class="c1"># &quot;2025-12-18&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">document_url</span><span class="p">)</span>   <span class="c1"># URL to legal act</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">infill_area</span><span class="p">)</span>    <span class="c1"># True if in building infill area</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="nb">print</span><span class="p">(</span><span class="n">pog</span><span class="o">.</span><span class="n">downtown_area</span><span class="p">)</span>  <span class="c1"># True if in downtown area</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="n">pog</span><span class="o">.</span><span class="n">zones</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">designation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">symbol_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Max height: </span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">max_building_height_m</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Max coverage: </span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">max_building_coverage_pct</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Min bio-active: </span><span class="si">{</span><span class="n">zone</span><span class="o">.</span><span class="n">min_bio_active_pct</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="planning-zones">Planning Zones<a class="headerlink" href="#planning-zones" title="Permanent link">&para;</a></h2>
+<p>POG defines 13 zone types (strefy planistyczne):</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Zone Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SW</code></td>
+<td>Multi-family residential (wielofunkcyjna z zabudowa wielorodzinna)</td>
+</tr>
+<tr>
+<td><code>SJ</code></td>
+<td>Single-family residential (wielofunkcyjna z zabudowa jednorodzinna)</td>
+</tr>
+<tr>
+<td><code>SZ</code></td>
+<td>Farm-based development (wielofunkcyjna z zabudowa zagrodowa)</td>
+</tr>
+<tr>
+<td><code>SU</code></td>
+<td>Service zone (uslugowa)</td>
+</tr>
+<tr>
+<td><code>SH</code></td>
+<td>Large-format retail (handlu wielkopowierzchniowego)</td>
+</tr>
+<tr>
+<td><code>SP</code></td>
+<td>Economic/Industrial zone (gospodarcza)</td>
+</tr>
+<tr>
+<td><code>SR</code></td>
+<td>Agricultural production (produkcji rolniczej)</td>
+</tr>
+<tr>
+<td><code>SI</code></td>
+<td>Infrastructure (infrastrukturalna)</td>
+</tr>
+<tr>
+<td><code>SN</code></td>
+<td>Green space and recreation (zieleni i rekreacji)</td>
+</tr>
+<tr>
+<td><code>SC</code></td>
+<td>Cemetery (cmentarzy)</td>
+</tr>
+<tr>
+<td><code>SG</code></td>
+<td>Mining (gornicza)</td>
+</tr>
+<tr>
+<td><code>SO</code></td>
+<td>Open zone (otwarta)</td>
+</tr>
+<tr>
+<td><code>SK</code></td>
+<td>Transportation (komunikacyjna)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
-<p>Queries <code>integracja.gugik.gov.pl/eziudp</code> with the plot's TERYT identifier and parses the HTML table of registered spatial data services. Returns a list of entries with the responsible authority, dataset name, and WMS/WFS service URLs.</p>
-<h2 id="gugikentry-model">GugikEntry Model<a class="headerlink" href="#gugikentry-model" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Computes the plot centroid in EPSG:2180</li>
+<li>Sends <code>GetFeatureInfo</code> to the <strong>adopted</strong> POG service (<code>PlanyOgolneGmin</code>)</li>
+<li>If no adopted plan found, falls back to the <strong>projected</strong> POG service (<code>ProjektowanePlanyOgolneGmin</code>)</li>
+<li>Parses GML response for zones, building parameters, and plan metadata</li>
+<li>Checks for building infill areas (<code>obszarUzupelnieniaZabudowy</code>) and downtown areas (<code>obszarZabSrodmiejskiej</code>)</li>
+</ol>
+<h2 id="pog-model">POG Model<a class="headerlink" href="#pog-model" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1299,24 +1398,101 @@
 </thead>
 <tbody>
 <tr>
-<td><code>organ</code></td>
-<td><code>str</code></td>
-<td>Responsible authority name</td>
+<td><code>has_plan</code></td>
+<td><code>bool</code></td>
+<td>Whether a POG exists for this location</td>
 </tr>
 <tr>
-<td><code>nazwa</code></td>
-<td><code>str</code></td>
-<td>Dataset / service name</td>
-</tr>
-<tr>
-<td><code>wms</code></td>
+<td><code>plan_name</code></td>
 <td><code>str \| None</code></td>
-<td>WMS service URL (if available)</td>
+<td>Plan title</td>
 </tr>
 <tr>
-<td><code>wfs</code></td>
+<td><code>valid_from</code></td>
 <td><code>str \| None</code></td>
-<td>WFS service URL (if available)</td>
+<td>Date the plan became valid</td>
+</tr>
+<tr>
+<td><code>document_url</code></td>
+<td><code>str \| None</code></td>
+<td>URL to the legal act</td>
+</tr>
+<tr>
+<td><code>is_draft</code></td>
+<td><code>bool</code></td>
+<td><code>True</code> if this is a projected/draft plan</td>
+</tr>
+<tr>
+<td><code>zones</code></td>
+<td><code>list[PlanZone]</code></td>
+<td>Planning zones at this location</td>
+</tr>
+<tr>
+<td><code>infill_area</code></td>
+<td><code>bool</code></td>
+<td>Whether the plot is in a building infill area</td>
+</tr>
+<tr>
+<td><code>downtown_area</code></td>
+<td><code>bool</code></td>
+<td>Whether the plot is in a downtown development area</td>
+</tr>
+<tr>
+<td><code>wms_url</code></td>
+<td><code>str \| None</code></td>
+<td>WMS GetMap URL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="planzone-model">PlanZone Model<a class="headerlink" href="#planzone-model" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>designation</code></td>
+<td><code>str \| None</code></td>
+<td>Zone designation (e.g. "63SW")</td>
+</tr>
+<tr>
+<td><code>symbol</code></td>
+<td><code>str \| None</code></td>
+<td>Zone type code (e.g. "SW")</td>
+</tr>
+<tr>
+<td><code>symbol_name</code></td>
+<td><code>str \| None</code></td>
+<td>Human-readable zone name</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td><code>str \| None</code></td>
+<td>Zone validity date</td>
+</tr>
+<tr>
+<td><code>max_building_intensity</code></td>
+<td><code>float \| None</code></td>
+<td>Max above-ground building intensity</td>
+</tr>
+<tr>
+<td><code>max_building_coverage_pct</code></td>
+<td><code>float \| None</code></td>
+<td>Max building coverage (%)</td>
+</tr>
+<tr>
+<td><code>max_building_height_m</code></td>
+<td><code>float \| None</code></td>
+<td>Max building height (meters)</td>
+</tr>
+<tr>
+<td><code>min_bio_active_pct</code></td>
+<td><code>float \| None</code></td>
+<td>Min biologically active surface (%)</td>
 </tr>
 </tbody>
 </table>
