@@ -196,6 +196,27 @@ Returns a [`Climate`](climate.md) model. See the [Climate docs](climate.md) for 
 
 ---
 
+## All Places (Bulk)
+
+Fetch all categories in a single Overpass query instead of calling each method separately.
+
+```python
+places = analyzer.all_places()
+
+for category, items in places.items():
+    print(f"{category}: {len(items)} places")
+    for p in items:
+        print(f"  {p.name} — {p.distance_m}m")
+```
+
+Returns `dict[str, list[Place]]` with keys: `education`, `finance`, `transport`, `infrastructure`, `green_areas`, `water`, `nuisances`.
+
+!!! tip "Async"
+
+    For faster execution, use `AsyncPlotAnalyzer` — see [Async API](async.md).
+
+---
+
 ## How It Works
 
 1. The plot's centroid is converted from EPSG:2180 to WGS84

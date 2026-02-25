@@ -42,6 +42,10 @@ Create an analyzer for a `Plot`.
 
 All place methods return `list[Place]` sorted by distance. All accept an optional `radius: int` parameter.
 
+#### `all_places(radius=None)`
+
+All categories in a single Overpass query. Returns `dict[str, list[Place]]`.
+
 #### `education(radius=None)`
 
 Schools, kindergartens, universities, colleges.
@@ -111,6 +115,39 @@ Environmental and geological risk assessment (flood, seismic, soil, landslide, n
 #### `mpzp() -> MPZP`
 
 Local spatial development plan data from Geoportal. Requires `pip install plot-finder[geo]`.
+
+---
+
+## Async API
+
+### `create_plot_async`
+
+```python
+plot = await create_plot_async(plot_id=None, address=None, x=None, y=None)
+```
+
+Async factory — same parameters as `Plot(...)`, returns a `Plot`.
+
+**Raises:** `PlotNotFoundError`, `ULDKError`, `GeocodeError`, `AddressNotFoundError`
+
+### `AsyncPlotAnalyzer`
+
+```python
+async with AsyncPlotAnalyzer(plot, *, radius=1000, openweather_api_key=None) as analyzer:
+    ...
+```
+
+Async context manager. Same methods as `PlotAnalyzer` — all `async` except `sunlight()` and `sunlight_seasonal()`. OSRM calls run concurrently via `asyncio.gather()`.
+
+### `AsyncPlotReporter`
+
+```python
+report = await AsyncPlotReporter(analyzer).report(for_date=None)
+```
+
+Runs all analyses concurrently. Returns `PlotReport`.
+
+See [Async API docs](async.md) for full details and performance benchmarks.
 
 ---
 

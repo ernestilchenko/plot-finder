@@ -28,8 +28,12 @@ from plot_finder.exceptions import (
     ULDKError,
 )
 from plot_finder.plot import Plot
+from plot_finder._async import AsyncPlotAnalyzer, AsyncPlotReporter, create_plot_async
 
 __all__ = [
+    "AsyncPlotAnalyzer",
+    "AsyncPlotReporter",
+    "create_plot_async",
     "AddressNotFoundError",
     "AirQuality",
     "Climate",

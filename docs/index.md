@@ -53,6 +53,20 @@ report = PlotReporter(analyzer).report()
 report.model_dump_json()
 ```
 
+!!! tip "Async API"
+
+    ```python
+    import asyncio
+    from plot_finder import create_plot_async, AsyncPlotAnalyzer, AsyncPlotReporter
+
+    async def main():
+        plot = await create_plot_async(plot_id="141201_1.0001.6509")
+        async with AsyncPlotAnalyzer(plot, radius=3000) as a:
+            report = await AsyncPlotReporter(a).report()
+
+    asyncio.run(main())
+    ```
+
 !!! tip "Visualization"
 
     ```python
@@ -70,6 +84,7 @@ report.model_dump_json()
 |--------|-------------|
 | [Plot](plot.md) | Find parcels by TERYT ID, address, or coordinates |
 | [PlotAnalyzer](analyzer.md) | Analyze surroundings — education, shops, transport, etc. |
+| [Async API](async.md) | Async versions with concurrent HTTP (~5x faster) |
 | [Climate](climate.md) | Temperature, precipitation, wind, frost/hot days |
 | [Air Quality](air.md) | Air pollution data (OpenWeatherMap) |
 | [Sunlight](sun.md) | Sunrise, sunset, daylight hours, seasonal data |

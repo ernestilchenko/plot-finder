@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
+import time
 from datetime import date, datetime, timedelta
 from math import asin, ceil, cos, radians, sin, sqrt, tan
 
@@ -34,12 +36,59 @@ from plot_finder.exceptions import (
 from plot_finder.place import Place
 from plot_finder.plot import Plot
 
-_OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+_OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter",
+]
+_OVERPASS_URL = _OVERPASS_URLS[0]
 _OSRM_URL = "https://router.project-osrm.org/route/v1"
 _OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
 _OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
 _EPSG2180_TO_WGS84 = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
+
+_log = logging.getLogger("plot_finder")
+
+
+def _retry_get(url: str, *, params: dict | None = None, headers: dict | None = None,
+               timeout: float = 15, retries: int = 2, backoff: float = 1.0) -> httpx.Response:
+    """GET with retry + exponential backoff."""
+    last_exc: Exception | None = None
+    for attempt in range(retries + 1):
+        try:
+            resp = httpx.get(url, params=params, headers=headers, timeout=timeout)
+            if resp.status_code == 429:
+                _log.debug("Rate limited (429) on %s, attempt %d", url, attempt + 1)
+                time.sleep(backoff * (2 ** attempt))
+                continue
+            return resp
+        except (httpx.TimeoutException, httpx.HTTPError) as exc:
+            last_exc = exc
+            if attempt < retries:
+                _log.debug("Retry %d for %s: %s", attempt + 1, url, exc)
+                time.sleep(backoff * (2 ** attempt))
+    raise last_exc  # type: ignore[misc]
+
+
+def _retry_post(url: str, *, data: dict | None = None, headers: dict | None = None,
+                timeout: float = 30, retries: int = 2, backoff: float = 1.0) -> httpx.Response:
+    """POST with retry + exponential backoff."""
+    last_exc: Exception | None = None
+    for attempt in range(retries + 1):
+        try:
+            resp = httpx.post(url, data=data, headers=headers, timeout=timeout)
+            if resp.status_code == 429:
+                _log.debug("Rate limited (429) on %s, attempt %d", url, attempt + 1)
+                time.sleep(backoff * (2 ** attempt))
+                continue
+            return resp
+        except (httpx.TimeoutException, httpx.HTTPError) as exc:
+            last_exc = exc
+            if attempt < retries:
+                _log.debug("Retry %d for %s: %s", attempt + 1, url, exc)
+                time.sleep(backoff * (2 ** attempt))
+    raise last_exc  # type: ignore[misc]
 
 _VOIVODESHIP_MAP = {
     'dolnośląskie': 'dolnoslaskie',
@@ -397,7 +446,7 @@ class PlotAnalyzer:
         }
 
         try:
-            resp = httpx.get(_OPEN_METEO_URL, params=params, timeout=15)
+            resp = _retry_get(_OPEN_METEO_URL, params=params, timeout=15)
         except httpx.TimeoutException as exc:
             raise OpenMeteoError("Open-Meteo request timed out") from exc
         except httpx.HTTPError as exc:
@@ -456,7 +505,7 @@ class PlotAnalyzer:
             )
 
         try:
-            resp = httpx.get(
+            resp = _retry_get(
                 _OPENWEATHER_URL,
                 params={"lat": self._lat, "lon": self._lon, "appid": self._openweather_api_key},
                 timeout=10,
@@ -632,8 +681,8 @@ class PlotAnalyzer:
                     f"&WIDTH=101&HEIGHT=101&X=50&Y=50"
                 )
                 try:
-                    resp = httpx.get(url, timeout=10)
-                except httpx.HTTPError:
+                    resp = _retry_get(url, timeout=10, retries=1)
+                except (httpx.TimeoutException, httpx.HTTPError):
                     continue
                 if resp.status_code != 200:
                     continue
@@ -671,7 +720,7 @@ class PlotAnalyzer:
         out center;
         """
         try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=45)
+            resp = self._overpass_request(query)
             if resp.status_code != 200:
                 raise OverpassError(f"Overpass returned {resp.status_code}")
             elements = resp.json().get("elements", [])
@@ -759,7 +808,7 @@ class PlotAnalyzer:
 
         checks = [
             self._check_flood(),
-            self._check_seismic(),
+            self._check_seismic(self._lat, self._lon),
             self._check_soil(),
             self._check_landslide(),
             self._check_noise_risk(),
@@ -782,7 +831,7 @@ class PlotAnalyzer:
         out geom;
         """
         try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=30)
+            resp = self._overpass_request(query)
             if resp.status_code != 200:
                 raise OverpassError(f"Overpass returned {resp.status_code}")
             elements = resp.json().get("elements", [])
@@ -826,14 +875,15 @@ class PlotAnalyzer:
             color="yellow",
         )
 
-    def _check_seismic(self) -> RiskInfo:
+    @staticmethod
+    def _check_seismic(lat: float, lon: float) -> RiskInfo:
         zones = [
             {"region": "Legnica-Glogow", "lat_min": 51.0, "lat_max": 51.5, "lon_min": 15.5, "lon_max": 16.5, "level": "medium"},
             {"region": "Gorny Slask", "lat_min": 50.0, "lat_max": 50.5, "lon_min": 18.5, "lon_max": 19.5, "level": "high"},
             {"region": "Dolny Slask", "lat_min": 50.5, "lat_max": 51.5, "lon_min": 16.0, "lon_max": 17.5, "level": "low"},
         ]
         for z in zones:
-            if z["lat_min"] <= self._lat <= z["lat_max"] and z["lon_min"] <= self._lon <= z["lon_max"]:
+            if z["lat_min"] <= lat <= z["lat_max"] and z["lon_min"] <= lon <= z["lon_max"]:
                 color = {"high": "red", "medium": "orange", "low": "yellow"}[z["level"]]
                 return RiskInfo(
                     risk_type="seismic", name="Aktywnosc sejsmiczna",
@@ -859,7 +909,7 @@ class PlotAnalyzer:
         out center;
         """
         try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=30)
+            resp = self._overpass_request(query)
             if resp.status_code != 200:
                 raise OverpassError(f"Overpass returned {resp.status_code}")
             elements = resp.json().get("elements", [])
@@ -926,7 +976,7 @@ class PlotAnalyzer:
             "returnGeometry": "false",
         }
         try:
-            resp = httpx.get(sopo_url, params=params, timeout=15)
+            resp = _retry_get(sopo_url, params=params, timeout=15)
             if resp.status_code == 200:
                 data = resp.json()
                 results = data.get("results", [])
@@ -978,7 +1028,7 @@ class PlotAnalyzer:
             "X": "50", "Y": "50",
         }
         try:
-            resp = httpx.get(gddkia_wms, params=params, timeout=15)
+            resp = _retry_get(gddkia_wms, params=params, timeout=15)
             if resp.status_code == 200:
                 try:
                     data = resp.json()
@@ -1018,7 +1068,7 @@ class PlotAnalyzer:
         out center;
         """
         try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=30)
+            resp = self._overpass_request(query)
             if resp.status_code == 200:
                 elements = resp.json().get("elements", [])
                 has_highway = any("highway" in e.get("tags", {}) for e in elements)
@@ -1057,7 +1107,7 @@ class PlotAnalyzer:
         out center;
         """
         try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=30)
+            resp = self._overpass_request(query)
             if resp.status_code != 200:
                 raise OverpassError(f"Overpass returned {resp.status_code}")
             elements = resp.json().get("elements", [])
@@ -1160,7 +1210,7 @@ class PlotAnalyzer:
         }
 
         try:
-            resp = httpx.get(url, headers=headers, timeout=15)
+            resp = _retry_get(url, headers=headers, timeout=15)
             if resp.status_code != 200:
                 raise GeoportalError(f"Geoportal returned {resp.status_code}")
             html_content = resp.text
@@ -1174,7 +1224,7 @@ class PlotAnalyzer:
                     src = f"https:{src}"
                 elif not src.startswith("http"):
                     src = f"https://{src}"
-                iframe_resp = httpx.get(src, headers=headers, timeout=15)
+                iframe_resp = _retry_get(src, headers=headers, timeout=15)
                 if iframe_resp.status_code == 200:
                     html_content = iframe_resp.text
 
@@ -1269,14 +1319,38 @@ class PlotAnalyzer:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _run_overpass(self, query: str) -> list[Place]:
-        try:
-            resp = httpx.post(_OVERPASS_URL, data={"data": query}, timeout=90)
-        except httpx.TimeoutException as exc:
-            raise OverpassTimeoutError("Overpass API request timed out") from exc
-        except httpx.HTTPError as exc:
-            raise OverpassError(f"Overpass API request failed: {exc}") from exc
+    @staticmethod
+    def _overpass_request(query: str) -> httpx.Response:
+        """POST to Overpass with fallback servers and retry."""
+        last_exc: Exception | None = None
+        for url in _OVERPASS_URLS:
+            try:
+                resp = _retry_post(url, data={"data": query}, timeout=90, retries=1, backoff=2.0)
+                if resp.status_code == 200 and resp.text.strip():
+                    return resp
+                if resp.status_code == 200:
+                    _log.debug("Empty response from %s, trying next server", url)
+                    continue
+                if resp.status_code == 400:  # bad query, no point retrying
+                    return resp
+                if resp.status_code == 429:
+                    _log.debug("Rate limited on %s, trying next server", url)
+                    continue
+                if resp.status_code == 504:
+                    _log.debug("Timeout (504) on %s, trying next server", url)
+                    continue
+                return resp  # other status codes — let caller handle
+            except (httpx.TimeoutException, httpx.HTTPError) as exc:
+                _log.debug("Server %s failed: %s", url, exc)
+                last_exc = exc
+        if last_exc:
+            raise OverpassTimeoutError(
+                f"All Overpass servers failed (tried {len(_OVERPASS_URLS)})"
+            ) from last_exc
+        raise OverpassError("All Overpass servers failed")
 
+    def _run_overpass(self, query: str) -> list[Place]:
+        resp = self._overpass_request(query)
         if resp.status_code == 429:
             raise OverpassRateLimitError("Overpass API rate limit exceeded (429)")
         if resp.status_code == 504:
@@ -1284,7 +1358,10 @@ class PlotAnalyzer:
         if resp.status_code != 200:
             raise OverpassError(f"Overpass API returned {resp.status_code}")
 
-        elements = resp.json().get("elements", [])
+        try:
+            elements = resp.json().get("elements", [])
+        except Exception:
+            elements = []
 
         results: list[Place] = []
         for el in elements:
@@ -1335,7 +1412,7 @@ class PlotAnalyzer:
             f"{self._lon},{self._lat};{dest_lon},{dest_lat}"
         )
         try:
-            resp = httpx.get(url, params={"overview": "false"}, timeout=10)
+            resp = _retry_get(url, params={"overview": "false"}, timeout=10, retries=1)
         except httpx.TimeoutException as exc:
             raise OSRMTimeoutError("OSRM request timed out") from exc
         except httpx.HTTPError as exc:

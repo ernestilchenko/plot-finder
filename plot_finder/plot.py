@@ -11,6 +11,54 @@ _NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 _RESULT_FIELDS = "teryt,voivodeship,county,commune,region,parcel,geom_wkt,geom_extent,datasource"
 
 
+def _parse_uldk_response(text: str, plot_id: str | None, x: float | None, y: float | None) -> dict:
+    """Parse ULDK API response into a dict of field values."""
+    lines = text.strip().splitlines()
+    if not lines:
+        raise ULDKError("Empty response from ULDK API")
+
+    status = lines[0].strip()
+    if status.startswith("-1") or len(lines) < 2:
+        query = f"xy={x},{y}" if x is not None else plot_id
+        raise PlotNotFoundError(f"Parcel not found: {query}")
+
+    parts = lines[1].split("|")
+    field_names = _RESULT_FIELDS.split(",")
+    result: dict = {}
+    for name, value in zip(field_names, parts):
+        val = value.strip() or None
+        if name == "teryt":
+            result["plot_id"] = val
+        else:
+            result[name] = val
+
+    if result.get("geom_wkt") and ";" in result["geom_wkt"]:
+        _, wkt = result["geom_wkt"].split(";", 1)
+        result["geom_wkt"] = wkt
+
+    return result
+
+
+def _build_uldk_params(plot_id: str | None, x: float | None, y: float | None, srid: int) -> dict:
+    """Build ULDK API request params."""
+    if x is not None:
+        xy = f"{x},{y}"
+        if srid != 2180:
+            xy += f",{srid}"
+        return {
+            "request": "GetParcelByXY",
+            "xy": xy,
+            "result": _RESULT_FIELDS,
+            "srid": str(srid),
+        }
+    return {
+        "request": "GetParcelById",
+        "id": plot_id,
+        "result": _RESULT_FIELDS,
+        "srid": str(srid),
+    }
+
+
 class Plot(BaseModel):
     plot_id: str | None = None
     address: str | None = None
@@ -87,51 +135,16 @@ class Plot(BaseModel):
         self.srid = 4326
 
     def _fetch(self) -> None:
-        if self.x is not None:
-            xy = f"{self.x},{self.y}"
-            if self.srid != 2180:
-                xy += f",{self.srid}"
-            params = {
-                "request": "GetParcelByXY",
-                "xy": xy,
-                "result": _RESULT_FIELDS,
-                "srid": str(self.srid),
-            }
-        else:
-            params = {
-                "request": "GetParcelById",
-                "id": self.plot_id,
-                "result": _RESULT_FIELDS,
-                "srid": str(self.srid),
-            }
-
+        params = _build_uldk_params(self.plot_id, self.x, self.y, self.srid)
         try:
             resp = httpx.get(_ULDK_URL, params=params, timeout=30)
             resp.raise_for_status()
         except httpx.HTTPError as exc:
             raise ULDKError(f"HTTP request failed: {exc}") from exc
 
-        lines = resp.text.strip().splitlines()
-        if not lines:
-            raise ULDKError("Empty response from ULDK API")
-
-        status = lines[0].strip()
-        if status.startswith("-1") or len(lines) < 2:
-            query = f"xy={self.x},{self.y}" if self.x is not None else self.plot_id
-            raise PlotNotFoundError(f"Parcel not found: {query}")
-
-        parts = lines[1].split("|")
-        field_names = _RESULT_FIELDS.split(",")
-        for name, value in zip(field_names, parts):
-            val = value.strip() or None
-            if name == "teryt":
-                self.plot_id = val
-            else:
-                setattr(self, name, val)
-
-        if self.geom_wkt and ";" in self.geom_wkt:
-            _, wkt = self.geom_wkt.split(";", 1)
-            self.geom_wkt = wkt
+        fields = _parse_uldk_response(resp.text, self.plot_id, self.x, self.y)
+        for name, value in fields.items():
+            setattr(self, name, value)
 
     def gugik(self) -> list["GugikEntry"]:
         """Fetch GUGiK integration data for this plot's TERYT ID.

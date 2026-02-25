@@ -41,6 +41,7 @@ nav:
   - Getting Started:
       - Plot: plot.md
       - PlotAnalyzer: analyzer.md
+      - Async API: async.md
       - Place: place.md
   - Data:
       - Climate: climate.md
