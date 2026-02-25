@@ -63,6 +63,12 @@ Pydantic `BaseModel` with all analysis results.
 | `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
 | `elevation` | `Elevation \| None` | `None` | Elevation, slope, and aspect |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
+| `noise` | `Noise \| None` | `None` | Noise level data |
+| `risks` | `RiskReport \| None` | `None` | Environmental risk assessment |
+| `mpzp` | `MPZP \| None` | `None` | Local spatial development plan |
+| `suikzp` | `SUIKZP \| None` | `None` | Study of conditions and directions |
+| `pog` | `POG \| None` | `None` | General municipal plan |
+| `gugik` | `list[GugikEntry] \| None` | `None` | GUGiK integration data |
 
 ---
 

@@ -17,6 +17,8 @@ from plot_finder.exceptions import (
 from plot_finder.gugik import GugikEntry
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise
+from plot_finder.pog import POG
+from plot_finder.suikzp import SUIKZP
 from plot_finder.place import Place
 from plot_finder.risks import RiskReport
 from plot_finder.sun import SeasonalSun, SunInfo
@@ -45,6 +47,8 @@ class PlotReport(BaseModel):
     noise: Noise | None = None
     risks: RiskReport | None = None
     mpzp: MPZP | None = None
+    suikzp: SUIKZP | None = None
+    pog: POG | None = None
     gugik: list[GugikEntry] | None = None
     geometry: list[list[float]] | None = None
 
@@ -110,6 +114,16 @@ class PlotReporter:
 
         try:
             data["mpzp"] = a.mpzp()
+        except Exception:
+            pass
+
+        try:
+            data["suikzp"] = a.suikzp()
+        except Exception:
+            pass
+
+        try:
+            data["pog"] = a.pog()
         except Exception:
             pass
 

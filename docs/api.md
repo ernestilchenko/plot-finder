@@ -122,6 +122,14 @@ Environmental and geological risk assessment (flood, seismic, soil, landslide, n
 
 Local spatial development plan data from Geoportal. Requires `pip install plot-finder[geo]`.
 
+#### `suikzp() -> SUIKZP`
+
+Study of Conditions and Directions of Spatial Development from Geoportal.
+
+#### `pog() -> POG`
+
+General Municipal Plan (adopted or projected) from Geoportal.
+
 ---
 
 ## Async API
@@ -296,6 +304,50 @@ Pydantic `BaseModel` returned by `mpzp()`. Requires `pip install plot-finder[geo
 | `effective_date` | `str \| None` | Effective date |
 | `wms_url` | `str \| None` | WMS map URL |
 
+## SUIKZP
+
+Pydantic `BaseModel` returned by `suikzp()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `has_plan` | `bool` | Whether Studium exists |
+| `plan_name` | `str \| None` | Full plan name |
+| `resolution` | `str \| None` | Resolution number |
+| `resolution_date` | `str \| None` | Adoption date |
+| `plan_type` | `str \| None` | Document type |
+| `legend_url` | `str \| None` | Legend image URL |
+| `document_url` | `str \| None` | Resolution document URL |
+| `wms_url` | `str \| None` | WMS map URL |
+
+## POG
+
+Pydantic `BaseModel` returned by `pog()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `has_plan` | `bool` | Whether POG exists |
+| `plan_name` | `str \| None` | Plan title |
+| `valid_from` | `str \| None` | Validity date |
+| `document_url` | `str \| None` | Legal act URL |
+| `is_draft` | `bool` | Whether this is a projected/draft plan |
+| `zones` | `list[PlanZone]` | Planning zones |
+| `infill_area` | `bool` | Building infill area |
+| `downtown_area` | `bool` | Downtown development area |
+| `wms_url` | `str \| None` | WMS map URL |
+
+## PlanZone
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `designation` | `str \| None` | Zone designation (e.g. "63SW") |
+| `symbol` | `str \| None` | Zone type code (e.g. "SW") |
+| `symbol_name` | `str \| None` | Human-readable zone name |
+| `valid_from` | `str \| None` | Zone validity date |
+| `max_building_intensity` | `float \| None` | Max building intensity |
+| `max_building_coverage_pct` | `float \| None` | Max building coverage (%) |
+| `max_building_height_m` | `float \| None` | Max building height (m) |
+| `min_bio_active_pct` | `float \| None` | Min biologically active surface (%) |
+
 ## GugikEntry
 
 Pydantic `BaseModel` returned by `Plot.gugik()`. Requires `pip install plot-finder[geo]`.
@@ -350,7 +402,9 @@ Pydantic `BaseModel` returned by `PlotReporter.report()`.
 | `seasonal_sun` | `SeasonalSun \| None` | `None` | Seasonal sun data (4 dates) |
 | `noise` | `Noise \| None` | `None` | Noise level data |
 | `risks` | `RiskReport \| None` | `None` | Environmental risk assessment |
-| `mpzp` | `MPZP \| None` | `None` | Spatial development plan |
+| `mpzp` | `MPZP \| None` | `None` | Local spatial development plan |
+| `suikzp` | `SUIKZP \| None` | `None` | Study of conditions and directions |
+| `pog` | `POG \| None` | `None` | General municipal plan |
 | `gugik` | `list[GugikEntry] \| None` | `None` | GUGiK integration data |
 
 ## PlotReporter

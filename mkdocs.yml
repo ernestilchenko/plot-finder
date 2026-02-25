@@ -51,6 +51,8 @@ nav:
       - Noise: noise.md
       - Risks: risks.md
       - MPZP: mpzp.md
+      - SUIKZP: suikzp.md
+      - POG: pog.md
       - GUGiK: gugik.md
   - Report & Visualization:
       - PlotReporter: report.md

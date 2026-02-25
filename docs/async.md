@@ -85,6 +85,8 @@ All methods are `async` and have the same signatures and return types as `PlotAn
 | `await noise()` | `Noise` | Noise from GDDKiA + OSM |
 | `await risks()` | `RiskReport` | Flood, seismic, soil, landslide, noise, mining |
 | `await mpzp()` | `MPZP` | Local spatial plan |
+| `await suikzp()` | `SUIKZP` | Study of conditions and directions |
+| `await pog()` | `POG` | General municipal plan |
 | `sunlight()` | `SunInfo` | Sun data (sync — no HTTP) |
 | `sunlight_seasonal()` | `SeasonalSun` | Seasonal sun data (sync — no HTTP) |
 

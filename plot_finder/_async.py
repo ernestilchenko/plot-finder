@@ -47,6 +47,8 @@ from plot_finder.exceptions import (
 from plot_finder.gugik import GugikEntry
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
+from plot_finder.pog import POG, PlanZone, _POG_ZONE_NAMES
+from plot_finder.suikzp import SUIKZP
 from plot_finder.place import Place
 from plot_finder.plot import Plot, _NOMINATIM_URL, _ULDK_URL, _build_uldk_params, _parse_uldk_response
 from plot_finder.report import PlotReport, PlotReporter
@@ -63,6 +65,7 @@ from plot_finder.analyzer import (
     _OVERPASS_URLS,
     _PLACE_CATEGORIES,
     _VOIVODESHIP_MAP,
+    _safe_float,
 )
 
 _log = logging.getLogger("plot_finder")
@@ -221,6 +224,17 @@ class AsyncPlotAnalyzer:
         t = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
         lon, lat = t.transform(x, y)
         return lat, lon
+
+    def _centroid_2180(self) -> tuple[float, float]:
+        from pyproj import Transformer
+        centroid = self.plot.centroid
+        if centroid is None:
+            raise ValueError("Plot has no geometry — cannot compute centroid")
+        x, y = centroid
+        if self.plot.srid == 2180:
+            return x, y
+        t = Transformer.from_crs(f"EPSG:{self.plot.srid}", "EPSG:2180", always_xy=True)
+        return t.transform(x, y)
 
     @property
     def lat(self) -> float:
@@ -1038,10 +1052,10 @@ class AsyncPlotAnalyzer:
             from bs4 import BeautifulSoup
         except ImportError:
             raise ImportError("beautifulsoup4 is required for MPZP. Install: pip install plot-finder[geo]")
-        centroid = self.plot.centroid
-        if centroid is None:
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
             return MPZP()
-        x, y = centroid
         buf = 300
         minx, miny, maxx, maxy = x - buf, y - buf, x + buf, y + buf
         width, height = 800, 800
@@ -1091,6 +1105,143 @@ class AsyncPlotAnalyzer:
         self._cache[key] = result
         return result
 
+    # ------------------------------------------------------------------
+    # SUIKZP
+    # ------------------------------------------------------------------
+
+    async def suikzp(self) -> SUIKZP:
+        """Get Studium Uwarunkowan i Kierunkow Zagospodarowania Przestrzennego."""
+        key = ("suikzp",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return SUIKZP()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        base_url = "https://mapy.geoportal.gov.pl/wss/ext/KrajowaIntegracjaStudiumKierunkowZagospodarowaniaPrzestrzennego"
+        url = (
+            f"{base_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS=studium&QUERY_LAYERS=studium"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Referer": "https://mapy.geoportal.gov.pl/",
+        }
+
+        try:
+            resp = await _async_retry_get(self._client, url, headers=headers, timeout=15)
+            if resp.status_code != 200:
+                raise GeoportalError(f"Geoportal SUIKZP returned {resp.status_code}")
+            result = PlotAnalyzer._parse_suikzp(resp.text)
+            map_url = (
+                f"{base_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                f"&LAYERS=studium&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+            )
+            result.wms_url = map_url
+        except Exception:
+            result = SUIKZP()
+
+        self._cache[key] = result
+        return result
+
+    # ------------------------------------------------------------------
+    # POG
+    # ------------------------------------------------------------------
+
+    async def pog(self) -> POG:
+        """Get Plan Ogolny Gminy (adopted or projected)."""
+        key = ("pog",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return POG()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Referer": "https://mapy.geoportal.gov.pl/",
+        }
+
+        # Try adopted plans first
+        adopted_url = "https://mapy.geoportal.gov.pl/wss/ext/PlanyOgolneGmin"
+        layers = "strefaPlanistyczna,obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        url = (
+            f"{adopted_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS={layers}&QUERY_LAYERS={layers}"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+
+        try:
+            resp = await _async_retry_get(self._client, url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                result = PlotAnalyzer._parse_pog(resp.text, is_draft=False)
+                if result.has_plan:
+                    map_url = (
+                        f"{adopted_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                        f"&LAYERS={layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                        f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                    )
+                    result.wms_url = map_url
+                    self._cache[key] = result
+                    return result
+        except Exception:
+            pass
+
+        # Fallback: projected/draft plans
+        draft_url = "https://mapy.geoportal.gov.pl/wss/ext/ProjektowanePlanyOgolneGmin"
+        draft_layers = "strefaPlanistyczna,obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        url = (
+            f"{draft_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS={draft_layers}&QUERY_LAYERS={draft_layers}"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+
+        try:
+            resp = await _async_retry_get(self._client, url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                result = PlotAnalyzer._parse_pog(resp.text, is_draft=True)
+                if result.has_plan:
+                    map_url = (
+                        f"{draft_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                        f"&LAYERS={draft_layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                        f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                    )
+                    result.wms_url = map_url
+                    self._cache[key] = result
+                    return result
+        except Exception:
+            pass
+
+        result = POG()
+        self._cache[key] = result
+        return result
+
 
 # -------------------------------------------------------------------------
 # Async reporter — all analyses concurrently
@@ -1122,13 +1273,15 @@ class AsyncPlotReporter:
                 return None
 
         # Run all HTTP analyses concurrently
-        places_r, climate_r, elevation_r, noise_r, risks_r, mpzp_r = await asyncio.gather(
+        places_r, climate_r, elevation_r, noise_r, risks_r, mpzp_r, suikzp_r, pog_r = await asyncio.gather(
             _safe(a.all_places()),
             _safe(a.climate()),
             _safe(a.elevation()),
             _safe(a.noise()),
             _safe(a.risks()),
             _safe(a.mpzp()),
+            _safe(a.suikzp()),
+            _safe(a.pog()),
         )
 
         if places_r:
@@ -1146,6 +1299,10 @@ class AsyncPlotReporter:
             data["risks"] = risks_r
         if mpzp_r:
             data["mpzp"] = mpzp_r
+        if suikzp_r:
+            data["suikzp"] = suikzp_r
+        if pog_r:
+            data["pog"] = pog_r
 
         # Sunlight — no HTTP
         try:

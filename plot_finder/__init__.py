@@ -5,6 +5,8 @@ from plot_finder.elevation import Elevation
 from plot_finder.gugik import GugikEntry
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
+from plot_finder.pog import POG, PlanZone
+from plot_finder.suikzp import SUIKZP
 from plot_finder.place import Place
 from plot_finder.report import PlotReport, PlotReporter
 from plot_finder.risks import RiskInfo, RiskReport
@@ -57,7 +59,9 @@ __all__ = [
     "OverpassRateLimitError",
     "OverpassTimeoutError",
     "Place",
+    "PlanZone",
     "Plot",
+    "POG",
     "PlotAnalyzer",
     "PlotReport",
     "PlotReporter",
@@ -66,6 +70,7 @@ __all__ = [
     "RiskReport",
     "SOPOError",
     "SeasonalSun",
+    "SUIKZP",
     "SunInfo",
     "ULDKError",
 ]

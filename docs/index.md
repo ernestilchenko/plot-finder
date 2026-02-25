@@ -91,6 +91,8 @@ report.model_dump_json()
 | [Noise](noise.md) | Noise levels from GDDKiA maps & OSM estimation |
 | [Risks](risks.md) | Flood, seismic, soil, landslide, noise, mining risks |
 | [MPZP](mpzp.md) | Local spatial development plan from Geoportal |
+| [SUIKZP](suikzp.md) | Study of conditions and directions of spatial development |
+| [POG](pog.md) | General Municipal Plan (zones, building parameters) |
 | [GUGiK](gugik.md) | Spatial data services from GUGiK integration portal |
 | [PlotReporter](report.md) | Full structured report in one call |
 | [PlotVisualizer](visualizer.md) | Interactive HTML maps & static PNG images |

@@ -18,6 +18,8 @@ from plot_finder.elevation import Elevation
 from plot_finder.gugik import GugikEntry
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
+from plot_finder.pog import POG, PlanZone, _POG_ZONE_NAMES
+from plot_finder.suikzp import SUIKZP
 from plot_finder.risks import RiskInfo, RiskReport
 from plot_finder.sun import SeasonalSun, SunInfo
 from plot_finder.exceptions import (
@@ -51,6 +53,14 @@ _OPEN_METEO_ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 _EPSG2180_TO_WGS84 = Transformer.from_crs("EPSG:2180", "EPSG:4326", always_xy=True)
 
 _log = logging.getLogger("plot_finder")
+
+
+def _safe_float(val: str) -> float | None:
+    """Parse float from GML value, return None on failure."""
+    try:
+        return float(val.strip())
+    except (ValueError, AttributeError):
+        return None
 
 
 def _retry_get(url: str, *, params: dict | None = None, headers: dict | None = None,
@@ -174,6 +184,17 @@ class PlotAnalyzer:
             return y, x  # centroid already (lon, lat) in WGS84
         lon, lat = _EPSG2180_TO_WGS84.transform(x, y)
         return lat, lon
+
+    def _centroid_2180(self) -> tuple[float, float]:
+        """Return centroid in EPSG:2180 (meters). Used for WMS queries."""
+        centroid = self.plot.centroid
+        if centroid is None:
+            raise ValueError("Plot has no geometry — cannot compute centroid")
+        x, y = centroid
+        if self.plot.srid == 2180:
+            return x, y
+        t = Transformer.from_crs(f"EPSG:{self.plot.srid}", "EPSG:2180", always_xy=True)
+        return t.transform(x, y)
 
     # ------------------------------------------------------------------
     # Bulk fetch — one Overpass request for all categories
@@ -1263,11 +1284,11 @@ class PlotAnalyzer:
                 "Install it with: pip install plot-finder[geo]"
             )
 
-        centroid = self.plot.centroid
-        if centroid is None:
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
             return MPZP()
 
-        x, y = centroid
         buf = 300
         minx, miny = x - buf, y - buf
         maxx, maxy = x + buf, y + buf
@@ -1396,6 +1417,298 @@ class PlotAnalyzer:
             resolution_date=resolution_date,
             publication=publication,
             effective_date=effective_date,
+        )
+
+    # ------------------------------------------------------------------
+    # SUIKZP (Studium)
+    # ------------------------------------------------------------------
+
+    def suikzp(self) -> SUIKZP:
+        """Get Studium Uwarunkowan i Kierunkow Zagospodarowania Przestrzennego."""
+        key = ("suikzp",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return SUIKZP()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        base_url = "https://mapy.geoportal.gov.pl/wss/ext/KrajowaIntegracjaStudiumKierunkowZagospodarowaniaPrzestrzennego"
+        url = (
+            f"{base_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS=studium&QUERY_LAYERS=studium"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Referer": "https://mapy.geoportal.gov.pl/",
+        }
+
+        try:
+            resp = _retry_get(url, headers=headers, timeout=15)
+            if resp.status_code != 200:
+                raise GeoportalError(f"Geoportal SUIKZP returned {resp.status_code}")
+            result = self._parse_suikzp(resp.text)
+            map_url = (
+                f"{base_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                f"&LAYERS=studium&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+            )
+            result.wms_url = map_url
+        except Exception:
+            result = SUIKZP()
+
+        self._cache[key] = result
+        return result
+
+    @staticmethod
+    def _parse_suikzp(text: str) -> SUIKZP:
+        if not text.strip() or len(text) < 50:
+            return SUIKZP()
+
+        plan_name = None
+        resolution = None
+        resolution_date = None
+        plan_type = None
+        legend_url = None
+        document_url = None
+
+        # GML fields
+        name_match = re.search(r"<[^>]*nazwapelnaplanu[^>]*>([^<]+)", text, re.IGNORECASE)
+        if not name_match:
+            name_match = re.search(r"<[^>]*nazwaskroconaplanu[^>]*>([^<]+)", text, re.IGNORECASE)
+        if name_match:
+            plan_name = name_match.group(1).strip()
+
+        res_match = re.search(r"<[^>]*numeruchwaly[^>]*>([^<]+)", text, re.IGNORECASE)
+        if res_match:
+            resolution = res_match.group(1).strip()
+
+        date_match = re.search(r"<[^>]*datauchwalenia[^>]*>([^<]+)", text, re.IGNORECASE)
+        if date_match:
+            resolution_date = date_match.group(1).strip()
+
+        type_match = re.search(r"<[^>]*typ[^>]*>([^<]+)", text, re.IGNORECASE)
+        if type_match:
+            plan_type = type_match.group(1).strip()
+
+        legend_match = re.search(r"<[^>]*legenda[^>]*>(https?://[^<]+)", text, re.IGNORECASE)
+        if legend_match:
+            legend_url = legend_match.group(1).strip()
+
+        doc_match = re.search(r"<[^>]*uchwala[^>]*>(https?://[^<]+)", text, re.IGNORECASE)
+        if doc_match:
+            document_url = doc_match.group(1).strip()
+
+        if not plan_name and not resolution:
+            # Fallback: try HTML-like parsing (some municipalities return HTML)
+            name_match2 = re.search(r"(?:Studium|studium)[^<]*?(?:dla|gminy|miasta)\s+([^<\n]+)", text, re.IGNORECASE)
+            if name_match2:
+                plan_name = f"Studium {name_match2.group(1).strip()}"
+            res_match2 = re.search(r"(?:Uchwala|uchwala)\s+(?:Nr|nr)\s*([^\n<]+)", text, re.IGNORECASE)
+            if res_match2:
+                resolution = f"Uchwala Nr {res_match2.group(1).strip()}"
+            date_match2 = re.search(r"z dnia\s*(\d{4}-\d{2}-\d{2})", text)
+            if date_match2:
+                resolution_date = date_match2.group(1)
+
+        if not plan_name and not resolution:
+            return SUIKZP()
+
+        return SUIKZP(
+            has_plan=True,
+            plan_name=plan_name,
+            resolution=resolution,
+            resolution_date=resolution_date,
+            plan_type=plan_type,
+            legend_url=legend_url,
+            document_url=document_url,
+        )
+
+    # ------------------------------------------------------------------
+    # POG (Plan Ogolny Gminy)
+    # ------------------------------------------------------------------
+
+    def pog(self) -> POG:
+        """Get Plan Ogolny Gminy (adopted or projected)."""
+        key = ("pog",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return POG()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Referer": "https://mapy.geoportal.gov.pl/",
+        }
+
+        # Try adopted plans first
+        adopted_url = "https://mapy.geoportal.gov.pl/wss/ext/PlanyOgolneGmin"
+        layers = "strefaPlanistyczna,obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        url = (
+            f"{adopted_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS={layers}&QUERY_LAYERS={layers}"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+
+        try:
+            resp = _retry_get(url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                result = self._parse_pog(resp.text, is_draft=False)
+                if result.has_plan:
+                    map_url = (
+                        f"{adopted_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                        f"&LAYERS={layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                        f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                    )
+                    result.wms_url = map_url
+                    self._cache[key] = result
+                    return result
+        except Exception:
+            pass
+
+        # Fallback: try projected/draft plans
+        draft_url = "https://mapy.geoportal.gov.pl/wss/ext/ProjektowanePlanyOgolneGmin"
+        draft_layers = "strefaPlanistyczna,obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        url = (
+            f"{draft_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS={draft_layers}&QUERY_LAYERS={draft_layers}"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=application/vnd.ogc.gml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+
+        try:
+            resp = _retry_get(url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                result = self._parse_pog(resp.text, is_draft=True)
+                if result.has_plan:
+                    map_url = (
+                        f"{draft_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                        f"&LAYERS={draft_layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                        f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                    )
+                    result.wms_url = map_url
+                    self._cache[key] = result
+                    return result
+        except Exception:
+            pass
+
+        result = POG()
+        self._cache[key] = result
+        return result
+
+    @staticmethod
+    def _parse_pog(text: str, *, is_draft: bool = False) -> POG:
+        if not text.strip() or len(text) < 50:
+            return POG()
+
+        zones: list[PlanZone] = []
+        plan_name = None
+        valid_from = None
+        document_url = None
+        infill_area = False
+        downtown_area = False
+
+        # Parse aktPlanowaniaprzestrzennego
+        title_match = re.search(r"<[^>]*tytul[^>]*>([^<]+)", text, re.IGNORECASE)
+        if title_match:
+            plan_name = title_match.group(1).strip()
+
+        from_match = re.search(r"<[^>]*obowiazujeOd[^>]*>([^<]+)", text, re.IGNORECASE)
+        if from_match:
+            valid_from = from_match.group(1).strip()
+
+        link_match = re.search(r"<[^>]*lacze[^>]*>(https?://[^<]+)", text, re.IGNORECASE)
+        if link_match:
+            document_url = link_match.group(1).strip()
+
+        # Parse strefaPlanistyczna features
+        # Look for zone blocks — each has symbol, oznaczenie, building params
+        zone_blocks = re.findall(
+            r"<[^>]*strefaPlanistyczna[^>]*>(.+?)</[^>]*strefaPlanistyczna[^>]*>",
+            text, re.DOTALL | re.IGNORECASE,
+        )
+        if not zone_blocks:
+            # Alternative: find all symbol/oznaczenie pairs in the whole text
+            symbols = re.findall(r"<[^>]*(?:symbol|Symbol)[^>]*>([^<]+)", text)
+            designations = re.findall(r"<[^>]*(?:oznaczenie|Oznaczenie)[^>]*>([^<]+)", text)
+            if symbols:
+                for i, sym in enumerate(symbols):
+                    sym = sym.strip()
+                    desig = designations[i].strip() if i < len(designations) else None
+                    zones.append(PlanZone(
+                        designation=desig,
+                        symbol=sym,
+                        symbol_name=_POG_ZONE_NAMES.get(sym),
+                    ))
+        else:
+            for block in zone_blocks:
+                sym_m = re.search(r"<[^>]*symbol[^>]*>([^<]+)", block, re.IGNORECASE)
+                desig_m = re.search(r"<[^>]*oznaczenie[^>]*>([^<]+)", block, re.IGNORECASE)
+                intensity_m = re.search(r"<[^>]*maksNadziemnaIntensywnoscZabudowy[^>]*>([^<]+)", block, re.IGNORECASE)
+                coverage_m = re.search(r"<[^>]*maksUdzialPowierzchniZabudowy[^>]*>([^<]+)", block, re.IGNORECASE)
+                height_m = re.search(r"<[^>]*maksWysokoscZabudowy[^>]*>([^<]+)", block, re.IGNORECASE)
+                bio_m = re.search(r"<[^>]*minUdzialPowierzchniBiologicznieCzynnej[^>]*>([^<]+)", block, re.IGNORECASE)
+                zone_from_m = re.search(r"<[^>]*obowiazujeOd[^>]*>([^<]+)", block, re.IGNORECASE)
+
+                sym = sym_m.group(1).strip() if sym_m else None
+                zones.append(PlanZone(
+                    designation=desig_m.group(1).strip() if desig_m else None,
+                    symbol=sym,
+                    symbol_name=_POG_ZONE_NAMES.get(sym) if sym else None,
+                    valid_from=zone_from_m.group(1).strip() if zone_from_m else None,
+                    max_building_intensity=_safe_float(intensity_m.group(1)) if intensity_m else None,
+                    max_building_coverage_pct=_safe_float(coverage_m.group(1)) if coverage_m else None,
+                    max_building_height_m=_safe_float(height_m.group(1)) if height_m else None,
+                    min_bio_active_pct=_safe_float(bio_m.group(1)) if bio_m else None,
+                ))
+
+        # Check for infill and downtown areas
+        if re.search(r"obszarUzupelnieniaZabudowy", text, re.IGNORECASE):
+            ouz_blocks = re.findall(r"<[^>]*obszarUzupelnieniaZabudowy[^>]*>", text, re.IGNORECASE)
+            if ouz_blocks:
+                infill_area = True
+
+        if re.search(r"obszarZabSrodmiejskiej", text, re.IGNORECASE):
+            ozs_blocks = re.findall(r"<[^>]*obszarZabSrodmiejskiej[^>]*>", text, re.IGNORECASE)
+            if ozs_blocks:
+                downtown_area = True
+
+        if not plan_name and not zones:
+            return POG()
+
+        return POG(
+            has_plan=True,
+            plan_name=plan_name,
+            valid_from=valid_from,
+            document_url=document_url,
+            is_draft=is_draft,
+            zones=zones,
+            infill_area=infill_area,
+            downtown_area=downtown_area,
         )
 
     # ------------------------------------------------------------------
