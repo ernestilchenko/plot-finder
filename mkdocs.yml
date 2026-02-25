@@ -47,6 +47,7 @@ nav:
       - Climate: climate.md
       - Air Quality: air.md
       - Sunlight: sun.md
+      - Elevation: elevation.md
       - Noise: noise.md
       - Risks: risks.md
       - MPZP: mpzp.md
@@ -56,6 +57,7 @@ nav:
       - PlotVisualizer: visualizer.md
       - PlotAI: ai.md
   - Reference:
+      - CLI: cli.md
       - API: api.md
       - Errors: errors.md
 
