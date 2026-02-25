@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/api/">
       
       
-        <link rel="prev" href="../ai/">
+        <link rel="prev" href="../cli/">
       
       
         <link rel="next" href="../errors/">
@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
     
     
       
@@ -600,6 +600,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../elevation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Elevation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../noise/" class="md-nav__link">
         
   
@@ -915,6 +943,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1112,6 +1168,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#elevation-elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        elevation() -&gt; Elevation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#air_quality-airquality" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1253,6 +1320,17 @@
     <span class="md-ellipsis">
       
         Climate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elevation
       
     </span>
   </a>
@@ -1575,6 +1653,17 @@
     <span class="md-ellipsis">
       
         Exceptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
       
     </span>
   </a>
@@ -1786,6 +1875,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#elevation-elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        elevation() -&gt; Elevation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#air_quality-airquality" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1927,6 +2027,17 @@
     <span class="md-ellipsis">
       
         Climate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elevation
       
     </span>
   </a>
@@ -2255,6 +2366,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2381,6 +2503,9 @@
 <p><strong>Raises:</strong> <code>NothingFoundError</code>, <code>OverpassError</code>, <code>OverpassTimeoutError</code>, <code>OverpassRateLimitError</code>, <code>OSRMError</code>, <code>OSRMTimeoutError</code></p>
 <h4 id="climate-climate"><code>climate() -&gt; Climate</code><a class="headerlink" href="#climate-climate" title="Permanent link">&para;</a></h4>
 <p>Historical climate data (last 365 days). Uses Open-Meteo Archive API — no API key needed.</p>
+<p><strong>Raises:</strong> <code>OpenMeteoError</code></p>
+<h4 id="elevation-elevation"><code>elevation() -&gt; Elevation</code><a class="headerlink" href="#elevation-elevation" title="Permanent link">&para;</a></h4>
+<p>Elevation, slope, and aspect. Uses Open-Meteo Elevation API — no API key needed.</p>
 <p><strong>Raises:</strong> <code>OpenMeteoError</code></p>
 <h4 id="air_quality-airquality"><code>air_quality() -&gt; AirQuality</code><a class="headerlink" href="#air_quality-airquality" title="Permanent link">&para;</a></h4>
 <p>Current air pollution data. Requires <code>openweather_api_key</code>.</p>
@@ -2587,6 +2712,39 @@
 <td><code>snow_days</code></td>
 <td><code>int \| None</code></td>
 <td>Days with snowfall &gt; 0cm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="elevation">Elevation<a class="headerlink" href="#elevation" title="Permanent link">&para;</a></h2>
+<p>Pydantic <code>BaseModel</code> returned by <code>elevation()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>elevation_m</code></td>
+<td><code>float</code></td>
+<td>Meters above sea level</td>
+</tr>
+<tr>
+<td><code>slope_deg</code></td>
+<td><code>float \| None</code></td>
+<td>Terrain slope (degrees)</td>
+</tr>
+<tr>
+<td><code>aspect</code></td>
+<td><code>str \| None</code></td>
+<td>Compass direction (N, NE, E, SE, S, SW, W, NW, flat)</td>
+</tr>
+<tr>
+<td><code>aspect_deg</code></td>
+<td><code>float \| None</code></td>
+<td>Aspect in degrees (0=N, 90=E, 180=S, 270=W)</td>
 </tr>
 </tbody>
 </table>
@@ -3088,6 +3246,12 @@
 <td>Temperature, precipitation, wind (last 365 days)</td>
 </tr>
 <tr>
+<td><code>elevation</code></td>
+<td><code>Elevation \| None</code></td>
+<td><code>None</code></td>
+<td>Elevation, slope, and aspect</td>
+</tr>
+<tr>
 <td><code>sunlight</code></td>
 <td><code>SunInfo \| None</code></td>
 <td><code>None</code></td>
@@ -3338,6 +3502,58 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder
+</code></pre></div>
+<p>All commands support <code>--json</code> for machine-readable output.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plot-finder analyze &lt;id&gt; [--radius N] [--json]</code></td>
+<td>Full report</td>
+</tr>
+<tr>
+<td><code>plot-finder search --address "..." [--json]</code></td>
+<td>Find plot by address</td>
+</tr>
+<tr>
+<td><code>plot-finder search --plot-id &lt;id&gt; [--json]</code></td>
+<td>Find plot by TERYT ID</td>
+</tr>
+<tr>
+<td><code>plot-finder places &lt;id&gt; [--radius N] [--category C]</code></td>
+<td>Nearby places</td>
+</tr>
+<tr>
+<td><code>plot-finder elevation &lt;id&gt;</code></td>
+<td>Elevation, slope, aspect</td>
+</tr>
+<tr>
+<td><code>plot-finder climate &lt;id&gt;</code></td>
+<td>Climate (last 365 days)</td>
+</tr>
+<tr>
+<td><code>plot-finder sunlight &lt;id&gt; [--date YYYY-MM-DD]</code></td>
+<td>Sunrise, sunset, daylight</td>
+</tr>
+<tr>
+<td><code>plot-finder noise &lt;id&gt;</code></td>
+<td>Noise level</td>
+</tr>
+<tr>
+<td><code>plot-finder risks &lt;id&gt;</code></td>
+<td>Environmental risks</td>
+</tr>
+</tbody>
+</table>
+<p>Also available as <code>python -m plot_finder &lt;command&gt; ...</code></p>
 <hr />
 
 

@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/air/">
+        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/cli/">
       
       
-        <link rel="prev" href="../climate/">
+        <link rel="prev" href="../ai/">
       
       
-        <link rel="next" href="../sun/">
+        <link rel="next" href="../api/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Air Quality - plot-finder</title>
+        <title>CLI - plot-finder</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#air-quality" class="md-skip">
+        <a href="#cli" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Air Quality
+              CLI
             
           </span>
         </div>
@@ -459,8 +459,6 @@
       
   
   
-    
-  
   
   
     
@@ -473,11 +471,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -498,7 +498,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -541,37 +541,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Air Quality
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../air/" class="md-nav__link">
         
   
   
@@ -587,92 +560,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#airquality-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AirQuality Fields
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aqi-scale" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AQI Scale
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#error-handling" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Error Handling
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-an-api-key" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting an API Key
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1002,8 +889,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1014,13 +903,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -1041,7 +928,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1056,10 +943,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../cli/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1075,6 +989,153 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyze-full-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze — Full report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-find-a-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        search — Find a plot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#places-nearby-places" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        places — Nearby places
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elevation-elevation-slope-aspect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        elevation — Elevation, slope, aspect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climate-climate-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        climate — Climate data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sunlight-sunrise-sunset-daylight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sunlight — Sunrise, sunset, daylight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-noise-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        noise — Noise level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risks-environmental-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        risks — Environmental risks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#json-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1170,17 +1231,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1192,43 +1242,115 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#airquality-fields" class="md-nav__link">
+  <a href="#commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AirQuality Fields
+        Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyze-full-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze — Full report
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#aqi-scale" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#search-find-a-plot" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AQI Scale
+        search — Find a plot
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#error-handling" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#places-nearby-places" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Error Handling
+        places — Nearby places
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-an-api-key" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#elevation-elevation-slope-aspect" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Getting an API Key
+        elevation — Elevation, slope, aspect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climate-climate-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        climate — Climate data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sunlight-sunrise-sunset-daylight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sunlight — Sunrise, sunset, daylight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-noise-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        noise — Noise level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risks-environmental-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        risks — Environmental risks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#json-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Output
       
     </span>
   </a>
@@ -1255,147 +1377,157 @@
   
 
 
-<h1 id="air-quality">Air Quality<a class="headerlink" href="#air-quality" title="Permanent link">&para;</a></h1>
-<p>Get real-time air pollution data for the plot location using the <a href="https://openweathermap.org/api/air-pollution">OpenWeatherMap Air Pollution API</a>.</p>
-<blockquote>
-<p>Requires a free API key from <a href="https://openweathermap.org/api">openweathermap.org</a>.</p>
-</blockquote>
-<hr />
-<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">openweather_api_key</span><span class="o">=</span><span class="s2">&quot;your_key_here&quot;</span><span class="p">)</span>
+<h1 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h1>
+<p>Command-line interface for quick plot analysis without writing code.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder
 </code></pre></div>
+<hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">air</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">air_quality</span><span class="p">()</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">aqi</span><span class="p">)</span>        <span class="c1"># 1-5</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">aqi_label</span><span class="p">)</span>  <span class="c1"># Good / Fair / Moderate / Poor / Very Poor</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">pm2_5</span><span class="p">)</span>      <span class="c1"># PM2.5 (ug/m3)</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">pm10</span><span class="p">)</span>       <span class="c1"># PM10 (ug/m3)</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">co</span><span class="p">)</span>         <span class="c1"># Carbon monoxide (ug/m3)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">no2</span><span class="p">)</span>        <span class="c1"># Nitrogen dioxide (ug/m3)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">o3</span><span class="p">)</span>         <span class="c1"># Ozone (ug/m3)</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">air</span><span class="o">.</span><span class="n">so2</span><span class="p">)</span>        <span class="c1"># Sulphur dioxide (ug/m3)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>plot-finder &lt;command&gt; [options]
 </code></pre></div>
-<h2 id="airquality-fields">AirQuality Fields<a class="headerlink" href="#airquality-fields" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>aqi</code></td>
-<td><code>int</code></td>
-<td>Air Quality Index (1-5)</td>
-</tr>
-<tr>
-<td><code>aqi_label</code></td>
-<td><code>str</code></td>
-<td>Human-readable label</td>
-</tr>
-<tr>
-<td><code>co</code></td>
-<td><code>float</code></td>
-<td>Carbon monoxide (ug/m3)</td>
-</tr>
-<tr>
-<td><code>no</code></td>
-<td><code>float</code></td>
-<td>Nitrogen monoxide (ug/m3)</td>
-</tr>
-<tr>
-<td><code>no2</code></td>
-<td><code>float</code></td>
-<td>Nitrogen dioxide (ug/m3)</td>
-</tr>
-<tr>
-<td><code>o3</code></td>
-<td><code>float</code></td>
-<td>Ozone (ug/m3)</td>
-</tr>
-<tr>
-<td><code>so2</code></td>
-<td><code>float</code></td>
-<td>Sulphur dioxide (ug/m3)</td>
-</tr>
-<tr>
-<td><code>pm2_5</code></td>
-<td><code>float</code></td>
-<td>Fine particulate matter (ug/m3)</td>
-</tr>
-<tr>
-<td><code>pm10</code></td>
-<td><code>float</code></td>
-<td>Coarse particulate matter (ug/m3)</td>
-</tr>
-<tr>
-<td><code>nh3</code></td>
-<td><code>float</code></td>
-<td>Ammonia (ug/m3)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="aqi-scale">AQI Scale<a class="headerlink" href="#aqi-scale" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>AQI</th>
-<th>Label</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>Good</td>
-<td>Air quality is satisfactory</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Fair</td>
-<td>Acceptable quality</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Moderate</td>
-<td>Sensitive groups may be affected</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Poor</td>
-<td>Everyone may experience effects</td>
-</tr>
-<tr>
-<td>5</td>
-<td>Very Poor</td>
-<td>Health alert</td>
-</tr>
-</tbody>
-</table>
-<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenWeatherAuthError</span><span class="p">,</span> <span class="n">OpenWeatherError</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">air</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">air_quality</span><span class="p">()</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">except</span> <span class="n">OpenWeatherAuthError</span><span class="p">:</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid or missing API key&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="k">except</span> <span class="n">OpenWeatherError</span><span class="p">:</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenWeatherMap request failed&quot;</span><span class="p">)</span>
+<p>Running <code>plot-finder</code> without arguments shows the banner and help:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>           __      __        _____           __
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    ____  / /___  / /_      / __(_)___  ____/ /__  _____
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>   / __ \/ / __ \/ __/_____/ /_/ / __ \/ __  / _ \/ ___/
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  / /_/ / / /_/ / /_/_____/ __/ / / / / /_/ /  __/ /
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a> / .___/_/\____/\__/     /_/ /_/_/ /_/\__,_/\___/_/
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>/_/
 </code></pre></div>
-<h2 id="getting-an-api-key">Getting an API Key<a class="headerlink" href="#getting-an-api-key" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Register at <a href="https://home.openweathermap.org/users/sign_up">openweathermap.org</a></li>
-<li>Go to <a href="https://home.openweathermap.org/api_keys">API Keys</a></li>
-<li>Copy your key and pass it to <code>PlotAnalyzer</code></li>
-</ol>
-<p>The free tier allows 1,000 calls/day.</p>
+<p>Also available as <code>python -m plot_finder &lt;command&gt; ...</code></p>
 <hr />
+<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
+<h3 id="analyze-full-report"><code>analyze</code> — Full report<a class="headerlink" href="#analyze-full-report" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>plot-finder<span class="w"> </span>analyze<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>plot-finder<span class="w"> </span>analyze<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--radius<span class="w"> </span><span class="m">2000</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>plot-finder<span class="w"> </span>analyze<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>plot-finder<span class="w"> </span>analyze<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--openweather-key<span class="w"> </span>YOUR_KEY
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--radius N</code></td>
+<td>Search radius in meters (default: 1000)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>Output raw JSON</td>
+</tr>
+<tr>
+<td><code>--openweather-key KEY</code></td>
+<td>OpenWeatherMap API key for air quality</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search-find-a-plot"><code>search</code> — Find a plot<a class="headerlink" href="#search-find-a-plot" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>plot-finder<span class="w"> </span>search<span class="w"> </span>--address<span class="w"> </span><span class="s2">&quot;Warszawa, Marszalkowska 1&quot;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>plot-finder<span class="w"> </span>search<span class="w"> </span>--plot-id<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>plot-finder<span class="w"> </span>search<span class="w"> </span>--x<span class="w"> </span><span class="m">21</span>.0<span class="w"> </span>--y<span class="w"> </span><span class="m">52</span>.2
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>plot-finder<span class="w"> </span>search<span class="w"> </span>--address<span class="w"> </span><span class="s2">&quot;Krakow, Rynek 1&quot;</span><span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--address</code></td>
+<td>Street address (geocoded via Nominatim)</td>
+</tr>
+<tr>
+<td><code>--plot-id</code></td>
+<td>TERYT parcel ID</td>
+</tr>
+<tr>
+<td><code>--x</code>, <code>--y</code></td>
+<td>Coordinates</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>Output raw JSON</td>
+</tr>
+</tbody>
+</table>
+<h3 id="places-nearby-places"><code>places</code> — Nearby places<a class="headerlink" href="#places-nearby-places" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>plot-finder<span class="w"> </span>places<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>plot-finder<span class="w"> </span>places<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--category<span class="w"> </span>education
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>plot-finder<span class="w"> </span>places<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--radius<span class="w"> </span><span class="m">3000</span><span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--radius N</code></td>
+<td>Search radius in meters (default: 1000)</td>
+</tr>
+<tr>
+<td><code>--category C</code></td>
+<td>Filter: education, finance, transport, infrastructure, green_areas, water, nuisances</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>Output raw JSON</td>
+</tr>
+</tbody>
+</table>
+<h3 id="elevation-elevation-slope-aspect"><code>elevation</code> — Elevation, slope, aspect<a class="headerlink" href="#elevation-elevation-slope-aspect" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>plot-finder<span class="w"> </span>elevation<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>plot-finder<span class="w"> </span>elevation<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+</code></pre></div>
+<h3 id="climate-climate-data"><code>climate</code> — Climate data<a class="headerlink" href="#climate-climate-data" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>plot-finder<span class="w"> </span>climate<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>plot-finder<span class="w"> </span>climate<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+</code></pre></div>
+<h3 id="sunlight-sunrise-sunset-daylight"><code>sunlight</code> — Sunrise, sunset, daylight<a class="headerlink" href="#sunlight-sunrise-sunset-daylight" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>plot-finder<span class="w"> </span>sunlight<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>plot-finder<span class="w"> </span>sunlight<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--date<span class="w"> </span><span class="m">2025</span>-06-21
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>plot-finder<span class="w"> </span>sunlight<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--date YYYY-MM-DD</code></td>
+<td>Date to calculate for (default: today)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>Output raw JSON</td>
+</tr>
+</tbody>
+</table>
+<h3 id="noise-noise-level"><code>noise</code> — Noise level<a class="headerlink" href="#noise-noise-level" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>plot-finder<span class="w"> </span>noise<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>plot-finder<span class="w"> </span>noise<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+</code></pre></div>
+<h3 id="risks-environmental-risks"><code>risks</code> — Environmental risks<a class="headerlink" href="#risks-environmental-risks" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>plot-finder<span class="w"> </span>risks<span class="w"> </span>141201_1.0001.6509
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>plot-finder<span class="w"> </span>risks<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json
+</code></pre></div>
+<hr />
+<h2 id="json-output">JSON Output<a class="headerlink" href="#json-output" title="Permanent link">&para;</a></h2>
+<p>All commands support <code>--json</code> for machine-readable output, useful for piping:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>plot-finder<span class="w"> </span>elevation<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.elevation_m&#39;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>plot-finder<span class="w"> </span>analyze<span class="w"> </span>141201_1.0001.6509<span class="w"> </span>--json<span class="w"> </span>&gt;<span class="w"> </span>report.json
+</code></pre></div>
 
 
 
