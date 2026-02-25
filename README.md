@@ -51,6 +51,20 @@ viz.save("map.html")  # interactive map
 viz.save("map.png")   # static image
 ```
 
+## CLI
+
+```bash
+plot-finder analyze 141201_1.0001.6509 --radius 2000
+plot-finder analyze 141201_1.0001.6509 --json
+plot-finder search --address "Warszawa, Marszalkowska 1"
+plot-finder elevation 141201_1.0001.6509
+plot-finder climate 141201_1.0001.6509
+plot-finder sunlight 141201_1.0001.6509
+plot-finder noise 141201_1.0001.6509
+plot-finder risks 141201_1.0001.6509
+plot-finder places 141201_1.0001.6509 --category education
+```
+
 ## Documentation
 
 Full documentation: [ernestilchenko.github.io/plot-finder](https://ernestilchenko.github.io/plot-finder/)

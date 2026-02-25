@@ -82,6 +82,12 @@ Historical climate data (last 365 days). Uses Open-Meteo Archive API — no API 
 
 **Raises:** `OpenMeteoError`
 
+#### `elevation() -> Elevation`
+
+Elevation, slope, and aspect. Uses Open-Meteo Elevation API — no API key needed.
+
+**Raises:** `OpenMeteoError`
+
 #### `air_quality() -> AirQuality`
 
 Current air pollution data. Requires `openweather_api_key`.
@@ -187,6 +193,17 @@ Pydantic `BaseModel` returned by `climate()`.
 | `hot_days` | `int \| None` | Days with max temp above 30°C |
 | `rainy_days` | `int \| None` | Days with rain > 0.1mm |
 | `snow_days` | `int \| None` | Days with snowfall > 0cm |
+
+## Elevation
+
+Pydantic `BaseModel` returned by `elevation()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `elevation_m` | `float` | Meters above sea level |
+| `slope_deg` | `float \| None` | Terrain slope (degrees) |
+| `aspect` | `str \| None` | Compass direction (N, NE, E, SE, S, SW, W, NW, flat) |
+| `aspect_deg` | `float \| None` | Aspect in degrees (0=N, 90=E, 180=S, 270=W) |
 
 ## SunInfo
 
@@ -328,6 +345,7 @@ Pydantic `BaseModel` returned by `PlotReporter.report()`.
 | `nuisances` | `list[Place]` | `[]` | Power lines, industrial zones, factories |
 | `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
 | `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
+| `elevation` | `Elevation \| None` | `None` | Elevation, slope, and aspect |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
 | `seasonal_sun` | `SeasonalSun \| None` | `None` | Seasonal sun data (4 dates) |
 | `noise` | `Noise \| None` | `None` | Noise level data |
@@ -444,5 +462,29 @@ Freeform Q&A about the plot.
 | `GugikError` | `Exception` | GUGiK integration error |
 | `GeocodeError` | `Exception` | Base Nominatim geocoding error |
 | `AddressNotFoundError` | `GeocodeError` | No results for address |
+
+---
+
+## CLI
+
+```bash
+pip install plot-finder
+```
+
+All commands support `--json` for machine-readable output.
+
+| Command | Description |
+|---------|-------------|
+| `plot-finder analyze <id> [--radius N] [--json]` | Full report |
+| `plot-finder search --address "..." [--json]` | Find plot by address |
+| `plot-finder search --plot-id <id> [--json]` | Find plot by TERYT ID |
+| `plot-finder places <id> [--radius N] [--category C]` | Nearby places |
+| `plot-finder elevation <id>` | Elevation, slope, aspect |
+| `plot-finder climate <id>` | Climate (last 365 days) |
+| `plot-finder sunlight <id> [--date YYYY-MM-DD]` | Sunrise, sunset, daylight |
+| `plot-finder noise <id>` | Noise level |
+| `plot-finder risks <id>` | Environmental risks |
+
+Also available as `python -m plot_finder <command> ...`
 
 ---

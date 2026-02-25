@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from plot_finder.air import AirQuality
 from plot_finder.climate import Climate
+from plot_finder.elevation import Elevation
 from plot_finder.exceptions import (
     OpenMeteoError,
     OSRMError,
@@ -38,6 +39,7 @@ class PlotReport(BaseModel):
     nuisances: list[Place] = []
     air_quality: AirQuality | None = None
     climate: Climate | None = None
+    elevation: Elevation | None = None
     sunlight: SunInfo | None = None
     seasonal_sun: SeasonalSun | None = None
     noise: Noise | None = None
@@ -79,6 +81,11 @@ class PlotReporter:
         try:
             data["climate"] = a.climate()
         except (OpenMeteoError, Exception):
+            pass
+
+        try:
+            data["elevation"] = a.elevation()
+        except Exception:
             pass
 
         try:

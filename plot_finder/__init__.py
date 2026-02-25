@@ -1,6 +1,7 @@
 from plot_finder.air import AirQuality
 from plot_finder.analyzer import PlotAnalyzer
 from plot_finder.climate import Climate
+from plot_finder.elevation import Elevation
 from plot_finder.gugik import GugikEntry
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
@@ -37,6 +38,7 @@ __all__ = [
     "AddressNotFoundError",
     "AirQuality",
     "Climate",
+    "Elevation",
     "GDDKiAError",
     "GeocodeError",
     "GeoportalError",

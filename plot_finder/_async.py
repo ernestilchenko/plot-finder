@@ -27,6 +27,7 @@ import httpx
 
 from plot_finder.air import AirQuality
 from plot_finder.climate import Climate
+from plot_finder.elevation import Elevation
 from plot_finder.exceptions import (
     AddressNotFoundError,
     GDDKiAError,
@@ -55,6 +56,7 @@ from plot_finder.sun import SeasonalSun, SunInfo
 # Reuse constants and static helpers from sync analyzer
 from plot_finder.analyzer import (
     PlotAnalyzer,
+    _OPEN_METEO_ELEVATION_URL,
     _OPEN_METEO_URL,
     _OPENWEATHER_URL,
     _OSRM_URL,
@@ -533,6 +535,65 @@ class AsyncPlotAnalyzer:
             hot_days=sum(1 for t in _safe(daily.get("temperature_2m_max")) if t > 30),
             rainy_days=sum(1 for r in _safe(daily.get("rain_sum")) if r > 0.1),
             snow_days=sum(1 for s in _safe(daily.get("snowfall_sum")) if s > 0),
+        )
+        self._cache[key] = result
+        return result
+
+    async def elevation(self) -> Elevation:
+        """Get elevation, slope, and aspect for the plot location."""
+        key = ("elevation",)
+        if key in self._cache:
+            return self._cache[key]
+
+        from math import atan, atan2, cos, degrees, radians, sqrt as msqrt
+
+        dlat = 30 / 111_320
+        dlon = 30 / (111_320 * cos(radians(self._lat)))
+        lats = [self._lat, self._lat + dlat, self._lat - dlat, self._lat, self._lat]
+        lons = [self._lon, self._lon, self._lon, self._lon + dlon, self._lon - dlon]
+
+        try:
+            resp = await _async_retry_get(
+                self._client, _OPEN_METEO_ELEVATION_URL,
+                params={
+                    "latitude": ",".join(f"{v:.6f}" for v in lats),
+                    "longitude": ",".join(f"{v:.6f}" for v in lons),
+                },
+                timeout=10,
+            )
+        except httpx.TimeoutException as exc:
+            raise OpenMeteoError("Open-Meteo elevation request timed out") from exc
+        except httpx.HTTPError as exc:
+            raise OpenMeteoError(f"Open-Meteo elevation request failed: {exc}") from exc
+
+        if resp.status_code != 200:
+            raise OpenMeteoError(f"Open-Meteo elevation returned {resp.status_code}")
+
+        data = resp.json()
+        elevations = data.get("elevation", [])
+        if not elevations or len(elevations) < 5:
+            raise OpenMeteoError("Open-Meteo returned incomplete elevation data")
+
+        centre, north, south, east, west = elevations
+        dz_dx = (east - west) / 60
+        dz_dy = (north - south) / 60
+        slope = degrees(atan(msqrt(dz_dx ** 2 + dz_dy ** 2)))
+
+        if dz_dx == 0 and dz_dy == 0:
+            aspect_deg_val = None
+            aspect_label = "flat"
+        else:
+            raw = degrees(atan2(dz_dx, dz_dy))
+            aspect_deg_val = raw % 360
+            dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+            idx = int((aspect_deg_val + 22.5) % 360 / 45)
+            aspect_label = dirs[idx]
+
+        result = Elevation(
+            elevation_m=round(centre, 1),
+            slope_deg=round(slope, 2),
+            aspect=aspect_label,
+            aspect_deg=round(aspect_deg_val, 1) if aspect_deg_val is not None else None,
         )
         self._cache[key] = result
         return result
@@ -1061,9 +1122,10 @@ class AsyncPlotReporter:
                 return None
 
         # Run all HTTP analyses concurrently
-        places_r, climate_r, noise_r, risks_r, mpzp_r = await asyncio.gather(
+        places_r, climate_r, elevation_r, noise_r, risks_r, mpzp_r = await asyncio.gather(
             _safe(a.all_places()),
             _safe(a.climate()),
+            _safe(a.elevation()),
             _safe(a.noise()),
             _safe(a.risks()),
             _safe(a.mpzp()),
@@ -1076,6 +1138,8 @@ class AsyncPlotReporter:
 
         if climate_r:
             data["climate"] = climate_r
+        if elevation_r:
+            data["elevation"] = elevation_r
         if noise_r:
             data["noise"] = noise_r
         if risks_r:

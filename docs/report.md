@@ -61,6 +61,7 @@ Pydantic `BaseModel` with all analysis results.
 | `nuisances` | `list[Place]` | `[]` | Power lines, industrial zones, factories |
 | `air_quality` | `AirQuality \| None` | `None` | Air pollution data |
 | `climate` | `Climate \| None` | `None` | Temperature, precipitation, wind (last 365 days) |
+| `elevation` | `Elevation \| None` | `None` | Elevation, slope, and aspect |
 | `sunlight` | `SunInfo \| None` | `None` | Sun position and daylight |
 
 ---
