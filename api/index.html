@@ -2666,7 +2666,7 @@
 <p>Rivers, lakes, ponds, reservoirs, streams, canals.</p>
 <h4 id="nuisancesradiusnone"><code>nuisances(radius=None)</code><a class="headerlink" href="#nuisancesradiusnone" title="Permanent link">&para;</a></h4>
 <p>Power lines, transformers, industrial zones, factories.</p>
-<p><strong>Raises:</strong> <code>NothingFoundError</code>, <code>OverpassError</code>, <code>OverpassTimeoutError</code>, <code>OverpassRateLimitError</code>, <code>OSRMError</code>, <code>OSRMTimeoutError</code></p>
+<p><strong>Raises:</strong> <code>NothingFoundError</code>, <code>OverpassError</code>, <code>OverpassTimeoutError</code>, <code>OverpassRateLimitError</code></p>
 <h4 id="climate-climate"><code>climate() -&gt; Climate</code><a class="headerlink" href="#climate-climate" title="Permanent link">&para;</a></h4>
 <p>Historical climate data (last 365 days). Uses Open-Meteo Archive API — no API key needed.</p>
 <p><strong>Raises:</strong> <code>OpenMeteoError</code></p>
@@ -2737,7 +2737,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">async</span> <span class="k">with</span> <span class="n">AsyncPlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">openweather_api_key</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="k">as</span> <span class="n">analyzer</span><span class="p">:</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="o">...</span>
 </code></pre></div>
-<p>Async context manager. Same methods as <code>PlotAnalyzer</code> — all <code>async</code> except <code>sunlight()</code> and <code>sunlight_seasonal()</code>. OSRM calls run concurrently via <code>asyncio.gather()</code>.</p>
+<p>Async context manager. Same methods as <code>PlotAnalyzer</code> — all <code>async</code> except <code>sunlight()</code> and <code>sunlight_seasonal()</code>.</p>
 <h3 id="asyncplotreporter"><code>AsyncPlotReporter</code><a class="headerlink" href="#asyncplotreporter" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">report</span> <span class="o">=</span> <span class="k">await</span> <span class="n">AsyncPlotReporter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">for_date</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
@@ -3470,21 +3470,6 @@
 <td><code>float</code></td>
 <td>Straight-line distance (m)</td>
 </tr>
-<tr>
-<td><code>walk_min</code></td>
-<td><code>int</code></td>
-<td>Walking time (min)</td>
-</tr>
-<tr>
-<td><code>bike_min</code></td>
-<td><code>int</code></td>
-<td>Cycling time (min)</td>
-</tr>
-<tr>
-<td><code>car_min</code></td>
-<td><code>int</code></td>
-<td>Driving time (min)</td>
-</tr>
 </tbody>
 </table>
 <hr />
@@ -3789,16 +3774,6 @@
 <td><code>OverpassRateLimitError</code></td>
 <td><code>OverpassError</code></td>
 <td>Overpass rate limit (429)</td>
-</tr>
-<tr>
-<td><code>OSRMError</code></td>
-<td><code>Exception</code></td>
-<td>Base OSRM error</td>
-</tr>
-<tr>
-<td><code>OSRMTimeoutError</code></td>
-<td><code>OSRMError</code></td>
-<td>OSRM timeout</td>
 </tr>
 <tr>
 <td><code>OpenWeatherError</code></td>

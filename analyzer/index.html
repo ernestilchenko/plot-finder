@@ -1422,7 +1422,7 @@
 
 
 <h1 id="plotanalyzer">PlotAnalyzer<a class="headerlink" href="#plotanalyzer" title="Permanent link">&para;</a></h1>
-<p>Analyzes the surroundings of a <a href="../plot/">Plot</a> using <a href="https://www.openstreetmap.org/">OpenStreetMap</a> data (via Overpass API) and real road routing (via <a href="https://project-osrm.org/">OSRM</a>).</p>
+<p>Analyzes the surroundings of a <a href="../plot/">Plot</a> using <a href="https://www.openstreetmap.org/">OpenStreetMap</a> data (via Overpass API).</p>
 <hr />
 <h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span>
@@ -1774,9 +1774,8 @@
 <ol>
 <li>The plot's centroid is converted from EPSG:2180 to WGS84</li>
 <li>An Overpass API query searches OpenStreetMap within the radius</li>
-<li>For each result, OSRM calculates the real road distance and driving time</li>
-<li>Walking and cycling times are estimated from the road distance (~5 km/h and ~15 km/h)</li>
-<li>Results are sorted by straight-line distance (closest first)</li>
+<li>Haversine distance is calculated from the plot centroid to each result</li>
+<li>Results are sorted by distance (closest first)</li>
 </ol>
 <hr />
 

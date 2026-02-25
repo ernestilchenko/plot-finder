@@ -498,17 +498,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#travel-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Travel Time
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#serialization" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1215,17 +1204,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#travel-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Travel Time
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#serialization" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1303,30 +1281,10 @@
 <tr>
 <td><code>distance_m</code></td>
 <td><code>float</code></td>
-<td>Straight-line distance in meters</td>
-</tr>
-<tr>
-<td><code>walk_min</code></td>
-<td><code>int</code></td>
-<td>Walking time in minutes (~5 km/h)</td>
-</tr>
-<tr>
-<td><code>bike_min</code></td>
-<td><code>int</code></td>
-<td>Cycling time in minutes (~15 km/h)</td>
-</tr>
-<tr>
-<td><code>car_min</code></td>
-<td><code>int</code></td>
-<td>Driving time in minutes (via OSRM)</td>
+<td>Straight-line distance in meters (haversine)</td>
 </tr>
 </tbody>
 </table>
-<h2 id="travel-time">Travel Time<a class="headerlink" href="#travel-time" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Driving</strong> — real route time from <a href="https://project-osrm.org/">OSRM</a> (road network routing)</li>
-<li><strong>Walking &amp; Cycling</strong> — calculated from the OSRM road distance at average speeds (5 km/h and 15 km/h)</li>
-</ul>
 <blockquote>
 <p>Results are always sorted by <code>distance_m</code> (closest first).</p>
 </blockquote>
@@ -1336,14 +1294,14 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># To dict</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">place</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># {&#39;name&#39;: &#39;Szkoła Podstawowa nr 3&#39;, &#39;kind&#39;: &#39;school&#39;, &#39;lat&#39;: 50.69, &#39;lon&#39;: 18.44,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">#  &#39;distance_m&#39;: 850.0, &#39;walk_min&#39;: 13, &#39;bike_min&#39;: 5, &#39;car_min&#39;: 3}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">#  &#39;distance_m&#39;: 850.0}</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># To JSON</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">place</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># Access fields</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">place</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>        <span class="c1"># Szkoła Podstawowa nr 3</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">place</span><span class="o">.</span><span class="n">walk_min</span><span class="p">)</span>    <span class="c1"># 13</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">place</span><span class="o">.</span><span class="n">distance_m</span><span class="p">)</span>  <span class="c1"># 850.0</span>
 </code></pre></div>
 <h2 id="example-output">Example Output<a class="headerlink" href="#example-output" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span><span class="p">,</span> <span class="n">PlotAnalyzer</span>
@@ -1352,16 +1310,10 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlotAnalyzer</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">education</span><span class="p">():</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Distance: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">distance_m</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Walk: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">walk_min</span><span class="si">}</span><span class="s2">min | Bike: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">bike_min</span><span class="si">}</span><span class="s2">min | Car: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">car_min</span><span class="si">}</span><span class="s2">min&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">distance_m</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>school: Niepubliczna Szkoła Podstawowa w Bzinicy Starej
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  Distance: 1840.0m
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  Walk: 28min | Bike: 10min | Car: 6min
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>school: Zespól Szkolno-Przedszkolny im.M.Konopnickiej
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  Distance: 3193.0m
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  Walk: 59min | Bike: 20min | Car: 10min
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>school: Niepubliczna Szkoła Podstawowa w Bzinicy Starej — 1840.0m
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>school: Zespól Szkolno-Przedszkolny im.M.Konopnickiej — 3193.0m
 </code></pre></div>
 <hr />
 
