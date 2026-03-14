@@ -21,6 +21,9 @@ if kuit.has_data:
     print(f"Power:   {kuit.power}")
     print(f"Telecom: {kuit.telecom}")
     print(f"Heating: {kuit.heating}")
+
+    # Download map with plot boundary overlay (pip install plot-finder[viz])
+    png = analyzer.render_wms(kuit.wms_url)
 ```
 
 ## Fields

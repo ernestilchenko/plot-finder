@@ -24,6 +24,11 @@ print(pog.document_url)   # URL to legal act
 print(pog.infill_area)    # True if in building infill area
 print(pog.downtown_area)  # True if in downtown area
 
+print(pog.wms_url)        # WMS map URL
+
+# Download map with plot boundary overlay (pip install plot-finder[viz])
+png = analyzer.render_wms(pog.wms_url)
+
 for zone in pog.zones:
     print(f"{zone.designation}: {zone.symbol} — {zone.symbol_name}")
     print(f"  Max height: {zone.max_building_height_m}m")

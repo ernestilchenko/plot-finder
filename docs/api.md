@@ -27,7 +27,7 @@ Fetch parcel data from the ULDK API. Provide `plot_id` (TERYT ID), `address` (st
 ## PlotAnalyzer
 
 ```python
-PlotAnalyzer(plot, *, radius=1000, openweather_api_key=None)
+PlotAnalyzer(plot, *, radius=1000, openweather_api_key=None, overlay_boundary=True)
 ```
 
 Create an analyzer for a `Plot`.
@@ -37,6 +37,7 @@ Create an analyzer for a `Plot`.
 | `plot` | `Plot` | required | Plot to analyze |
 | `radius` | `int` | `1000` | Default search radius in meters |
 | `openweather_api_key` | `str \| None` | `None` | API key for air quality data |
+| `overlay_boundary` | `bool` | `True` | Draw plot boundary on WMS map images |
 
 ### Methods
 
@@ -138,6 +139,15 @@ Underground utility infrastructure detection (water, sewage, gas, power, telecom
 
 Official land use classification from EGiB via GUGiK integration.
 
+#### `render_wms(wms_url) -> bytes | None`
+
+Download a WMS map image and draw the plot boundary on it. Returns PNG bytes or `None`. Requires `Pillow` (`pip install plot-finder[viz]`).
+
+```python
+mpzp = analyzer.mpzp()
+png = analyzer.render_wms(mpzp.wms_url)
+```
+
 ---
 
 ## Async API
@@ -155,7 +165,7 @@ Async factory — same parameters as `Plot(...)`, returns a `Plot`.
 ### `AsyncPlotAnalyzer`
 
 ```python
-async with AsyncPlotAnalyzer(plot, *, radius=1000, openweather_api_key=None) as analyzer:
+async with AsyncPlotAnalyzer(plot, *, radius=1000, openweather_api_key=None, overlay_boundary=True) as analyzer:
     ...
 ```
 

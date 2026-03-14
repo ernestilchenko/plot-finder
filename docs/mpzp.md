@@ -29,6 +29,11 @@ print(mpzp.plan_name)       # "MPZP dla obszaru ..."
 print(mpzp.resolution)      # "Uchwala Nr XXIII/123/2020"
 print(mpzp.resolution_date) # "2020-06-15"
 print(mpzp.wms_url)         # WMS map URL
+
+# Download map with plot boundary overlay (pip install plot-finder[viz])
+png = analyzer.render_wms(mpzp.wms_url)
+with open("mpzp.png", "wb") as f:
+    f.write(png)
 ```
 
 ## How It Works

@@ -22,6 +22,9 @@ print(studium.plan_type)        # "Studium"
 print(studium.legend_url)       # URL to legend image
 print(studium.document_url)     # URL to resolution PDF
 print(studium.wms_url)          # WMS map URL
+
+# Download map with plot boundary overlay (pip install plot-finder[viz])
+png = analyzer.render_wms(studium.wms_url)
 ```
 
 ## How It Works

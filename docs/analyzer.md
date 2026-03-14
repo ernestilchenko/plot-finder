@@ -10,7 +10,8 @@ Analyzes the surroundings of a [Plot](plot.md) using [OpenStreetMap](https://www
 from plot_finder import Plot, PlotAnalyzer
 
 plot = Plot(plot_id="141201_1.0001.6509")
-analyzer = PlotAnalyzer(plot, radius=2000)  # default radius: 1000m
+analyzer = PlotAnalyzer(plot, radius=2000)       # default radius: 1000m
+analyzer = PlotAnalyzer(plot, overlay_boundary=False)  # disable WMS overlay
 ```
 
 > Every method accepts an optional `radius` parameter to override the default.
@@ -214,6 +215,28 @@ Returns `dict[str, list[Place]]` with keys: `education`, `finance`, `transport`,
 !!! tip "Async"
 
     For faster execution, use `AsyncPlotAnalyzer` — see [Async API](async.md).
+
+---
+
+## WMS Boundary Overlay
+
+Download any WMS map image with the plot boundary drawn on it. Requires `pip install plot-finder[viz]`.
+
+```python
+mpzp = analyzer.mpzp()
+png_bytes = analyzer.render_wms(mpzp.wms_url)
+
+with open("mpzp_map.png", "wb") as f:
+    f.write(png_bytes)
+```
+
+Works with all WMS-returning methods: `mpzp()`, `suikzp()`, `pog()`, `kuit()`, `land_use()`.
+
+Disable the overlay by passing `overlay_boundary=False` to the constructor:
+
+```python
+analyzer = PlotAnalyzer(plot, overlay_boundary=False)
+```
 
 ---
 

@@ -19,6 +19,9 @@ if lu.has_data:
     print(f"Area: {lu.area_ha} ha")
     print(f"Use code: {lu.use_code}")
     print(f"Use name: {lu.use_name}")
+
+    # Download map with plot boundary overlay (pip install plot-finder[viz])
+    png = analyzer.render_wms(lu.wms_url)
 ```
 
 ## Fields

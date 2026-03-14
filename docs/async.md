@@ -65,6 +65,7 @@ async with AsyncPlotAnalyzer(plot, radius=2000) as analyzer:
 | `plot` | `Plot` | required | Plot to analyze |
 | `radius` | `int` | `1000` | Default search radius (m) |
 | `openweather_api_key` | `str \| None` | `None` | API key for air quality |
+| `overlay_boundary` | `bool` | `True` | Draw plot boundary on WMS maps |
 
 ### Methods
 
@@ -91,6 +92,7 @@ All methods are `async` and have the same signatures and return types as `PlotAn
 | `await land_use()` | `LandUse` | Land use classification |
 | `sunlight()` | `SunInfo` | Sun data (sync — no HTTP) |
 | `sunlight_seasonal()` | `SeasonalSun` | Seasonal sun data (sync — no HTTP) |
+| `await render_wms(url)` | `bytes \| None` | Download WMS image with plot boundary overlay |
 
 !!! note "sunlight methods are sync"
 

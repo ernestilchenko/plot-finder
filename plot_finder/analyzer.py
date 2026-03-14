@@ -38,6 +38,7 @@ from plot_finder.exceptions import (
 )
 from plot_finder.place import Place
 from plot_finder.plot import Plot
+from plot_finder._sld import overlay_url
 
 _OVERPASS_URLS = [
     "https://overpass-api.de/api/interpreter",
@@ -159,10 +160,12 @@ _PLACE_CATEGORIES: dict[str, str] = {
 
 
 class PlotAnalyzer:
-    def __init__(self, plot: Plot, *, radius: int = 1000, openweather_api_key: str | None = None) -> None:
+    def __init__(self, plot: Plot, *, radius: int = 1000, openweather_api_key: str | None = None,
+                 overlay_boundary: bool = True) -> None:
         self.plot = plot
         self.radius = radius
         self._openweather_api_key = openweather_api_key
+        self._overlay_boundary = overlay_boundary
         self._lat, self._lon = self._centroid_wgs84()
         self._cache: dict = {}
 
@@ -1336,11 +1339,15 @@ class PlotAnalyzer:
             # Build WMS map URL
             map_url = (
                 f"{base_url}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
-                f"&LAYERS=granice,wektor-str,wektor-lzb,wektor-lin,wektor-pow,wektor-pkt"
+                f"&LAYERS=granice,raster,wektor-str,wektor-lzb,wektor-lin,wektor-pow,wektor-pkt"
                 f"&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
                 f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
             )
-            result.wms_url = map_url
+            result.wms_url = overlay_url(
+                map_url, self.plot.geom_wkt, self.plot.srid,
+                ["granice", "raster", "wektor-str", "wektor-lzb", "wektor-lin", "wektor-pow", "wektor-pkt"],
+                enabled=self._overlay_boundary,
+            )
 
         except ImportError:
             raise
@@ -1463,7 +1470,10 @@ class PlotAnalyzer:
                 f"&LAYERS=studium&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
                 f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
             )
-            result.wms_url = map_url
+            result.wms_url = overlay_url(
+                map_url, self.plot.geom_wkt, self.plot.srid,
+                ["studium"], enabled=self._overlay_boundary,
+            )
         except Exception:
             result = SUIKZP()
 
@@ -1582,7 +1592,12 @@ class PlotAnalyzer:
                         f"&LAYERS={layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
                         f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
                     )
-                    result.wms_url = map_url
+                    _pog_layers = ["strefaPlanistyczna", "obszarUzupelnieniaZabudowy",
+                                   "obszarZabSrodmiejskiej", "aktPlanowaniaprzestrzennego"]
+                    result.wms_url = overlay_url(
+                        map_url, self.plot.geom_wkt, self.plot.srid,
+                        _pog_layers, enabled=self._overlay_boundary,
+                    )
                     self._cache[key] = result
                     return result
         except Exception:
@@ -1590,7 +1605,10 @@ class PlotAnalyzer:
 
         # Fallback: try projected/draft plans
         draft_url = "https://mapy.geoportal.gov.pl/wss/ext/ProjektowanePlanyOgolneGmin"
-        draft_layers = "strefaPlanistyczna,obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        draft_layers = (
+            "strefaPlanistyczna,obszarStandardowDostepnosciInfrastrukturySpolecznej,"
+            "obszarUzupelnieniaZabudowy,obszarZabSrodmiejskiej,aktPlanowaniaprzestrzennego"
+        )
         url = (
             f"{draft_url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
             f"&LAYERS={draft_layers}&QUERY_LAYERS={draft_layers}"
@@ -1609,7 +1627,17 @@ class PlotAnalyzer:
                         f"&LAYERS={draft_layers}&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
                         f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
                     )
-                    result.wms_url = map_url
+                    _pog_layers = [
+                        "strefaPlanistyczna",
+                        "obszarStandardowDostepnosciInfrastrukturySpolecznej",
+                        "obszarUzupelnieniaZabudowy",
+                        "obszarZabSrodmiejskiej",
+                        "aktPlanowaniaprzestrzennego",
+                    ]
+                    result.wms_url = overlay_url(
+                        map_url, self.plot.geom_wkt, self.plot.srid,
+                        _pog_layers, enabled=self._overlay_boundary,
+                    )
                     self._cache[key] = result
                     return result
         except Exception:
@@ -1759,12 +1787,18 @@ class PlotAnalyzer:
 
         has_any = any(found.values())
         all_layers = ",".join(l for l, _ in self._KUIT_LAYERS)
-        wms_url = (
+        wms_url: str | None = (
             f"{self._KUIT_URL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
             f"&LAYERS={all_layers}&CRS=EPSG:2180"
             f"&BBOX={minx},{miny},{maxx},{maxy}"
             f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
         ) if has_any else None
+        if wms_url is not None:
+            kuit_layer_names = [l for l, _ in self._KUIT_LAYERS]
+            wms_url = overlay_url(
+                wms_url, self.plot.geom_wkt, self.plot.srid,
+                kuit_layer_names, enabled=self._overlay_boundary,
+            )
 
         result = KUIT(has_data=has_any, wms_url=wms_url, **found)
         self._cache[key] = result
@@ -1816,12 +1850,33 @@ class PlotAnalyzer:
                     f"&LAYERS=klasouzytki&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
                     f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
                 )
-                result.wms_url = map_url
+                result.wms_url = overlay_url(
+                    map_url, self.plot.geom_wkt, self.plot.srid,
+                    ["klasouzytki"], enabled=self._overlay_boundary,
+                )
         except Exception:
             result = LandUse()
 
         self._cache[key] = result
         return result
+
+    # ------------------------------------------------------------------
+    # WMS overlay rendering
+    # ------------------------------------------------------------------
+
+    def render_wms(self, wms_url: str | None) -> bytes | None:
+        """Download the WMS image at *wms_url* and draw the plot boundary.
+
+        Returns PNG bytes with a red boundary overlay, or *None* when
+        the URL or geometry is unavailable.
+        Requires ``Pillow``: ``pip install plot-finder[viz]``.
+        """
+        from plot_finder._sld import fetch_wms_with_overlay
+
+        return fetch_wms_with_overlay(
+            wms_url, self.plot.geom_wkt, self.plot.srid,
+            enabled=self._overlay_boundary,
+        )
 
     @staticmethod
     def _parse_land_use(text: str) -> LandUse:
