@@ -147,10 +147,7 @@ class PlotVisualizer:
                 popup_html = (
                     f"<b>{place.name or 'N/A'}</b><br>"
                     f"Kind: {place.kind}<br>"
-                    f"Distance: {place.distance_m}m<br>"
-                    f"Walk: {place.walk_min} min | "
-                    f"Bike: {place.bike_min} min | "
-                    f"Car: {place.car_min} min"
+                    f"Distance: {place.distance_m}m"
                 )
                 folium.Marker(
                     location=[place.lat, place.lon],

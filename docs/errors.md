@@ -16,8 +16,6 @@ Exception
 ├── OverpassError
 │   ├── OverpassTimeoutError
 │   └── OverpassRateLimitError
-├── OSRMError
-│   └── OSRMTimeoutError
 ├── OpenWeatherError
 │   └── OpenWeatherAuthError
 ├── OpenMeteoError
@@ -39,8 +37,6 @@ Exception
 | `OverpassError` | Overpass API (OpenStreetMap) request failed |
 | `OverpassTimeoutError` | Overpass API timed out — server is busy |
 | `OverpassRateLimitError` | Overpass API rate limit exceeded (HTTP 429) |
-| `OSRMError` | OSRM routing request failed |
-| `OSRMTimeoutError` | OSRM request timed out |
 | `OpenWeatherError` | OpenWeatherMap API request failed |
 | `OpenWeatherAuthError` | Missing or invalid OpenWeatherMap API key |
 | `OpenMeteoError` | Open-Meteo API request failed or timed out |
@@ -84,7 +80,6 @@ from plot_finder import (
     NothingFoundError,
     OverpassTimeoutError,
     OverpassRateLimitError,
-    OSRMError,
 )
 
 plot = Plot(plot_id="141201_1.0001.6509")
@@ -98,8 +93,6 @@ except OverpassTimeoutError:
     print("OpenStreetMap server is busy — try again later")
 except OverpassRateLimitError:
     print("Too many requests — wait a moment")
-except OSRMError:
-    print("Routing service unavailable")
 ```
 
 ### Catch all Overpass errors

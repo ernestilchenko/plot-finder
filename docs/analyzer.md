@@ -1,6 +1,6 @@
 # PlotAnalyzer
 
-Analyzes the surroundings of a [Plot](plot.md) using [OpenStreetMap](https://www.openstreetmap.org/) data (via Overpass API) and real road routing (via [OSRM](https://project-osrm.org/)).
+Analyzes the surroundings of a [Plot](plot.md) using [OpenStreetMap](https://www.openstreetmap.org/) data (via Overpass API).
 
 ---
 
@@ -221,8 +221,7 @@ Returns `dict[str, list[Place]]` with keys: `education`, `finance`, `transport`,
 
 1. The plot's centroid is converted from EPSG:2180 to WGS84
 2. An Overpass API query searches OpenStreetMap within the radius
-3. For each result, OSRM calculates the real road distance and driving time
-4. Walking and cycling times are estimated from the road distance (~5 km/h and ~15 km/h)
-5. Results are sorted by straight-line distance (closest first)
+3. Haversine distance is calculated from the plot centroid to each result
+4. Results are sorted by distance (closest first)
 
 ---

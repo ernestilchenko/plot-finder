@@ -74,7 +74,7 @@ Rivers, lakes, ponds, reservoirs, streams, canals.
 
 Power lines, transformers, industrial zones, factories.
 
-**Raises:** `NothingFoundError`, `OverpassError`, `OverpassTimeoutError`, `OverpassRateLimitError`, `OSRMError`, `OSRMTimeoutError`
+**Raises:** `NothingFoundError`, `OverpassError`, `OverpassTimeoutError`, `OverpassRateLimitError`
 
 #### `climate() -> Climate`
 
@@ -130,6 +130,14 @@ Study of Conditions and Directions of Spatial Development from Geoportal.
 
 General Municipal Plan (adopted or projected) from Geoportal.
 
+#### `kuit() -> KUIT`
+
+Underground utility infrastructure detection (water, sewage, gas, power, telecom, heating).
+
+#### `land_use() -> LandUse`
+
+Official land use classification from EGiB via GUGiK integration.
+
 ---
 
 ## Async API
@@ -151,7 +159,7 @@ async with AsyncPlotAnalyzer(plot, *, radius=1000, openweather_api_key=None) as 
     ...
 ```
 
-Async context manager. Same methods as `PlotAnalyzer` — all `async` except `sunlight()` and `sunlight_seasonal()`. OSRM calls run concurrently via `asyncio.gather()`.
+Async context manager. Same methods as `PlotAnalyzer` — all `async` except `sunlight()` and `sunlight_seasonal()`.
 
 ### `AsyncPlotReporter`
 
@@ -348,6 +356,35 @@ Pydantic `BaseModel` returned by `pog()`.
 | `max_building_height_m` | `float \| None` | Max building height (m) |
 | `min_bio_active_pct` | `float \| None` | Min biologically active surface (%) |
 
+## KUIT
+
+Pydantic `BaseModel` returned by `kuit()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `has_data` | `bool` | Whether any utility data was found |
+| `water` | `bool` | Water supply network present |
+| `sewage` | `bool` | Sewage/drainage network present |
+| `gas` | `bool` | Gas pipeline present |
+| `power` | `bool` | Electric power network present |
+| `telecom` | `bool` | Telecommunication network present |
+| `heating` | `bool` | District heating network present |
+| `wms_url` | `str \| None` | WMS map URL |
+
+## LandUse
+
+Pydantic `BaseModel` returned by `land_use()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `has_data` | `bool` | Whether land use data was found |
+| `plot_id` | `str \| None` | Cadastral parcel ID |
+| `area_ha` | `float \| None` | Parcel area in hectares |
+| `use_code` | `str \| None` | Land use codes (e.g. "B,Bi", "RIVb") |
+| `use_name` | `str \| None` | Human-readable name |
+| `registry_group` | `str \| None` | Registry group number |
+| `wms_url` | `str \| None` | WMS map URL |
+
 ## GugikEntry
 
 Pydantic `BaseModel` returned by `Plot.gugik()`. Requires `pip install plot-finder[geo]`.
@@ -372,9 +409,6 @@ Pydantic `BaseModel` returned by all analyzer methods.
 | `lat` | `float` | Latitude (WGS84) |
 | `lon` | `float` | Longitude (WGS84) |
 | `distance_m` | `float` | Straight-line distance (m) |
-| `walk_min` | `int` | Walking time (min) |
-| `bike_min` | `int` | Cycling time (min) |
-| `car_min` | `int` | Driving time (min) |
 
 ---
 
@@ -405,6 +439,8 @@ Pydantic `BaseModel` returned by `PlotReporter.report()`.
 | `mpzp` | `MPZP \| None` | `None` | Local spatial development plan |
 | `suikzp` | `SUIKZP \| None` | `None` | Study of conditions and directions |
 | `pog` | `POG \| None` | `None` | General municipal plan |
+| `kuit` | `KUIT \| None` | `None` | Underground utility infrastructure |
+| `land_use` | `LandUse \| None` | `None` | Official land use classification |
 | `gugik` | `list[GugikEntry] \| None` | `None` | GUGiK integration data |
 
 ## PlotReporter
@@ -505,8 +541,6 @@ Freeform Q&A about the plot.
 | `OverpassError` | `Exception` | Base Overpass API error |
 | `OverpassTimeoutError` | `OverpassError` | Overpass timeout |
 | `OverpassRateLimitError` | `OverpassError` | Overpass rate limit (429) |
-| `OSRMError` | `Exception` | Base OSRM error |
-| `OSRMTimeoutError` | `OSRMError` | OSRM timeout |
 | `OpenWeatherError` | `Exception` | Base OpenWeatherMap error |
 | `OpenWeatherAuthError` | `OpenWeatherError` | Missing/invalid API key |
 | `OpenMeteoError` | `Exception` | Open-Meteo API error |

@@ -46,7 +46,7 @@ print(plot.centroid)     # (x, y)
 analyzer = PlotAnalyzer(plot, radius=3000)
 
 for place in analyzer.education():
-    print(f"{place.name} — {place.distance_m}m, walk {place.walk_min}min")
+    print(f"{place.name} — {place.distance_m}m")
 
 # Full report
 report = PlotReporter(analyzer).report()
@@ -93,6 +93,8 @@ report.model_dump_json()
 | [MPZP](mpzp.md) | Local spatial development plan from Geoportal |
 | [SUIKZP](suikzp.md) | Study of conditions and directions of spatial development |
 | [POG](pog.md) | General Municipal Plan (zones, building parameters) |
+| [KUIT](kuit.md) | Underground utility infrastructure (water, gas, power, etc.) |
+| [Land Use](land_use.md) | Official land use classification (EGiB) |
 | [GUGiK](gugik.md) | Spatial data services from GUGiK integration portal |
 | [PlotReporter](report.md) | Full structured report in one call |
 | [PlotVisualizer](visualizer.md) | Interactive HTML maps & static PNG images |

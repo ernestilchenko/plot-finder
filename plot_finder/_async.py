@@ -21,7 +21,6 @@ import json
 import logging
 import re
 from datetime import date
-from math import ceil
 
 import httpx
 
@@ -35,8 +34,6 @@ from plot_finder.exceptions import (
     GeoportalError,
     NothingFoundError,
     OpenMeteoError,
-    OSRMError,
-    OSRMTimeoutError,
     OpenWeatherAuthError,
     OpenWeatherError,
     OverpassError,
@@ -45,6 +42,8 @@ from plot_finder.exceptions import (
     ULDKError,
 )
 from plot_finder.gugik import GugikEntry
+from plot_finder.kuit import KUIT
+from plot_finder.land_use import LandUse, _LAND_USE_NAMES
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
 from plot_finder.pog import POG, PlanZone, _POG_ZONE_NAMES
@@ -61,7 +60,6 @@ from plot_finder.analyzer import (
     _OPEN_METEO_ELEVATION_URL,
     _OPEN_METEO_URL,
     _OPENWEATHER_URL,
-    _OSRM_URL,
     _OVERPASS_URLS,
     _PLACE_CATEGORIES,
     _VOIVODESHIP_MAP,
@@ -211,7 +209,6 @@ class AsyncPlotAnalyzer:
         self._lat, self._lon = self._compute_centroid()
         self._cache: dict = {}
         self._client = httpx.AsyncClient()
-        self._osrm_sem = asyncio.Semaphore(10)
 
     def _compute_centroid(self) -> tuple[float, float]:
         from pyproj import Transformer
@@ -283,33 +280,7 @@ class AsyncPlotAnalyzer:
         raise OverpassError("All Overpass servers failed")
 
     # ------------------------------------------------------------------
-    # OSRM with concurrency
-    # ------------------------------------------------------------------
-
-    async def _osrm_route(self, dest_lat: float, dest_lon: float) -> tuple[float, int]:
-        url = f"{_OSRM_URL}/driving/{self._lon},{self._lat};{dest_lon},{dest_lat}"
-        async with self._osrm_sem:
-            try:
-                resp = await _async_retry_get(
-                    self._client, url,
-                    params={"overview": "false"}, timeout=10, retries=1,
-                )
-            except httpx.TimeoutException as exc:
-                raise OSRMTimeoutError("OSRM request timed out") from exc
-            except httpx.HTTPError as exc:
-                raise OSRMError(f"OSRM request failed: {exc}") from exc
-        if resp.status_code != 200:
-            raise OSRMError(f"OSRM returned {resp.status_code}")
-        data = resp.json()
-        if data.get("code") != "Ok":
-            raise OSRMError(f"OSRM error: {data.get('code')}")
-        routes = data.get("routes", [])
-        if not routes:
-            raise OSRMError("OSRM returned no routes")
-        return routes[0]["distance"], ceil(routes[0]["duration"] / 60)
-
-    # ------------------------------------------------------------------
-    # Core Overpass runner — concurrent OSRM
+    # Core Overpass runner
     # ------------------------------------------------------------------
 
     async def _run_overpass(self, query: str) -> list[Place]:
@@ -326,8 +297,7 @@ class AsyncPlotAnalyzer:
         except Exception:
             elements = []
 
-        # Parse elements
-        parsed: list[tuple[float, float, str | None, str, float]] = []
+        results: list[Place] = []
         for el in elements:
             lat = el.get("lat") or el.get("center", {}).get("lat")
             lon = el.get("lon") or el.get("center", {}).get("lon")
@@ -346,27 +316,9 @@ class AsyncPlotAnalyzer:
                 or "unknown"
             )
             dist = PlotAnalyzer._haversine(self._lat, self._lon, lat, lon)
-            parsed.append((lat, lon, name, kind, dist))
-
-        # Concurrent OSRM
-        async def _route(dest_lat: float, dest_lon: float, haversine: float):
-            try:
-                return await self._osrm_route(dest_lat, dest_lon)
-            except (OSRMError, OSRMTimeoutError):
-                return haversine, 0
-
-        route_results = await asyncio.gather(
-            *[_route(lat, lon, dist) for lat, lon, _, _, dist in parsed]
-        )
-
-        results: list[Place] = []
-        for (lat, lon, name, kind, dist), (road_dist, car_min) in zip(parsed, route_results):
             results.append(Place(
                 name=name, kind=kind, lat=lat, lon=lon,
                 distance_m=round(dist),
-                walk_min=ceil(road_dist / 1000 / 5.0 * 60),
-                bike_min=ceil(road_dist / 1000 / 15.0 * 60),
-                car_min=car_min,
             ))
 
         results.sort(key=lambda p: p.distance_m)
@@ -1242,6 +1194,109 @@ class AsyncPlotAnalyzer:
         self._cache[key] = result
         return result
 
+    # ------------------------------------------------------------------
+    # KUIT — underground utility infrastructure
+    # ------------------------------------------------------------------
+
+    async def kuit(self) -> KUIT:
+        """Check which utility networks exist near the plot."""
+        key = ("kuit",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return KUIT()
+
+        buf = 50
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        }
+
+        async def _check_layer(layer: str, field: str) -> tuple[str, bool]:
+            url = (
+                f"{PlotAnalyzer._KUIT_URL}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap"
+                f"&LAYERS={layer}&SRS=EPSG:2180"
+                f"&BBOX={minx},{miny},{maxx},{maxy}"
+                f"&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+            )
+            try:
+                resp = await _async_retry_get(self._client, url, headers=headers, timeout=15)
+                return field, len(resp.content) > PlotAnalyzer._KUIT_EMPTY_SIZE
+            except Exception:
+                return field, False
+
+        results = await asyncio.gather(
+            *[_check_layer(layer, field) for layer, field in PlotAnalyzer._KUIT_LAYERS]
+        )
+        found = dict(results)
+        has_any = any(found.values())
+        all_layers = ",".join(l for l, _ in PlotAnalyzer._KUIT_LAYERS)
+        wms_url = (
+            f"{PlotAnalyzer._KUIT_URL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+            f"&LAYERS={all_layers}&CRS=EPSG:2180"
+            f"&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+        ) if has_any else None
+
+        result = KUIT(has_data=has_any, wms_url=wms_url, **found)
+        self._cache[key] = result
+        return result
+
+    # ------------------------------------------------------------------
+    # Land use classification
+    # ------------------------------------------------------------------
+
+    async def land_use(self) -> LandUse:
+        """Get official land use classification for the plot."""
+        key = ("land_use",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return LandUse()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        url = (
+            f"{PlotAnalyzer._LAND_USE_URL}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS=klasouzytki&QUERY_LAYERS=klasouzytki"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=text/xml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        }
+
+        try:
+            resp = await _async_retry_get(self._client, url, headers=headers, timeout=15)
+            if resp.status_code != 200:
+                raise GeoportalError(f"Land use service returned {resp.status_code}")
+            result = PlotAnalyzer._parse_land_use(resp.text)
+            if result.has_data:
+                map_url = (
+                    f"{PlotAnalyzer._LAND_USE_URL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                    f"&LAYERS=klasouzytki&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                    f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                )
+                result.wms_url = map_url
+        except Exception:
+            result = LandUse()
+
+        self._cache[key] = result
+        return result
+
 
 # -------------------------------------------------------------------------
 # Async reporter — all analyses concurrently
@@ -1273,7 +1328,8 @@ class AsyncPlotReporter:
                 return None
 
         # Run all HTTP analyses concurrently
-        places_r, climate_r, elevation_r, noise_r, risks_r, mpzp_r, suikzp_r, pog_r = await asyncio.gather(
+        (places_r, climate_r, elevation_r, noise_r, risks_r,
+         mpzp_r, suikzp_r, pog_r, kuit_r, land_use_r) = await asyncio.gather(
             _safe(a.all_places()),
             _safe(a.climate()),
             _safe(a.elevation()),
@@ -1282,6 +1338,8 @@ class AsyncPlotReporter:
             _safe(a.mpzp()),
             _safe(a.suikzp()),
             _safe(a.pog()),
+            _safe(a.kuit()),
+            _safe(a.land_use()),
         )
 
         if places_r:
@@ -1303,6 +1361,10 @@ class AsyncPlotReporter:
             data["suikzp"] = suikzp_r
         if pog_r:
             data["pog"] = pog_r
+        if kuit_r:
+            data["kuit"] = kuit_r
+        if land_use_r:
+            data["land_use"] = land_use_r
 
         # Sunlight — no HTTP
         try:

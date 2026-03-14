@@ -10,11 +10,12 @@ from plot_finder.climate import Climate
 from plot_finder.elevation import Elevation
 from plot_finder.exceptions import (
     OpenMeteoError,
-    OSRMError,
     OpenWeatherAuthError,
     OverpassError,
 )
 from plot_finder.gugik import GugikEntry
+from plot_finder.kuit import KUIT
+from plot_finder.land_use import LandUse
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise
 from plot_finder.pog import POG
@@ -49,6 +50,8 @@ class PlotReport(BaseModel):
     mpzp: MPZP | None = None
     suikzp: SUIKZP | None = None
     pog: POG | None = None
+    kuit: KUIT | None = None
+    land_use: LandUse | None = None
     gugik: list[GugikEntry] | None = None
     geometry: list[list[float]] | None = None
 
@@ -74,7 +77,7 @@ class PlotReporter:
             for category in ("education", "finance", "transport", "infrastructure", "green_areas", "water", "nuisances"):
                 if places.get(category):
                     data[category] = places[category]
-        except (OverpassError, OSRMError):
+        except OverpassError:
             pass
 
         try:
@@ -124,6 +127,16 @@ class PlotReporter:
 
         try:
             data["pog"] = a.pog()
+        except Exception:
+            pass
+
+        try:
+            data["kuit"] = a.kuit()
+        except Exception:
+            pass
+
+        try:
+            data["land_use"] = a.land_use()
         except Exception:
             pass
 

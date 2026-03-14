@@ -3,6 +3,8 @@ from plot_finder.analyzer import PlotAnalyzer
 from plot_finder.climate import Climate
 from plot_finder.elevation import Elevation
 from plot_finder.gugik import GugikEntry
+from plot_finder.kuit import KUIT
+from plot_finder.land_use import LandUse
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
 from plot_finder.pog import POG, PlanZone
@@ -19,8 +21,6 @@ from plot_finder.exceptions import (
     GugikError,
     NothingFoundError,
     OpenMeteoError,
-    OSRMError,
-    OSRMTimeoutError,
     OpenWeatherAuthError,
     OpenWeatherError,
     OverpassError,
@@ -46,6 +46,8 @@ __all__ = [
     "GeoportalError",
     "GugikEntry",
     "GugikError",
+    "KUIT",
+    "LandUse",
     "MPZP",
     "Noise",
     "NoiseSource",
@@ -53,8 +55,6 @@ __all__ = [
     "OpenMeteoError",
     "OpenWeatherAuthError",
     "OpenWeatherError",
-    "OSRMError",
-    "OSRMTimeoutError",
     "OverpassError",
     "OverpassRateLimitError",
     "OverpassTimeoutError",

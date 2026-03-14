@@ -53,6 +53,8 @@ nav:
       - MPZP: mpzp.md
       - SUIKZP: suikzp.md
       - POG: pog.md
+      - KUIT: kuit.md
+      - Land Use: land_use.md
       - GUGiK: gugik.md
   - Report & Visualization:
       - PlotReporter: report.md

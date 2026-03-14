@@ -22,14 +22,6 @@ class OverpassRateLimitError(OverpassError):
     """Raised when the Overpass API returns 429 Too Many Requests."""
 
 
-class OSRMError(Exception):
-    """Base error for OSRM routing API issues."""
-
-
-class OSRMTimeoutError(OSRMError):
-    """Raised when the OSRM API request times out."""
-
-
 class OpenWeatherError(Exception):
     """Base error for OpenWeatherMap API issues."""
 

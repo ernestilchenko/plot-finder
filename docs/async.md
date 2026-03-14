@@ -15,7 +15,7 @@ async def main():
     plot = await create_plot_async(plot_id="141201_1.0001.6509")
     print(plot.voivodeship)  # mazowieckie
 
-    # Analyze surroundings (concurrent OSRM + Overpass)
+    # Analyze surroundings
     async with AsyncPlotAnalyzer(plot, radius=3000) as analyzer:
         schools = await analyzer.education()
         for s in schools:
@@ -87,6 +87,8 @@ All methods are `async` and have the same signatures and return types as `PlotAn
 | `await mpzp()` | `MPZP` | Local spatial plan |
 | `await suikzp()` | `SUIKZP` | Study of conditions and directions |
 | `await pog()` | `POG` | General municipal plan |
+| `await kuit()` | `KUIT` | Underground utility infrastructure |
+| `await land_use()` | `LandUse` | Land use classification |
 | `sunlight()` | `SunInfo` | Sun data (sync — no HTTP) |
 | `sunlight_seasonal()` | `SeasonalSun` | Seasonal sun data (sync — no HTTP) |
 
@@ -113,11 +115,10 @@ Returns the same [`PlotReport`](report.md) model as the sync version.
 
 ## Performance
 
-The async API runs OSRM routing and risk checks concurrently:
+The async API runs risk checks and analyses concurrently:
 
 | Operation | Sync | Async | Speedup |
 |-----------|------|-------|---------|
-| `all_places()` (30 POIs) | ~6s | ~0.5s | ~12x |
 | `risks()` (5 checks) | ~1.5s | ~0.3s | ~5x |
 | Full `report()` | ~15-20s | ~3-4s | ~5x |
 
@@ -129,7 +130,5 @@ Both sync and async APIs include:
 
 - **Retry with exponential backoff** for all HTTP requests (rate limits, timeouts)
 - **Overpass fallback servers** — automatically tries multiple mirrors if one fails
-- **OSRM fallback** — haversine distance if OSRM is unavailable
-- **Concurrency control** — `Semaphore(10)` prevents OSRM overload
 
 ---

@@ -162,7 +162,7 @@ def _cmd_places(args: argparse.Namespace) -> None:
         print(f"{cat.replace('_', ' ').capitalize()} ({len(places)}):")
         for p in places[:10]:
             label = p.name or p.kind
-            print(f"  {label} — {p.distance_m}m, walk {p.walk_min}min")
+            print(f"  {label} — {p.distance_m}m")
         if len(places) > 10:
             print(f"  ... and {len(places) - 10} more")
         print()
@@ -303,7 +303,7 @@ def _print_report(report) -> None:
         print(f"{name} ({len(places)}):")
         for p in places[:5]:
             label = p.name or p.kind
-            print(f"  {label} — {p.distance_m}m, walk {p.walk_min}min")
+            print(f"  {label} — {p.distance_m}m")
         if len(places) > 5:
             print(f"  ... and {len(places) - 5} more")
         print()

@@ -5,7 +5,7 @@ import logging
 import re
 import time
 from datetime import date, datetime, timedelta
-from math import asin, ceil, cos, radians, sin, sqrt, tan
+from math import asin, cos, radians, sin, sqrt, tan
 
 import httpx
 from astral import LocationInfo
@@ -16,6 +16,8 @@ from plot_finder.air import AirQuality
 from plot_finder.climate import Climate
 from plot_finder.elevation import Elevation
 from plot_finder.gugik import GugikEntry
+from plot_finder.kuit import KUIT
+from plot_finder.land_use import LandUse, _LAND_USE_NAMES
 from plot_finder.mpzp import MPZP
 from plot_finder.noise import Noise, NoiseSource
 from plot_finder.pog import POG, PlanZone, _POG_ZONE_NAMES
@@ -27,8 +29,6 @@ from plot_finder.exceptions import (
     GeoportalError,
     NothingFoundError,
     OpenMeteoError,
-    OSRMError,
-    OSRMTimeoutError,
     OpenWeatherAuthError,
     OpenWeatherError,
     OverpassError,
@@ -45,7 +45,6 @@ _OVERPASS_URLS = [
     "https://overpass.private.coffee/api/interpreter",
 ]
 _OVERPASS_URL = _OVERPASS_URLS[0]
-_OSRM_URL = "https://router.project-osrm.org/route/v1"
 _OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
 _OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 _OPEN_METEO_ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
@@ -1697,7 +1696,7 @@ class PlotAnalyzer:
             if ozs_blocks:
                 downtown_area = True
 
-        if not plan_name and not zones:
+        if not plan_name and not zones and not infill_area and not downtown_area:
             return POG()
 
         return POG(
@@ -1709,6 +1708,176 @@ class PlotAnalyzer:
             zones=zones,
             infill_area=infill_area,
             downtown_area=downtown_area,
+        )
+
+    # ------------------------------------------------------------------
+    # KUIT — underground utility infrastructure
+    # ------------------------------------------------------------------
+
+    _KUIT_URL = "https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaUzbrojeniaTerenu"
+    _KUIT_LAYERS = [
+        ("przewod_wodociagowy", "water"),
+        ("przewod_kanalizacyjny", "sewage"),
+        ("przewod_gazowy", "gas"),
+        ("przewod_elektroenergetyczny", "power"),
+        ("przewod_telekomunikacyjny", "telecom"),
+        ("przewod_cieplowniczy", "heating"),
+    ]
+    _KUIT_EMPTY_SIZE = 400  # transparent PNG is ~334 bytes
+
+    def kuit(self) -> KUIT:
+        """Check which utility networks exist near the plot (water, sewage, gas, power, telecom, heating)."""
+        key = ("kuit",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return KUIT()
+
+        buf = 50
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        }
+
+        found: dict[str, bool] = {}
+        for layer, field in self._KUIT_LAYERS:
+            url = (
+                f"{self._KUIT_URL}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap"
+                f"&LAYERS={layer}&SRS=EPSG:2180"
+                f"&BBOX={minx},{miny},{maxx},{maxy}"
+                f"&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+            )
+            try:
+                resp = _retry_get(url, headers=headers, timeout=15)
+                found[field] = len(resp.content) > self._KUIT_EMPTY_SIZE
+            except Exception:
+                found[field] = False
+
+        has_any = any(found.values())
+        all_layers = ",".join(l for l, _ in self._KUIT_LAYERS)
+        wms_url = (
+            f"{self._KUIT_URL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+            f"&LAYERS={all_layers}&CRS=EPSG:2180"
+            f"&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+        ) if has_any else None
+
+        result = KUIT(has_data=has_any, wms_url=wms_url, **found)
+        self._cache[key] = result
+        return result
+
+    # ------------------------------------------------------------------
+    # Land use classification
+    # ------------------------------------------------------------------
+
+    _LAND_USE_URL = "https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaUzytkowGruntowych"
+
+    def land_use(self) -> LandUse:
+        """Get official land use classification for the plot."""
+        key = ("land_use",)
+        if key in self._cache:
+            return self._cache[key]
+
+        try:
+            x, y = self._centroid_2180()
+        except ValueError:
+            return LandUse()
+
+        buf = 300
+        minx, miny = x - buf, y - buf
+        maxx, maxy = x + buf, y + buf
+        width, height = 800, 800
+        pixel_x = int((x - minx) / (maxx - minx) * width)
+        pixel_y = int((maxy - y) / (maxy - miny) * height)
+
+        url = (
+            f"{self._LAND_USE_URL}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo"
+            f"&LAYERS=klasouzytki&QUERY_LAYERS=klasouzytki"
+            f"&SRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+            f"&WIDTH={width}&HEIGHT={height}&X={pixel_x}&Y={pixel_y}"
+            f"&INFO_FORMAT=text/xml&TRANSPARENT=TRUE&FORMAT=image/png"
+        )
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        }
+
+        try:
+            resp = _retry_get(url, headers=headers, timeout=15)
+            if resp.status_code != 200:
+                raise GeoportalError(f"Land use service returned {resp.status_code}")
+            result = self._parse_land_use(resp.text)
+            if result.has_data:
+                map_url = (
+                    f"{self._LAND_USE_URL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap"
+                    f"&LAYERS=klasouzytki&CRS=EPSG:2180&BBOX={minx},{miny},{maxx},{maxy}"
+                    f"&WIDTH=800&HEIGHT=800&FORMAT=image/png&TRANSPARENT=TRUE&STYLES="
+                )
+                result.wms_url = map_url
+        except Exception:
+            result = LandUse()
+
+        self._cache[key] = result
+        return result
+
+    @staticmethod
+    def _parse_land_use(text: str) -> LandUse:
+        if not text.strip() or len(text) < 50:
+            return LandUse()
+
+        if "nie udostępnia danych" in text.lower():
+            return LandUse()
+
+        plot_id = None
+        area_ha = None
+        use_code = None
+        registry_group = None
+
+        pid_m = re.search(r'Name="Identyfikator działki">([^<]+)', text)
+        if pid_m:
+            plot_id = pid_m.group(1).strip()
+
+        area_m = re.search(r'Name="Pole pow[^"]*">([^<]+)', text)
+        if area_m:
+            area_ha = _safe_float(area_m.group(1))
+
+        contour_m = re.search(r'Name="Oznaczenie konturu">([^<]+)', text)
+        if contour_m:
+            use_code = contour_m.group(1).strip()
+        if not use_code:
+            use_m = re.search(r'Name="Oznaczenie użytku">([^<]+)', text)
+            if use_m:
+                use_code = use_m.group(1).strip()
+
+        group_m = re.search(r'Name="Grupa rejestrowa">([^<]+)', text)
+        if group_m:
+            registry_group = group_m.group(1).strip()
+
+        if not plot_id and not use_code:
+            return LandUse()
+
+        # Build human-readable name from use codes
+        use_name = None
+        if use_code:
+            codes = [c.strip() for c in use_code.split(",")]
+            names = []
+            for code in codes:
+                base = re.sub(r"[IVab0-9]+$", "", code)
+                if base in _LAND_USE_NAMES:
+                    names.append(_LAND_USE_NAMES[base])
+            if names:
+                use_name = ", ".join(dict.fromkeys(names))
+
+        return LandUse(
+            has_data=True,
+            plot_id=plot_id,
+            area_ha=area_ha,
+            use_code=use_code,
+            use_name=use_name,
+            registry_group=registry_group,
         )
 
     # ------------------------------------------------------------------
@@ -1785,48 +1954,13 @@ class PlotAnalyzer:
                 or "unknown"
             )
             dist = self._haversine(self._lat, self._lon, lat, lon)
-            try:
-                road_dist, car_min = self._osrm_route(lat, lon)
-            except (OSRMError, OSRMTimeoutError):
-                road_dist = dist
-                car_min = 0
             results.append(Place(
                 name=name, kind=kind, lat=lat, lon=lon,
                 distance_m=round(dist),
-                walk_min=ceil(road_dist / 1000 / 5.0 * 60),
-                bike_min=ceil(road_dist / 1000 / 15.0 * 60),
-                car_min=car_min,
             ))
 
         results.sort(key=lambda p: p.distance_m)
         return results
-
-    def _osrm_route(self, dest_lat: float, dest_lon: float) -> tuple[float, int]:
-        """Get road distance (meters) and driving duration (minutes) via OSRM."""
-        url = (
-            f"{_OSRM_URL}/driving/"
-            f"{self._lon},{self._lat};{dest_lon},{dest_lat}"
-        )
-        try:
-            resp = _retry_get(url, params={"overview": "false"}, timeout=10, retries=1)
-        except httpx.TimeoutException as exc:
-            raise OSRMTimeoutError("OSRM request timed out") from exc
-        except httpx.HTTPError as exc:
-            raise OSRMError(f"OSRM request failed: {exc}") from exc
-
-        if resp.status_code != 200:
-            raise OSRMError(f"OSRM returned {resp.status_code}")
-
-        data = resp.json()
-        if data.get("code") != "Ok":
-            raise OSRMError(f"OSRM error: {data.get('code')} — {data.get('message', '')}")
-
-        routes = data.get("routes", [])
-        if not routes:
-            raise OSRMError("OSRM returned no routes")
-
-        route = routes[0]
-        return route["distance"], ceil(route["duration"] / 60)
 
     @staticmethod
     def _haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

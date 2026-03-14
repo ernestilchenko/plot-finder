@@ -4,7 +4,6 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 ![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-7EBC6F?logo=openstreetmap&logoColor=white)
-![OSRM](https://img.shields.io/badge/OSRM-Routing-blue)
 ![OpenWeather](https://img.shields.io/badge/OpenWeather-API-orange?logo=openweathermap&logoColor=white)
 ![Open-Meteo](https://img.shields.io/badge/Open--Meteo-Climate-1a73e8)
 
@@ -38,7 +37,7 @@ print(plot.centroid)     # (x, y)
 analyzer = PlotAnalyzer(plot, radius=3000)
 
 for place in analyzer.education():
-    print(f"{place.name} — {place.distance_m}m, walk {place.walk_min}min")
+    print(f"{place.name} — {place.distance_m}m")
 
 # Full report
 report = PlotReporter(analyzer).report()
