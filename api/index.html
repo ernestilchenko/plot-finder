@@ -768,6 +768,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../kuit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KUIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../land_use/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Land Use
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../gugik/" class="md-nav__link">
         
   
@@ -1322,6 +1378,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#kuit-kuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kuit() -&gt; KUIT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#land_use-landuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        land_use() -&gt; LandUse
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1519,6 +1597,28 @@
     <span class="md-ellipsis">
       
         PlanZone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KUIT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#landuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LandUse
       
     </span>
   </a>
@@ -2084,6 +2184,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#kuit-kuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kuit() -&gt; KUIT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#land_use-landuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        land_use() -&gt; LandUse
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2281,6 +2403,28 @@
     <span class="md-ellipsis">
       
         PlanZone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KUIT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#landuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LandUse
       
     </span>
   </a>
@@ -2726,6 +2870,10 @@
 <p>Study of Conditions and Directions of Spatial Development from Geoportal.</p>
 <h4 id="pog-pog"><code>pog() -&gt; POG</code><a class="headerlink" href="#pog-pog" title="Permanent link">&para;</a></h4>
 <p>General Municipal Plan (adopted or projected) from Geoportal.</p>
+<h4 id="kuit-kuit"><code>kuit() -&gt; KUIT</code><a class="headerlink" href="#kuit-kuit" title="Permanent link">&para;</a></h4>
+<p>Underground utility infrastructure detection (water, sewage, gas, power, telecom, heating).</p>
+<h4 id="land_use-landuse"><code>land_use() -&gt; LandUse</code><a class="headerlink" href="#land_use-landuse" title="Permanent link">&para;</a></h4>
+<p>Official land use classification from EGiB via GUGiK integration.</p>
 <hr />
 <h2 id="async-api">Async API<a class="headerlink" href="#async-api" title="Permanent link">&para;</a></h2>
 <h3 id="create_plot_async"><code>create_plot_async</code><a class="headerlink" href="#create_plot_async" title="Permanent link">&para;</a></h3>
@@ -3400,6 +3548,107 @@
 </tr>
 </tbody>
 </table>
+<h2 id="kuit">KUIT<a class="headerlink" href="#kuit" title="Permanent link">&para;</a></h2>
+<p>Pydantic <code>BaseModel</code> returned by <code>kuit()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_data</code></td>
+<td><code>bool</code></td>
+<td>Whether any utility data was found</td>
+</tr>
+<tr>
+<td><code>water</code></td>
+<td><code>bool</code></td>
+<td>Water supply network present</td>
+</tr>
+<tr>
+<td><code>sewage</code></td>
+<td><code>bool</code></td>
+<td>Sewage/drainage network present</td>
+</tr>
+<tr>
+<td><code>gas</code></td>
+<td><code>bool</code></td>
+<td>Gas pipeline present</td>
+</tr>
+<tr>
+<td><code>power</code></td>
+<td><code>bool</code></td>
+<td>Electric power network present</td>
+</tr>
+<tr>
+<td><code>telecom</code></td>
+<td><code>bool</code></td>
+<td>Telecommunication network present</td>
+</tr>
+<tr>
+<td><code>heating</code></td>
+<td><code>bool</code></td>
+<td>District heating network present</td>
+</tr>
+<tr>
+<td><code>wms_url</code></td>
+<td><code>str \| None</code></td>
+<td>WMS map URL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="landuse">LandUse<a class="headerlink" href="#landuse" title="Permanent link">&para;</a></h2>
+<p>Pydantic <code>BaseModel</code> returned by <code>land_use()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_data</code></td>
+<td><code>bool</code></td>
+<td>Whether land use data was found</td>
+</tr>
+<tr>
+<td><code>plot_id</code></td>
+<td><code>str \| None</code></td>
+<td>Cadastral parcel ID</td>
+</tr>
+<tr>
+<td><code>area_ha</code></td>
+<td><code>float \| None</code></td>
+<td>Parcel area in hectares</td>
+</tr>
+<tr>
+<td><code>use_code</code></td>
+<td><code>str \| None</code></td>
+<td>Land use codes (e.g. "B,Bi", "RIVb")</td>
+</tr>
+<tr>
+<td><code>use_name</code></td>
+<td><code>str \| None</code></td>
+<td>Human-readable name</td>
+</tr>
+<tr>
+<td><code>registry_group</code></td>
+<td><code>str \| None</code></td>
+<td>Registry group number</td>
+</tr>
+<tr>
+<td><code>wms_url</code></td>
+<td><code>str \| None</code></td>
+<td>WMS map URL</td>
+</tr>
+</tbody>
+</table>
 <h2 id="gugikentry">GugikEntry<a class="headerlink" href="#gugikentry" title="Permanent link">&para;</a></h2>
 <p>Pydantic <code>BaseModel</code> returned by <code>Plot.gugik()</code>. Requires <code>pip install plot-finder[geo]</code>.</p>
 <table>
@@ -3610,6 +3859,18 @@
 <td><code>POG \| None</code></td>
 <td><code>None</code></td>
 <td>General municipal plan</td>
+</tr>
+<tr>
+<td><code>kuit</code></td>
+<td><code>KUIT \| None</code></td>
+<td><code>None</code></td>
+<td>Underground utility infrastructure</td>
+</tr>
+<tr>
+<td><code>land_use</code></td>
+<td><code>LandUse \| None</code></td>
+<td><code>None</code></td>
+<td>Official land use classification</td>
 </tr>
 <tr>
 <td><code>gugik</code></td>

@@ -2,86 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/ai/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/air/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/analyzer/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/api/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/async/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/cli/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/climate/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/elevation/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/errors/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/gugik/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
+    </url>
+    <url>
+         <loc>https://ernestilchenko.github.io/plot-finder/kuit/</loc>
+         <lastmod>2026-03-14</lastmod>
+    </url>
+    <url>
+         <loc>https://ernestilchenko.github.io/plot-finder/land_use/</loc>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/mpzp/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/noise/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/place/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/plot/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/pog/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/report/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/risks/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/suikzp/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/sun/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/visualizer/</loc>
-         <lastmod>2026-02-25</lastmod>
+         <lastmod>2026-03-14</lastmod>
     </url>
 </urlset>
