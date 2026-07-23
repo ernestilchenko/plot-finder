@@ -1,5 +1,5 @@
 site_name: plot-finder
-site_description: Python library to find Polish land parcels and analyze their surroundings
+site_description: Python library to find land parcels in Poland and France
 site_url: https://ernestilchenko.github.io/plot-finder/
 repo_url: https://github.com/ernestilchenko/plot-finder
 repo_name: ernestilchenko/plot-finder
@@ -38,32 +38,8 @@ theme:
 
 nav:
   - Home: index.md
-  - Getting Started:
-      - Plot: plot.md
-      - PlotAnalyzer: analyzer.md
-      - Async API: async.md
-      - Place: place.md
-  - Data:
-      - Climate: climate.md
-      - Air Quality: air.md
-      - Sunlight: sun.md
-      - Elevation: elevation.md
-      - Noise: noise.md
-      - Risks: risks.md
-      - MPZP: mpzp.md
-      - SUIKZP: suikzp.md
-      - POG: pog.md
-      - KUIT: kuit.md
-      - Land Use: land_use.md
-      - GUGiK: gugik.md
-  - Report & Visualization:
-      - PlotReporter: report.md
-      - PlotVisualizer: visualizer.md
-      - PlotAI: ai.md
-  - Reference:
-      - CLI: cli.md
-      - API: api.md
-      - Errors: errors.md
+  - Poland: poland.md
+  - France: france.md
 
 markdown_extensions:
   - admonition

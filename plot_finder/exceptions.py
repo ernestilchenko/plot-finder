@@ -1,37 +1,13 @@
 class ULDKError(Exception):
-    """Base error for ULDK API issues."""
+    """Base error for the Polish ULDK (GUGiK) API."""
 
 
-class PlotNotFoundError(ULDKError):
-    """Raised when the ULDK API returns no result for the given parcel ID."""
+class IGNError(Exception):
+    """Base error for the French IGN (apicarto cadastre) API."""
 
 
-class NothingFoundError(Exception):
-    """Raised when no places are found within the given radius."""
-
-
-class OverpassError(Exception):
-    """Base error for Overpass API issues."""
-
-
-class OverpassTimeoutError(OverpassError):
-    """Raised when the Overpass API times out (server too busy)."""
-
-
-class OverpassRateLimitError(OverpassError):
-    """Raised when the Overpass API returns 429 Too Many Requests."""
-
-
-class OpenWeatherError(Exception):
-    """Base error for OpenWeatherMap API issues."""
-
-
-class OpenWeatherAuthError(OpenWeatherError):
-    """Raised when the OpenWeatherMap API key is missing or invalid."""
-
-
-class OpenMeteoError(Exception):
-    """Base error for Open-Meteo API issues."""
+class PlotNotFoundError(Exception):
+    """Raised when no parcel is found for the given query."""
 
 
 class GeocodeError(Exception):
@@ -39,20 +15,4 @@ class GeocodeError(Exception):
 
 
 class AddressNotFoundError(GeocodeError):
-    """Raised when Nominatim returns no results for the given address."""
-
-
-class GeoportalError(Exception):
-    """Base error for Geoportal WMS/WFS issues."""
-
-
-class GDDKiAError(Exception):
-    """Base error for GDDKiA noise map issues."""
-
-
-class SOPOError(Exception):
-    """Base error for PIG-PIB SOPO landslide API issues."""
-
-
-class GugikError(Exception):
-    """Base error for GUGiK integration portal issues."""
+    """Raised when the geocoder returns no results for the given address."""

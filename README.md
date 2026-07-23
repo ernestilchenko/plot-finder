@@ -3,71 +3,43 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
-![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-7EBC6F?logo=openstreetmap&logoColor=white)
-![OpenWeather](https://img.shields.io/badge/OpenWeather-API-orange?logo=openweathermap&logoColor=white)
-![Open-Meteo](https://img.shields.io/badge/Open--Meteo-Climate-1a73e8)
 
-> Python library to find Polish land parcels and analyze their surroundings.
-
-Query the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API to get parcel data by TERYT ID or coordinates, then analyze nearby infrastructure using OpenStreetMap.
-
-![Plot with geometry, radius and nearby places](assets/showcase.png)
+> Python library to find land parcels in **Poland** and **France** by id, address or coordinates.
 
 ## Installation
 
 ```bash
-pip install plot-finder           # base
-pip install plot-finder[viz]      # + interactive maps & PNG export
-pip install plot-finder[ai]       # + AI-powered analysis (OpenAI)
+pip install plot-finder
 ```
 
-**Requirements:** Python 3.10+ | `pydantic` `httpx` `shapely` `pyproj`
-
-## Quick Start
+## Poland 🇵🇱
 
 ```python
-from plot_finder import Plot, PlotAnalyzer, PlotReporter
+from plot_finder import PolandPlot
 
-# Find a parcel
-plot = Plot(plot_id="141201_1.0001.6509")
-print(plot.voivodeship)  # mazowieckie
-print(plot.centroid)     # (x, y)
+plot = PolandPlot(plot_id="141201_1.0001.6509")
+plot = PolandPlot(x=639231, y=486743)
+plot = PolandPlot(address="Warszawa, Marszalkowska 1")
 
-# Analyze surroundings
-analyzer = PlotAnalyzer(plot, radius=3000)
-
-for place in analyzer.education():
-    print(f"{place.name} — {place.distance_m}m")
-
-# Full report
-report = PlotReporter(analyzer).report()
-report.model_dump_json()
-
-# Visualization (pip install plot-finder[viz])
-from plot_finder.visualizer import PlotVisualizer
-viz = PlotVisualizer(report)
-viz.save("map.html")  # interactive map
-viz.save("map.png")   # static image
+print(plot.voivodeship, plot.commune, plot.area)
 ```
 
-## CLI
+## France 🇫🇷
 
-```bash
-plot-finder analyze 141201_1.0001.6509 --radius 2000
-plot-finder analyze 141201_1.0001.6509 --json
-plot-finder search --address "Warszawa, Marszalkowska 1"
-plot-finder elevation 141201_1.0001.6509
-plot-finder climate 141201_1.0001.6509
-plot-finder sunlight 141201_1.0001.6509
-plot-finder noise 141201_1.0001.6509
-plot-finder risks 141201_1.0001.6509
-plot-finder places 141201_1.0001.6509 --category education
+```python
+from plot_finder import FrancePlot
+
+plot = FrancePlot(plot_id="33063000KE0078")
+plot = FrancePlot(x=-0.5792, y=44.8378)
+plot = FrancePlot(address="Bordeaux, France")
+
+print(plot.department, plot.commune, plot.area)
 ```
 
 ## Documentation
 
-Full documentation: [ernestilchenko.github.io/plot-finder](https://ernestilchenko.github.io/plot-finder/)
+Full docs: [ernestilchenko.github.io/plot-finder](https://ernestilchenko.github.io/plot-finder/)
 
 ## License
 
-MIT — use it however you want.
+MIT
