@@ -3,20 +3,15 @@ from typing import ClassVar
 
 import httpx
 import shapely.geometry
+from pydantic import BaseModel
 
-from plot_finder.base import BasePlot
 from plot_finder.exceptions import IGNError, PlotNotFoundError
 
 _APICARTO_URL = "https://apicarto.ign.fr/api/cadastre/parcelle"
 
 
-class FrancePlot(BasePlot):
-    """A land parcel in France, from the IGN apicarto cadastre API.
-
-    Coordinates are longitude (``x``) / latitude (``y``) in EPSG:4326.
-    ``plot_id`` is the 14-character cadastral identifier (IDU),
-    e.g. ``"33063000KE0078"``.
-    """
+class France(BaseModel):
+    """France-specific parcel attributes, from the IGN apicarto cadastre API."""
 
     department: str | None = None      # code_dep, e.g. "33"
     insee: str | None = None           # commune INSEE code, e.g. "33063"
@@ -24,27 +19,28 @@ class FrancePlot(BasePlot):
     section: str | None = None         # cadastral section, e.g. "KE"
     numero: str | None = None          # parcel number, e.g. "0078"
 
-    srid: int = 4326
-    _area_crs: ClassVar[int] = 2154
+    code: ClassVar[str] = "FR"
+    default_srid: ClassVar[int] = 4326
+    area_crs: ClassVar[int] = 2154
+    attributes: ClassVar[tuple[str, ...]] = ("department", "insee", "commune", "section", "numero")
 
-    def _fetch(self) -> None:
-        if self.plot_id:
-            pid = self.plot_id
+    @staticmethod
+    def fetch(plot_id: str | None, x: float | None, y: float | None, srid: int) -> dict:
+        if plot_id:
             # IDU layout: code_insee(5) + com_abs(3) + section(2) + numero(4).
             # Note: for Paris/Lyon/Marseille the IDU carries the arrondissement
             # code rather than the base commune INSEE, so id lookup does not work
             # for those three cities — use coordinates or an address instead.
-            if len(pid) != 14:
-                raise IGNError(f"Invalid French cadastral id (expected 14 chars): {pid!r}")
+            if len(plot_id) != 14:
+                raise IGNError(f"Invalid French cadastral id (expected 14 chars): {plot_id!r}")
             params = {
-                "code_insee": pid[:5],
-                "com_abs": pid[5:8],
-                "section": pid[8:10],
-                "numero": pid[10:14],
+                "code_insee": plot_id[:5],
+                "com_abs": plot_id[5:8],
+                "section": plot_id[8:10],
+                "numero": plot_id[10:14],
             }
         else:
-            geom = {"type": "Point", "coordinates": [self.x, self.y]}
-            params = {"geom": json.dumps(geom)}
+            params = {"geom": json.dumps({"type": "Point", "coordinates": [x, y]})}
 
         try:
             resp = httpx.get(_APICARTO_URL, params=params, timeout=30)
@@ -58,16 +54,18 @@ class FrancePlot(BasePlot):
             raise IGNError(f"Invalid JSON from IGN apicarto: {exc}") from exc
 
         if not features:
-            query = f"xy={self.x},{self.y}" if self.x is not None else self.plot_id
+            query = f"xy={x},{y}" if x is not None else plot_id
             raise PlotNotFoundError(f"Parcel not found: {query}")
 
         props = features[0].get("properties", {})
-
-        self.geom_wkt = shapely.geometry.shape(features[0]["geometry"]).wkt
-        self.plot_id = props.get("idu") or self.plot_id
-        self.department = props.get("code_dep")
-        self.insee = props.get("code_insee") or props.get("code_com")
-        self.commune = props.get("nom_com") or props.get("code_com")
-        self.section = props.get("section")
-        self.numero = props.get("numero")
-        self.datasource = "IGN apicarto cadastre"
+        return {
+            "plot_id": props.get("idu") or plot_id,
+            "geom_wkt": shapely.geometry.shape(features[0]["geometry"]).wkt,
+            "geom_extent": None,
+            "datasource": "IGN apicarto cadastre",
+            "department": props.get("code_dep"),
+            "insee": props.get("code_insee") or props.get("code_com"),
+            "commune": props.get("nom_com") or props.get("code_com"),
+            "section": props.get("section"),
+            "numero": props.get("numero"),
+        }

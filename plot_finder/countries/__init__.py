@@ -1,4 +1,7 @@
-from plot_finder.countries.france import FrancePlot
-from plot_finder.countries.poland import PolandPlot
+from plot_finder.countries.france import France
+from plot_finder.countries.poland import Poland
 
-__all__ = ["PolandPlot", "FrancePlot"]
+# Registry: country code -> attribute/fetcher class.
+REGISTRY = {Poland.code: Poland, France.code: France}
+
+__all__ = ["Poland", "France", "REGISTRY"]

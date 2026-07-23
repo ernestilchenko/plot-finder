@@ -1,15 +1,15 @@
 # Poland 🇵🇱
 
-`PolandPlot` queries the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API. Coordinates are in **EPSG:2180**.
+`country="PL"` queries the [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) API. Coordinates are in **EPSG:2180**.
 
 ```python
-from plot_finder import PolandPlot
+from plot_finder import Plot
 
-PolandPlot(plot_id="141201_1.0001.6509")        # by TERYT id
-PolandPlot(x=639231, y=486743)                  # by coordinates
-PolandPlot(address="Warszawa, Marszalkowska 1") # by address
+Plot(country="PL", plot_id="141201_1.0001.6509")        # by TERYT id
+Plot(country="PL", x=639231, y=486743)                  # by coordinates
+Plot(country="PL", address="Warszawa, Marszalkowska 1") # by address
 ```
 
-**Fields:** `plot_id` (TERYT), `voivodeship`, `county`, `commune`, `region`, `parcel`
+**Attributes** (from the `Poland` class): `voivodeship`, `county`, `commune`, `region`, `parcel`
 
 **Errors:** `ULDKError`, `PlotNotFoundError`

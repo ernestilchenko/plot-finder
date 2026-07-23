@@ -1,4 +1,4 @@
-from plot_finder.base import BasePlot
+from plot_finder.countries import France, Poland
 from plot_finder.exceptions import (
     AddressNotFoundError,
     GeocodeError,
@@ -6,12 +6,12 @@ from plot_finder.exceptions import (
     PlotNotFoundError,
     ULDKError,
 )
-from plot_finder.countries import FrancePlot, PolandPlot
+from plot_finder.plot import Plot
 
 __all__ = [
-    "BasePlot",
-    "PolandPlot",
-    "FrancePlot",
+    "Plot",
+    "Poland",
+    "France",
     "AddressNotFoundError",
     "GeocodeError",
     "IGNError",
