@@ -9,6 +9,7 @@ country-specific attributes are sourced from a matching class in `plot_finder.co
 |---------|-----------|-----------------|-------------|
 | [Poland](poland.md) 🇵🇱 | `"PL"` | `Poland` | [ULDK (GUGiK)](https://uldk.gugik.gov.pl/) |
 | [France](france.md) 🇫🇷 | `"FR"` | `France` | [IGN apicarto cadastre](https://apicarto.ign.fr/api/doc/cadastre) |
+| [Spain](spain.md) 🇪🇸 | `"ES"` | `Spain` | [Dirección General del Catastro](https://www.catastro.hacienda.gob.es/) |
 
 ```bash
 pip install plot-finder

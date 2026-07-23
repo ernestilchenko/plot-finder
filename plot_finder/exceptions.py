@@ -6,6 +6,10 @@ class IGNError(Exception):
     """Base error for the French IGN (apicarto cadastre) API."""
 
 
+class CatastroError(Exception):
+    """Base error for the Spanish Dirección General del Catastro API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

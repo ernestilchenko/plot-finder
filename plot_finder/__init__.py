@@ -1,6 +1,7 @@
-from plot_finder.countries import France, Poland
+from plot_finder.countries import France, Poland, Spain
 from plot_finder.exceptions import (
     AddressNotFoundError,
+    CatastroError,
     GeocodeError,
     IGNError,
     PlotNotFoundError,
@@ -12,7 +13,9 @@ __all__ = [
     "Plot",
     "Poland",
     "France",
+    "Spain",
     "AddressNotFoundError",
+    "CatastroError",
     "GeocodeError",
     "IGNError",
     "PlotNotFoundError",

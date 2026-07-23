@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plot-finder"
-version = "1.1.0"
-description = "Find land parcels in Poland (ULDK/GUGiK) and France (IGN cadastre) by id, address or coordinates"
+version = "1.2.0"
+description = "Find land parcels in Poland (ULDK), France (IGN) and Spain (Catastro) by id, address or coordinates"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
     { name = "Ernest Ilchenko" },
 ]
-keywords = ["cadastre", "parcel", "plot", "geodesy", "poland", "france", "uldk", "ign"]
+keywords = ["cadastre", "parcel", "plot", "geodesy", "poland", "france", "spain", "uldk", "ign", "catastro"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
