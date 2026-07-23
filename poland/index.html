@@ -385,14 +385,14 @@
 
 
 <h1 id="poland">Poland 🇵🇱<a class="headerlink" href="#poland" title="Permanent link">&para;</a></h1>
-<p><code>PolandPlot</code> queries the <a href="https://uldk.gugik.gov.pl/">ULDK (GUGiK)</a> API. Coordinates are in <strong>EPSG:2180</strong>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolandPlot</span>
+<p><code>country="PL"</code> queries the <a href="https://uldk.gugik.gov.pl/">ULDK (GUGiK)</a> API. Coordinates are in <strong>EPSG:2180</strong>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">PolandPlot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>        <span class="c1"># by TERYT id</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">PolandPlot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">639231</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">486743</span><span class="p">)</span>                  <span class="c1"># by coordinates</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">PolandPlot</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">&quot;Warszawa, Marszalkowska 1&quot;</span><span class="p">)</span> <span class="c1"># by address</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>        <span class="c1"># by TERYT id</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">639231</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">486743</span><span class="p">)</span>                  <span class="c1"># by coordinates</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;Warszawa, Marszalkowska 1&quot;</span><span class="p">)</span> <span class="c1"># by address</span>
 </code></pre></div>
-<p><strong>Fields:</strong> <code>plot_id</code> (TERYT), <code>voivodeship</code>, <code>county</code>, <code>commune</code>, <code>region</code>, <code>parcel</code></p>
+<p><strong>Attributes</strong> (from the <code>Poland</code> class): <code>voivodeship</code>, <code>county</code>, <code>commune</code>, <code>region</code>, <code>parcel</code></p>
 <p><strong>Errors:</strong> <code>ULDKError</code>, <code>PlotNotFoundError</code></p>
 
 

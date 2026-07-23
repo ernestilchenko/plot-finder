@@ -383,14 +383,14 @@
 
 
 <h1 id="france">France 🇫🇷<a class="headerlink" href="#france" title="Permanent link">&para;</a></h1>
-<p><code>FrancePlot</code> queries the <a href="https://apicarto.ign.fr/api/doc/cadastre">IGN apicarto cadastre</a> API. Coordinates are <strong>lon / lat (EPSG:4326)</strong>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">FrancePlot</span>
+<p><code>country="FR"</code> queries the <a href="https://apicarto.ign.fr/api/doc/cadastre">IGN apicarto cadastre</a> API. Coordinates are <strong>lon / lat (EPSG:4326)</strong>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">FrancePlot</span><span class="p">(</span><span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;33063000KE0078&quot;</span><span class="p">)</span>     <span class="c1"># by cadastral id (IDU, 14 chars)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">FrancePlot</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">0.5792</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">44.8378</span><span class="p">)</span>         <span class="c1"># by coordinates (lon, lat)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">FrancePlot</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">&quot;Bordeaux, France&quot;</span><span class="p">)</span>   <span class="c1"># by address</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;FR&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;33063000KE0078&quot;</span><span class="p">)</span>                    <span class="c1"># by cadastral id (IDU, 14 chars)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;FR&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="mf">0.5792</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">44.8378</span><span class="p">)</span>                        <span class="c1"># by coordinates (lon, lat)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;FR&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;30 Rue Sainte-Catherine, Bordeaux&quot;</span><span class="p">)</span> <span class="c1"># by address</span>
 </code></pre></div>
-<p><strong>Fields:</strong> <code>plot_id</code> (IDU), <code>department</code>, <code>insee</code>, <code>commune</code>, <code>section</code>, <code>numero</code></p>
+<p><strong>Attributes</strong> (from the <code>France</code> class): <code>department</code>, <code>insee</code>, <code>commune</code>, <code>section</code>, <code>numero</code></p>
 <p><strong>Errors:</strong> <code>IGNError</code>, <code>PlotNotFoundError</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

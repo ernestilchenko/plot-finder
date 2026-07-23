@@ -386,32 +386,43 @@
 <blockquote>
 <p>Find land parcels in <strong>Poland</strong> and <strong>France</strong> by id, address or coordinates.</p>
 </blockquote>
-<p>One class per country, both sharing a common <code>BasePlot</code> base:</p>
+<p>One <code>Plot</code> class. <strong><code>country</code> is required</strong> and selects the cadastre; the
+country-specific attributes are sourced from a matching class in <code>plot_finder.countries</code>:</p>
 <table>
 <thead>
 <tr>
 <th>Country</th>
-<th>Class</th>
+<th><code>country</code></th>
+<th>Attribute class</th>
 <th>Data source</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="poland/">Poland</a> 🇵🇱</td>
-<td><code>PolandPlot</code></td>
+<td><code>"PL"</code></td>
+<td><code>Poland</code></td>
 <td><a href="https://uldk.gugik.gov.pl/">ULDK (GUGiK)</a></td>
 </tr>
 <tr>
 <td><a href="france/">France</a> 🇫🇷</td>
-<td><code>FrancePlot</code></td>
+<td><code>"FR"</code></td>
+<td><code>France</code></td>
 <td><a href="https://apicarto.ign.fr/api/doc/cadastre">IGN apicarto cadastre</a></td>
 </tr>
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>plot-finder
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;141201_1.0001.6509&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">plot</span><span class="o">.</span><span class="n">voivodeship</span>   <span class="c1"># country attribute, from the Poland class</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">plot</span><span class="o">.</span><span class="n">area</span>          <span class="c1"># shared computed property</span>
+</code></pre></div>
 <p>Shared computed properties: <code>area</code> (m²), <code>centroid</code> <code>(x, y)</code>, <code>geojson</code>.
-Both are Pydantic models — use <code>model_dump()</code> / <code>model_dump_json()</code> to serialize.</p>
+<code>Plot</code> is a Pydantic model — <code>model_dump()</code> returns a flat dict with the common
+fields, the country attributes and the computed properties.</p>
 
 
 
