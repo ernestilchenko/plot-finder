@@ -14,6 +14,26 @@ class KadasterError(Exception):
     """Base error for the Dutch PDOK Kadaster (Kadastrale Kaart) API."""
 
 
+class GeoAdminError(Exception):
+    """Base error for the Swiss geo.admin.ch (swisstopo) API."""
+
+
+class MaaametError(Exception):
+    """Base error for the Estonian Maa-amet (Land Board) API."""
+
+
+class DLSError(Exception):
+    """Base error for the Cyprus Department of Lands and Surveys API."""
+
+
+class RCError(Exception):
+    """Base error for the Lithuanian Registrų centras (geoportal.lt) API."""
+
+
+class VZDError(Exception):
+    """Base error for the Latvian Valsts zemes dienests (kadastrs.lv) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

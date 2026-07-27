@@ -65,4 +65,10 @@ class Poland(BaseModel):
             resp.raise_for_status()
         except httpx.HTTPError as exc:
             raise ULDKError(f"HTTP request failed: {exc}") from exc
-        return _parse_uldk_response(resp.text, plot_id, x, y)
+
+        result = _parse_uldk_response(resp.text, plot_id, x, y)
+        if result.get("geom_wkt") and srid != 4326:
+            import shapely.wkt
+            from plot_finder.countries._geo import to_4326
+            result["geom_wkt"] = to_4326(shapely.wkt.loads(result["geom_wkt"]), srid).wkt
+        return result

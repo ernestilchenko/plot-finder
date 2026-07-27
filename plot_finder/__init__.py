@@ -1,12 +1,27 @@
-from plot_finder.countries import France, Netherlands, Poland, Spain
+from plot_finder.countries import (
+    Cyprus,
+    Estonia,
+    France,
+    Latvia,
+    Lithuania,
+    Netherlands,
+    Poland,
+    Spain,
+    Switzerland,
+)
 from plot_finder.exceptions import (
     AddressNotFoundError,
     CatastroError,
+    DLSError,
+    GeoAdminError,
     GeocodeError,
     IGNError,
     KadasterError,
+    MaaametError,
     PlotNotFoundError,
+    RCError,
     ULDKError,
+    VZDError,
 )
 from plot_finder.plot import Plot
 
@@ -16,11 +31,21 @@ __all__ = [
     "France",
     "Spain",
     "Netherlands",
+    "Switzerland",
+    "Estonia",
+    "Cyprus",
+    "Lithuania",
+    "Latvia",
     "AddressNotFoundError",
     "CatastroError",
+    "DLSError",
+    "GeoAdminError",
     "GeocodeError",
     "IGNError",
     "KadasterError",
+    "MaaametError",
     "PlotNotFoundError",
+    "RCError",
     "ULDKError",
+    "VZDError",
 ]

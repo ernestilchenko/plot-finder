@@ -43,6 +43,11 @@ nav:
       - France: france.md
       - Spain: spain.md
       - Netherlands: netherlands.md
+      - Switzerland: switzerland.md
+      - Estonia: estonia.md
+      - Cyprus: cyprus.md
+      - Lithuania: lithuania.md
+      - Latvia: latvia.md
   - Reference:
       - The Plot object: reference.md
 

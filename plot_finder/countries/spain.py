@@ -17,7 +17,6 @@ _CP = "{http://inspire.ec.europa.eu/schemas/cp/4.0}"
 
 
 def _ring(elem: ET.Element) -> list[tuple[float, float]]:
-    """Read a GML LinearRing posList as (lon, lat) pairs (GML EPSG:4326 is lat/lon)."""
     nums = [float(v) for v in next(elem.iter(_GML + "posList")).text.split()]
     return [(nums[i + 1], nums[i]) for i in range(0, len(nums), 2)]
 
@@ -34,7 +33,6 @@ def _parse_geometry(parcel: ET.Element):
 
 
 def _rccoor(x: float, y: float, srid: int) -> str:
-    """Resolve coordinates to a cadastral reference (referencia catastral)."""
     params = {"SRS": f"EPSG:{srid}", "Coordenada_X": str(x), "Coordenada_Y": str(y)}
     try:
         resp = httpx.get(_RCCOOR_URL, params=params, timeout=30)
@@ -51,7 +49,6 @@ def _rccoor(x: float, y: float, srid: int) -> str:
 
 
 def _dnprc(refcat: str) -> tuple[str | None, str | None]:
-    """Best-effort province / municipality lookup for a cadastral reference."""
     try:
         resp = httpx.get(_DNPRC_URL, params={"Provincia": "", "Municipio": "", "RC": refcat}, timeout=30)
         resp.raise_for_status()
@@ -64,7 +61,6 @@ def _dnprc(refcat: str) -> tuple[str | None, str | None]:
 
 
 def _wfs_geometry(refcat: str) -> tuple[str, str]:
-    """Fetch parcel geometry (as WKT) and the canonical reference from the INSPIRE WFS."""
     ref14 = refcat[:14]
     params = {
         "service": "wfs",
@@ -91,12 +87,12 @@ def _wfs_geometry(refcat: str) -> tuple[str, str]:
 class Spain(BaseModel):
     """Spain-specific parcel attributes, from the Dirección General del Catastro."""
 
-    province: str | None = None      # provincia, e.g. "MADRID"
-    municipality: str | None = None  # municipio, e.g. "MADRID"
+    province: str | None = None
+    municipality: str | None = None
 
     code: ClassVar[str] = "ES"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 25830  # ETRS89 / UTM zone 30N
+    area_crs: ClassVar[int] = 25830
     attributes: ClassVar[tuple[str, ...]] = ("province", "municipality")
 
     @staticmethod

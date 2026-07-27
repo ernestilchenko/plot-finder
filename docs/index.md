@@ -24,6 +24,11 @@ plot.centroid      # (x, y)
 | [France](france.md) 🇫🇷 | `"FR"` | `France` | [IGN apicarto cadastre](https://apicarto.ign.fr/api/doc/cadastre) | lon/lat (EPSG:4326) |
 | [Spain](spain.md) 🇪🇸 | `"ES"` | `Spain` | [Dirección General del Catastro](https://www.catastro.hacienda.gob.es/) | lon/lat (EPSG:4326) |
 | [Netherlands](netherlands.md) 🇳🇱 | `"NL"` | `Netherlands` | [PDOK Kadaster](https://www.pdok.nl/) | lon/lat (EPSG:4326) |
+| [Switzerland](switzerland.md) 🇨🇭 | `"CH"` | `Switzerland` | [swisstopo / geo.admin.ch](https://api3.geo.admin.ch/) | lon/lat (EPSG:4326) |
+| [Estonia](estonia.md) 🇪🇪 | `"EE"` | `Estonia` | [Maa-amet](https://geoportaal.maaamet.ee/) | lon/lat (EPSG:4326) |
+| [Cyprus](cyprus.md) 🇨🇾 | `"CY"` | `Cyprus` | [DLS (Lands & Surveys)](https://portal.dls.moi.gov.cy/) | lon/lat (EPSG:4326) |
+| [Lithuania](lithuania.md) 🇱🇹 | `"LT"` | `Lithuania` | [Registrų centras (geoportal.lt)](https://www.inspire-geoportal.lt/) | lon/lat (EPSG:4326) |
+| [Latvia](latvia.md) 🇱🇻 | `"LV"` | `Latvia` | [VZD (kadastrs.lv)](https://www.kadastrs.lv/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -76,6 +81,23 @@ Regardless of country, every `Plot` exposes:
 | `geojson`  | `dict` | Geometry as a GeoJSON mapping |
 | `geom_wkt` | `str` | Geometry as WKT |
 
+## Coordinate systems
+
+Geometry is always returned in **EPSG:4326** (lon/lat) by default. To get it in
+another CRS, set `srid`:
+
+```python
+Plot(country="PL", x=639231, y=486743)             # geometry in EPSG:4326
+Plot(country="PL", x=639231, y=486743, srid=2180)  # geometry in EPSG:2180
+```
+
+Input coordinates are read in each country's native CRS (e.g. EPSG:2180 for
+Poland, EPSG:4326 for the rest). Override with `in_srid`:
+
+```python
+Plot(country="CH", x=2683400, y=1247500, in_srid=2056)   # LV95 input, 4326 output
+```
+
 ## Serialization
 
 `Plot` is a Pydantic v2 model, so a parcel round-trips to plain data:
@@ -95,6 +117,11 @@ from plot_finder import (
     IGNError,              # France (IGN) API failure
     CatastroError,         # Spain (Catastro) API failure
     KadasterError,         # Netherlands (PDOK Kadaster) API failure
+    GeoAdminError,         # Switzerland (geo.admin.ch) API failure
+    MaaametError,          # Estonia (Maa-amet) API failure
+    DLSError,              # Cyprus (DLS) API failure
+    RCError,               # Lithuania (geoportal.lt) API failure
+    VZDError,              # Latvia (VZD) API failure
 )
 ```
 

@@ -13,11 +13,11 @@ _APICARTO_URL = "https://apicarto.ign.fr/api/cadastre/parcelle"
 class France(BaseModel):
     """France-specific parcel attributes, from the IGN apicarto cadastre API."""
 
-    department: str | None = None      # code_dep, e.g. "33"
-    insee: str | None = None           # commune INSEE code, e.g. "33063"
-    commune: str | None = None         # commune name, e.g. "Bordeaux"
-    section: str | None = None         # cadastral section, e.g. "KE"
-    numero: str | None = None          # parcel number, e.g. "0078"
+    department: str | None = None
+    insee: str | None = None
+    commune: str | None = None
+    section: str | None = None
+    numero: str | None = None
 
     code: ClassVar[str] = "FR"
     default_srid: ClassVar[int] = 4326
@@ -27,10 +27,6 @@ class France(BaseModel):
     @staticmethod
     def fetch(plot_id: str | None, x: float | None, y: float | None, srid: int) -> dict:
         if plot_id:
-            # IDU layout: code_insee(5) + com_abs(3) + section(2) + numero(4).
-            # Note: for Paris/Lyon/Marseille the IDU carries the arrondissement
-            # code rather than the base commune INSEE, so id lookup does not work
-            # for those three cities — use coordinates or an address instead.
             if len(plot_id) != 14:
                 raise IGNError(f"Invalid French cadastral id (expected 14 chars): {plot_id!r}")
             params = {

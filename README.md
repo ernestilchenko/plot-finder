@@ -4,7 +4,9 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels in **Poland**, **France**, **Spain** and the **Netherlands** by id, address or coordinates.
+> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania** and **Latvia** — by id, address or coordinates.
+>
+> Geometry is returned in **EPSG:4326** by default (set `srid=` for another CRS).
 
 One `Plot` class. `country` is required and selects the cadastre; the
 country-specific attributes come from a matching class in `plot_finder.countries`.
@@ -70,6 +72,76 @@ print(plot.municipality, plot.section, plot.area)
 ```
 
 Attributes: `municipality`, `section`, `parcel_number`
+
+## Switzerland 🇨🇭
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="CH", plot_id="CH119192997709")   # EGRID
+plot = Plot(country="CH", x=8.5417, y=47.3769)        # lon/lat, EPSG:4326
+plot = Plot(country="CH", address="Bundesplatz 3, Bern")
+
+print(plot.canton, plot.municipality, plot.area)
+```
+
+Attributes: `canton`, `municipality`, `egrid`, `parcel_number`
+
+## Estonia 🇪🇪
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="EE", plot_id="78401:114:0086")   # katastritunnus
+plot = Plot(country="EE", x=24.7536, y=59.437)        # lon/lat, EPSG:4326
+plot = Plot(country="EE", address="Viru väljak 4, Tallinn")
+
+print(plot.county, plot.municipality, plot.area)
+```
+
+Attributes: `county`, `municipality`, `settlement`
+
+## Cyprus 🇨🇾
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="CY", plot_id="1000-21/450301-1-1-290")   # cadastral reference
+plot = Plot(country="CY", x=33.3396, y=35.1787)               # lon/lat, EPSG:4326
+plot = Plot(country="CY", address="Nicosia, Cyprus")
+
+print(plot.district_code, plot.parcel_number, plot.area)
+```
+
+Attributes: `district_code`, `sheet`, `plan`, `parcel_number`
+
+## Lithuania 🇱🇹
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="LT", plot_id="0101/0041:0121")   # kadastro numeris
+plot = Plot(country="LT", x=25.27904, y=54.68449)     # lon/lat, EPSG:4326
+plot = Plot(country="LT", address="Gedimino pr. 1, Vilnius")
+
+print(plot.cadastral_zone, plot.purpose, plot.area)
+```
+
+Attributes: `cadastral_zone`, `municipality_code`, `purpose`
+
+## Latvia 🇱🇻
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="LV", plot_id="01000540120")   # kadastra apzīmējums
+plot = Plot(country="LV", x=24.0917, y=56.9276)    # lon/lat, EPSG:4326
+plot = Plot(country="LV", address="Rīga, Latvia")
+
+print(plot.territory_code, plot.parcel_number, plot.area)
+```
+
+Attributes: `territory_code`, `group_code`, `parcel_number`
 
 ## Documentation
 

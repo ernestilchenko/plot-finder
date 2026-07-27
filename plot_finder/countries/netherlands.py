@@ -24,7 +24,6 @@ def _to_wgs():
 
 
 def _locatieserver_lonlat(query: str) -> tuple[float, float]:
-    """Resolve a cadastral designation to a lon/lat point via the PDOK Locatieserver."""
     params = {"q": query, "fq": "type:perceel", "rows": 1}
     try:
         resp = httpx.get(_LOCSERVER_URL, params=params, timeout=30, follow_redirects=True)
@@ -42,7 +41,6 @@ def _locatieserver_lonlat(query: str) -> tuple[float, float]:
 
 
 def _wfs_parcel_at(rd_x: float, rd_y: float) -> tuple:
-    """Return (RD polygon, properties) of the parcel containing an RD point."""
     d = 30
     bbox = f"{rd_x - d},{rd_y - d},{rd_x + d},{rd_y + d},urn:ogc:def:crs:EPSG::28992"
     params = {
@@ -72,13 +70,13 @@ def _wfs_parcel_at(rd_x: float, rd_y: float) -> tuple:
 class Netherlands(BaseModel):
     """Netherlands-specific parcel attributes, from the PDOK Kadaster."""
 
-    municipality: str | None = None      # kadastrale gemeente, e.g. "Alkemade"
-    section: str | None = None           # sectie, e.g. "K"
-    parcel_number: str | None = None     # perceelnummer, e.g. "3785"
+    municipality: str | None = None
+    section: str | None = None
+    parcel_number: str | None = None
 
     code: ClassVar[str] = "NL"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 28992  # Amersfoort / RD New
+    area_crs: ClassVar[int] = 28992
     attributes: ClassVar[tuple[str, ...]] = ("municipality", "section", "parcel_number")
 
     @staticmethod
@@ -88,7 +86,7 @@ class Netherlands(BaseModel):
             rd_x, rd_y = _to_rd().transform(lon, lat)
         elif srid == 28992:
             rd_x, rd_y = x, y
-        else:  # lon/lat (EPSG:4326)
+        else:
             rd_x, rd_y = _to_rd().transform(x, y)
 
         geom_rd, props = _wfs_parcel_at(rd_x, rd_y)

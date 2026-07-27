@@ -8,11 +8,12 @@ geometry and attributes.
 
 ```python
 Plot(
-    country,          # required: "PL" | "FR" | "ES" | "NL"
+    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"
     plot_id=None,     # cadastral id / reference / designation
     address=None,     # free-form address (geocoded)
     x=None, y=None,   # coordinates
-    srid=None,        # coordinate CRS (defaults to the country's native CRS)
+    srid=4326,        # output geometry CRS
+    in_srid=None,     # input coordinate CRS (defaults to the country's native CRS)
 )
 ```
 
@@ -20,8 +21,9 @@ Rules:
 
 - **`country` is required** — there is no default.
 - Provide **one** of: `plot_id`, `address`, or both `x` and `y`.
-- `srid` defaults per country (PL → 2180, FR/ES/NL → 4326). It is the CRS of the
-  **input** coordinates.
+- `srid` is the **output** geometry CRS — **4326 by default**, set it for another.
+- `in_srid` is the CRS of the **input** coordinates; it defaults to the country's
+  native CRS (PL → 2180, everything else → 4326).
 
 ## Common fields
 
@@ -55,6 +57,11 @@ The remaining attributes depend on `country` and come from the matching class in
 | `France` | `department`, `insee`, `commune`, `section`, `numero` |
 | `Spain` | `province`, `municipality` |
 | `Netherlands` | `municipality`, `section`, `parcel_number` |
+| `Switzerland` | `canton`, `municipality`, `egrid`, `parcel_number` |
+| `Estonia` | `county`, `municipality`, `settlement` |
+| `Cyprus` | `district_code`, `sheet`, `plan`, `parcel_number` |
+| `Lithuania` | `cadastral_zone`, `municipality_code`, `purpose` |
+| `Latvia` | `territory_code`, `group_code`, `parcel_number` |
 
 They are exposed **flat** on the plot and included in `model_dump()`:
 
@@ -84,3 +91,8 @@ Both include the common fields, the country attributes and the computed
 | `IGNError` | France (IGN apicarto) |
 | `CatastroError` | Spain (Dirección General del Catastro) |
 | `KadasterError` | Netherlands (PDOK Kadaster) |
+| `GeoAdminError` | Switzerland (geo.admin.ch) |
+| `MaaametError` | Estonia (Maa-amet) |
+| `DLSError` | Cyprus (Department of Lands and Surveys) |
+| `RCError` | Lithuania (Registrų centras / geoportal.lt) |
+| `VZDError` | Latvia (Valsts zemes dienests) |
