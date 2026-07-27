@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/spain/">
+        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/switzerland/">
       
       
-        <link rel="prev" href="../france/">
+        <link rel="prev" href="../netherlands/">
       
       
-        <link rel="next" href="../netherlands/">
+        <link rel="next" href="../estonia/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Spain - plot-finder</title>
+        <title>Switzerland - plot-finder</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#spain" class="md-skip">
+        <a href="#switzerland" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Spain
+              Switzerland
             
           </span>
         </div>
@@ -396,6 +396,62 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../spain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../netherlands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Netherlands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -415,7 +471,7 @@
   <span class="md-ellipsis">
     
   
-    Spain
+    Switzerland
   
 
     
@@ -433,7 +489,7 @@
   <span class="md-ellipsis">
     
   
-    Spain
+    Switzerland
   
 
     
@@ -506,62 +562,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../netherlands/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Netherlands
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../switzerland/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Switzerland
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -865,73 +865,79 @@
   
 
 
-<h1 id="spain">Spain 🇪🇸<a class="headerlink" href="#spain" title="Permanent link">&para;</a></h1>
-<p>Parcels in Spain come from the <strong>Dirección General del Catastro</strong> (DGC). Because
-no single endpoint returns everything, <code>plot-finder</code> combines three official
-services:</p>
-<ol>
-<li><strong><code>Consulta_RCCOOR</code></strong> — coordinates → cadastral reference (<em>referencia catastral</em>).</li>
-<li><strong>INSPIRE WFS</strong> (<code>GetParcel</code>) — reference → parcel geometry + official area.</li>
-<li><strong><code>Consulta_DNPRC</code></strong> — reference → province and municipality.</li>
-</ol>
+<h1 id="switzerland">Switzerland 🇨🇭<a class="headerlink" href="#switzerland" title="Permanent link">&para;</a></h1>
+<p>Parcels in Switzerland come from <strong>swisstopo</strong> via the federal geoportal
+<a href="https://api3.geo.admin.ch/">geo.admin.ch</a>. <code>plot-finder</code> uses the
+<code>identify</code> / <code>find</code> services on the cadastral web map layer, plus the
+municipality-boundary layer for the commune name.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;ES&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;0749407VK4704H&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;CH119192997709&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="querying">Querying<a class="headerlink" href="#querying" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">By reference</label><label for="__tabbed_1_2">By coordinates</label><label for="__tabbed_1_3">By address</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">By id (EGRID)</label><label for="__tabbed_1_2">By coordinates</label><label for="__tabbed_1_3">By address</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>The <code>plot_id</code> is the <strong>referencia catastral</strong> (14 characters for the parcel).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;ES&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;0749407VK4704H&quot;</span><span class="p">)</span>
+<p>The <code>plot_id</code> is the <strong>EGRID</strong> — the federal parcel identifier
+(e.g. <code>CH119192997709</code>), unique across the whole country.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;CH119192997709&quot;</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>Coordinates are <strong>longitude, latitude</strong> (EPSG:4326). They are resolved to a
-cadastral reference via <code>RCCOOR</code>, then to geometry.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;ES&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="mf">3.6999</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">40.4211</span><span class="p">)</span>   <span class="c1"># (lon, lat)</span>
+<p>Coordinates are <strong>longitude, latitude</strong> (EPSG:4326) by default. Pass
+<code>srid=2056</code> to provide LV95 (CH1903+) coordinates.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">8.5417</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">47.3769</span><span class="p">)</span>               <span class="c1"># (lon, lat)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">2683400</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1247500</span><span class="p">,</span> <span class="n">srid</span><span class="o">=</span><span class="mi">2056</span><span class="p">)</span>   <span class="c1"># LV95</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>The address is geocoded with OpenStreetMap Nominatim.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;ES&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;Calle de Alcalá 1, Madrid&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;Bundesplatz 3, Bern&quot;</span><span class="p">)</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
-<p>Sourced from the <code>Spain</code> class:</p>
+<p>Sourced from the <code>Switzerland</code> class:</p>
 <table>
 <thead>
 <tr>
 <th>Attribute</th>
-<th>Spanish term</th>
+<th>Meaning</th>
 <th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>province</code></td>
-<td>provincia</td>
-<td><code>MADRID</code></td>
+<td><code>canton</code></td>
+<td>canton abbreviation</td>
+<td><code>ZH</code></td>
 </tr>
 <tr>
 <td><code>municipality</code></td>
-<td>municipio</td>
-<td><code>MADRID</code></td>
+<td>commune name</td>
+<td><code>Zürich</code></td>
+</tr>
+<tr>
+<td><code>egrid</code></td>
+<td>federal parcel id</td>
+<td><code>CH119192997709</code></td>
+</tr>
+<tr>
+<td><code>parcel_number</code></td>
+<td>cantonal parcel number</td>
+<td><code>AA8048</code></td>
 </tr>
 </tbody>
 </table>
-<p>Plus the shared fields: <code>plot_id</code> (referencia catastral), <code>geom_wkt</code>,
-<code>datasource</code>, and the computed <code>area</code> / <code>centroid</code> / <code>geojson</code>.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Area</strong> is computed in <strong>EPSG:25830</strong> (ETRS89 / UTM zone 30N). It matches the
-  Catastro's official <em>superficie</em> to within a fraction of a percent.</li>
-<li>The INSPIRE WFS returns geometry as GML in <strong>lat/lon</strong> axis order;
-  <code>plot-finder</code> normalizes it to standard <strong>lon/lat</strong> WKT.</li>
-<li>The geometry request uses the 14-character parcel reference; a longer 20-char
-  property reference is truncated to its parcel part.</li>
+<li><strong>Area</strong> is computed in <strong>EPSG:2056</strong> (CH1903+ / LV95), the Swiss metric
+  reference system. Geometry is returned in <strong>EPSG:4326</strong>.</li>
+<li>The cadastral layer carries the canton and EGRID; the commune name is fetched
+  from the <code>swissboundaries3d</code> municipality layer at the parcel centroid.</li>
+<li><code>parcel_number</code> is only unique within a municipality — use the <code>egrid</code> as the
+  stable identifier.</li>
 </ul>
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <table>
@@ -943,12 +949,12 @@ cadastral reference via <code>RCCOOR</code>, then to geometry.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>CatastroError</code></td>
-<td>an RCCOOR / WFS request failed or returned invalid data</td>
+<td><code>GeoAdminError</code></td>
+<td>a geo.admin.ch request failed</td>
 </tr>
 <tr>
 <td><code>PlotNotFoundError</code></td>
-<td>no parcel at the point / for the reference</td>
+<td>no parcel at the point / for the EGRID</td>
 </tr>
 <tr>
 <td><code>AddressNotFoundError</code></td>

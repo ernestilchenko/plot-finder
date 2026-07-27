@@ -375,6 +375,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#coordinate-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinate systems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#serialization" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -570,6 +581,146 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="switzerland/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Switzerland
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="estonia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estonia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cyprus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyprus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lithuania/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lithuania
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="latvia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Latvia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -748,6 +899,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#coordinate-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinate systems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#serialization" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -844,6 +1006,41 @@ attributes.</p>
 <td><a href="https://www.pdok.nl/">PDOK Kadaster</a></td>
 <td>lon/lat (EPSG:4326)</td>
 </tr>
+<tr>
+<td><a href="switzerland/">Switzerland</a> 🇨🇭</td>
+<td><code>"CH"</code></td>
+<td><code>Switzerland</code></td>
+<td><a href="https://api3.geo.admin.ch/">swisstopo / geo.admin.ch</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
+<tr>
+<td><a href="estonia/">Estonia</a> 🇪🇪</td>
+<td><code>"EE"</code></td>
+<td><code>Estonia</code></td>
+<td><a href="https://geoportaal.maaamet.ee/">Maa-amet</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
+<tr>
+<td><a href="cyprus/">Cyprus</a> 🇨🇾</td>
+<td><code>"CY"</code></td>
+<td><code>Cyprus</code></td>
+<td><a href="https://portal.dls.moi.gov.cy/">DLS (Lands &amp; Surveys)</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
+<tr>
+<td><a href="lithuania/">Lithuania</a> 🇱🇹</td>
+<td><code>"LT"</code></td>
+<td><code>Lithuania</code></td>
+<td><a href="https://www.inspire-geoportal.lt/">Registrų centras (geoportal.lt)</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
+<tr>
+<td><a href="latvia/">Latvia</a> 🇱🇻</td>
+<td><code>"LV"</code></td>
+<td><code>Latvia</code></td>
+<td><a href="https://www.kadastrs.lv/">VZD (kadastrs.lv)</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
@@ -906,20 +1103,35 @@ you must provide at least one of <code>plot_id</code>, <code>address</code>, or 
 </tr>
 </tbody>
 </table>
+<h2 id="coordinate-systems">Coordinate systems<a class="headerlink" href="#coordinate-systems" title="Permanent link">&para;</a></h2>
+<p>Geometry is always returned in <strong>EPSG:4326</strong> (lon/lat) by default. To get it in
+another CRS, set <code>srid</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">639231</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">486743</span><span class="p">)</span>             <span class="c1"># geometry in EPSG:4326</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">639231</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">486743</span><span class="p">,</span> <span class="n">srid</span><span class="o">=</span><span class="mi">2180</span><span class="p">)</span>  <span class="c1"># geometry in EPSG:2180</span>
+</code></pre></div>
+<p>Input coordinates are read in each country's native CRS (e.g. EPSG:2180 for
+Poland, EPSG:4326 for the rest). Override with <code>in_srid</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;CH&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">2683400</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1247500</span><span class="p">,</span> <span class="n">in_srid</span><span class="o">=</span><span class="mi">2056</span><span class="p">)</span>   <span class="c1"># LV95 input, 4326 output</span>
+</code></pre></div>
 <h2 id="serialization">Serialization<a class="headerlink" href="#serialization" title="Permanent link">&para;</a></h2>
 <p><code>Plot</code> is a Pydantic v2 model, so a parcel round-trips to plain data:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">plot</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>        <span class="c1"># flat dict: common fields + country attributes + computed props</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">plot</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>   <span class="c1"># JSON string</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">plot</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>        <span class="c1"># flat dict: common fields + country attributes + computed props</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">plot</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>   <span class="c1"># JSON string</span>
 </code></pre></div>
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">PlotNotFoundError</span><span class="p">,</span>     <span class="c1"># no parcel for the given query</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">AddressNotFoundError</span><span class="p">,</span>  <span class="c1"># geocoder returned no result</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">ULDKError</span><span class="p">,</span>             <span class="c1"># Poland (ULDK) API failure</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">IGNError</span><span class="p">,</span>              <span class="c1"># France (IGN) API failure</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">CatastroError</span><span class="p">,</span>         <span class="c1"># Spain (Catastro) API failure</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">KadasterError</span><span class="p">,</span>         <span class="c1"># Netherlands (PDOK Kadaster) API failure</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">PlotNotFoundError</span><span class="p">,</span>     <span class="c1"># no parcel for the given query</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">AddressNotFoundError</span><span class="p">,</span>  <span class="c1"># geocoder returned no result</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">ULDKError</span><span class="p">,</span>             <span class="c1"># Poland (ULDK) API failure</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">IGNError</span><span class="p">,</span>              <span class="c1"># France (IGN) API failure</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">CatastroError</span><span class="p">,</span>         <span class="c1"># Spain (Catastro) API failure</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">KadasterError</span><span class="p">,</span>         <span class="c1"># Netherlands (PDOK Kadaster) API failure</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">GeoAdminError</span><span class="p">,</span>         <span class="c1"># Switzerland (geo.admin.ch) API failure</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="n">MaaametError</span><span class="p">,</span>          <span class="c1"># Estonia (Maa-amet) API failure</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="n">DLSError</span><span class="p">,</span>              <span class="c1"># Cyprus (DLS) API failure</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">RCError</span><span class="p">,</span>               <span class="c1"># Lithuania (geoportal.lt) API failure</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">VZDError</span><span class="p">,</span>              <span class="c1"># Latvia (VZD) API failure</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="p">)</span>
 </code></pre></div>
 <p>See the <a href="reference/">reference</a> for the full field list and model details.</p>
 
