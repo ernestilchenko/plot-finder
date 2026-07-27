@@ -2,18 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/</loc>
-         <lastmod>2026-07-23</lastmod>
+         <lastmod>2026-07-27</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/france/</loc>
-         <lastmod>2026-07-23</lastmod>
+         <lastmod>2026-07-27</lastmod>
+    </url>
+    <url>
+         <loc>https://ernestilchenko.github.io/plot-finder/netherlands/</loc>
+         <lastmod>2026-07-27</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/poland/</loc>
-         <lastmod>2026-07-23</lastmod>
+         <lastmod>2026-07-27</lastmod>
+    </url>
+    <url>
+         <loc>https://ernestilchenko.github.io/plot-finder/reference/</loc>
+         <lastmod>2026-07-27</lastmod>
     </url>
     <url>
          <loc>https://ernestilchenko.github.io/plot-finder/spain/</loc>
-         <lastmod>2026-07-23</lastmod>
+         <lastmod>2026-07-27</lastmod>
     </url>
 </urlset>
