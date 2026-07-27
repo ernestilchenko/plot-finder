@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels in **Poland**, **France** and **Spain** by id, address or coordinates.
+> Python library to find land parcels in **Poland**, **France**, **Spain** and the **Netherlands** by id, address or coordinates.
 
 One `Plot` class. `country` is required and selects the cadastre; the
 country-specific attributes come from a matching class in `plot_finder.countries`.
@@ -56,6 +56,20 @@ print(plot.province, plot.municipality, plot.area)
 ```
 
 Attributes: `province`, `municipality`
+
+## Netherlands 🇳🇱
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="NL", plot_id="AKM01 K 3785")     # cadastral designation
+plot = Plot(country="NL", x=4.6255, y=52.1987)        # lon/lat, EPSG:4326
+plot = Plot(country="NL", address="Dam 1, Amsterdam")
+
+print(plot.municipality, plot.section, plot.area)
+```
+
+Attributes: `municipality`, `section`, `parcel_number`
 
 ## Documentation
 

@@ -38,9 +38,13 @@ theme:
 
 nav:
   - Home: index.md
-  - Poland: poland.md
-  - France: france.md
-  - Spain: spain.md
+  - Countries:
+      - Poland: poland.md
+      - France: france.md
+      - Spain: spain.md
+      - Netherlands: netherlands.md
+  - Reference:
+      - The Plot object: reference.md
 
 markdown_extensions:
   - admonition

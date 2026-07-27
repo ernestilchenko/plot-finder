@@ -10,6 +10,10 @@ class CatastroError(Exception):
     """Base error for the Spanish Dirección General del Catastro API."""
 
 
+class KadasterError(Exception):
+    """Base error for the Dutch PDOK Kadaster (Kadastrale Kaart) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 
