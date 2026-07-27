@@ -29,6 +29,7 @@ plot.centroid      # (x, y)
 | [Cyprus](cyprus.md) 🇨🇾 | `"CY"` | `Cyprus` | [DLS (Lands & Surveys)](https://portal.dls.moi.gov.cy/) | lon/lat (EPSG:4326) |
 | [Lithuania](lithuania.md) 🇱🇹 | `"LT"` | `Lithuania` | [Registrų centras (geoportal.lt)](https://www.inspire-geoportal.lt/) | lon/lat (EPSG:4326) |
 | [Latvia](latvia.md) 🇱🇻 | `"LV"` | `Latvia` | [VZD (kadastrs.lv)](https://www.kadastrs.lv/) | lon/lat (EPSG:4326) |
+| [Portugal](portugal.md) 🇵🇹 | `"PT"` | `Portugal` | [DGT SNIC](https://snic.dgterritorio.gov.pt/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -122,6 +123,7 @@ from plot_finder import (
     DLSError,              # Cyprus (DLS) API failure
     RCError,               # Lithuania (geoportal.lt) API failure
     VZDError,              # Latvia (VZD) API failure
+    DGTError,              # Portugal (DGT SNIC) API failure
 )
 ```
 

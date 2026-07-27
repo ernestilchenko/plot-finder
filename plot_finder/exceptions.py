@@ -34,6 +34,10 @@ class VZDError(Exception):
     """Base error for the Latvian Valsts zemes dienests (kadastrs.lv) API."""
 
 
+class DGTError(Exception):
+    """Base error for the Portuguese Direção-Geral do Território (SNIC) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

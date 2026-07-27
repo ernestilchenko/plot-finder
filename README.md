@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania** and **Latvia** — by id, address or coordinates.
+> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania**, **Latvia** and **Portugal** — by id, address or coordinates.
 >
 > Geometry is returned in **EPSG:4326** by default (set `srid=` for another CRS).
 
@@ -142,6 +142,19 @@ print(plot.territory_code, plot.parcel_number, plot.area)
 ```
 
 Attributes: `territory_code`, `group_code`, `parcel_number`
+
+## Portugal 🇵🇹
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="PT", plot_id="AAA000825807")   # NIC
+plot = Plot(country="PT", x=-7.7079, y=40.4210)     # lon/lat, EPSG:4326
+
+print(plot.municipality, plot.parish, plot.area)
+```
+
+Attributes: `municipality`, `parish`, `district_code` — _partial coverage (no big cities/north)._
 
 ## Documentation
 
