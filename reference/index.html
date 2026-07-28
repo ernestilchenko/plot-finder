@@ -207,7 +207,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.9.0</li>
+        <li class="md-source__fact md-source__fact--version">v1.9.1</li>
       </ul>
     
   </div>
@@ -258,7 +258,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.9.0</li>
+        <li class="md-source__fact md-source__fact--version">v1.9.1</li>
       </ul>
     
   </div>
@@ -1042,18 +1042,16 @@ geometry and attributes.</p>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">country</span><span class="p">,</span>          <span class="c1"># required: &quot;PL&quot;|&quot;FR&quot;|&quot;ES&quot;|&quot;NL&quot;|&quot;CH&quot;|&quot;EE&quot;|&quot;CY&quot;|&quot;LT&quot;|&quot;LV&quot;|&quot;PT&quot;|&quot;SI&quot;|&quot;IT&quot;|&quot;DE&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">plot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># cadastral id / reference / designation</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">address</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># free-form address (geocoded)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>   <span class="c1"># coordinates</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>   <span class="c1"># lon/lat coordinates (EPSG:4326)</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">srid</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span>        <span class="c1"># output geometry CRS</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">in_srid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># input coordinate CRS (defaults to the country&#39;s native CRS)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
 </code></pre></div>
 <p>Rules:</p>
 <ul>
 <li><strong><code>country</code> is required</strong> — there is no default.</li>
 <li>Provide <strong>one</strong> of: <code>plot_id</code>, <code>address</code>, or both <code>x</code> and <code>y</code>.</li>
+<li>Input coordinates are always <strong>lon/lat (EPSG:4326)</strong> for every country.</li>
 <li><code>srid</code> is the <strong>output</strong> geometry CRS — <strong>4326 by default</strong>, set it for another.</li>
-<li><code>in_srid</code> is the CRS of the <strong>input</strong> coordinates; it defaults to the country's
-  native CRS (PL → 2180, everything else → 4326).</li>
 </ul>
 <h2 id="common-fields">Common fields<a class="headerlink" href="#common-fields" title="Permanent link">&para;</a></h2>
 <table>
@@ -1088,17 +1086,12 @@ geometry and attributes.</p>
 <tr>
 <td><code>srid</code></td>
 <td><code>int</code></td>
-<td>CRS of the coordinates</td>
+<td>Output geometry CRS (default 4326)</td>
 </tr>
 <tr>
-<td><code>geom_wkt</code></td>
-<td><code>str</code></td>
-<td>Parcel geometry as WKT</td>
-</tr>
-<tr>
-<td><code>geom_extent</code></td>
-<td><code>str \| None</code></td>
-<td>Bounding box, when the source provides one</td>
+<td><code>geojson</code></td>
+<td><code>dict</code></td>
+<td>Parcel geometry as GeoJSON</td>
 </tr>
 <tr>
 <td><code>datasource</code></td>
@@ -1120,7 +1113,7 @@ geometry and attributes.</p>
 <tr>
 <td><code>area</code></td>
 <td><code>float</code></td>
-<td>Area in <strong>m²</strong>, measured in the country's metric CRS</td>
+<td>Geodesic area in <strong>m²</strong> (WGS84 ellipsoid)</td>
 </tr>
 <tr>
 <td><code>centroid</code></td>
@@ -1128,9 +1121,9 @@ geometry and attributes.</p>
 <td>Centroid of the geometry</td>
 </tr>
 <tr>
-<td><code>geojson</code></td>
-<td><code>dict</code></td>
-<td>Geometry as a GeoJSON mapping</td>
+<td><code>bbox</code></td>
+<td><code>(float, float, float, float)</code></td>
+<td>Bounding box <code>(minx, miny, maxx, maxy)</code></td>
 </tr>
 </tbody>
 </table>
@@ -1208,8 +1201,8 @@ geometry and attributes.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">p</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>        <span class="c1"># dict</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">p</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>    <span class="c1"># JSON string</span>
 </code></pre></div>
-<p>Both include the common fields, the country attributes and the computed
-<code>area</code> / <code>centroid</code> / <code>geojson</code>.</p>
+<p>Both include the common fields (<code>geojson</code> included), the country attributes and
+the computed <code>area</code> / <code>centroid</code> / <code>bbox</code>.</p>
 <h2 id="exceptions">Exceptions<a class="headerlink" href="#exceptions" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1336,7 +1329,7 @@ geometry and attributes.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.9.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.9.1"}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
