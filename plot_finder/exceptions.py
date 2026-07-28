@@ -38,6 +38,10 @@ class DGTError(Exception):
     """Base error for the Portuguese Direção-Geral do Território (SNIC) API."""
 
 
+class GURSError(Exception):
+    """Base error for the Slovenian GURS (e-prostor) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

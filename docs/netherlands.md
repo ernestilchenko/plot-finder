@@ -28,13 +28,13 @@ plot = Plot(country="NL", plot_id="AKM01 K 3785")
 
 === "By coordinates"
 
-    Coordinates are **longitude, latitude** (EPSG:4326) by default. Internally
-    they are converted to RD New (EPSG:28992) to query the WFS. Pass
-    `srid=28992` to provide RD coordinates directly.
+    Input coordinates are **longitude, latitude** (EPSG:4326) by default.
+    Internally they are converted to RD New (EPSG:28992) to query the WFS. Pass
+    `in_srid=28992` to provide RD coordinates directly.
 
     ```python
-    Plot(country="NL", x=4.6255, y=52.1987)              # (lon, lat)
-    Plot(country="NL", x=102923, y=468116, srid=28992)   # RD New
+    Plot(country="NL", x=4.6255, y=52.1987)                 # (lon, lat)
+    Plot(country="NL", x=102923, y=468116, in_srid=28992)   # RD New
     ```
 
 === "By address"

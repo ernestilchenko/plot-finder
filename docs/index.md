@@ -18,8 +18,11 @@ plot.centroid      # (x, y)
 
 ## Supported countries
 
-| Country | `country` | Attribute class | Data source | Coordinates |
-|---------|-----------|-----------------|-------------|-------------|
+Geometry is always returned in **EPSG:4326** (see [Coordinate systems](#coordinate-systems)).
+The last column is the CRS in which each country reads **input** coordinates.
+
+| Country | `country` | Attribute class | Data source | Input coords |
+|---------|-----------|-----------------|-------------|--------------|
 | [Poland](poland.md) 🇵🇱 | `"PL"` | `Poland` | [ULDK / GUGiK](https://uldk.gugik.gov.pl/) | EPSG:2180 |
 | [France](france.md) 🇫🇷 | `"FR"` | `France` | [IGN apicarto cadastre](https://apicarto.ign.fr/api/doc/cadastre) | lon/lat (EPSG:4326) |
 | [Spain](spain.md) 🇪🇸 | `"ES"` | `Spain` | [Dirección General del Catastro](https://www.catastro.hacienda.gob.es/) | lon/lat (EPSG:4326) |
@@ -30,6 +33,7 @@ plot.centroid      # (x, y)
 | [Lithuania](lithuania.md) 🇱🇹 | `"LT"` | `Lithuania` | [Registrų centras (geoportal.lt)](https://www.inspire-geoportal.lt/) | lon/lat (EPSG:4326) |
 | [Latvia](latvia.md) 🇱🇻 | `"LV"` | `Latvia` | [VZD (kadastrs.lv)](https://www.kadastrs.lv/) | lon/lat (EPSG:4326) |
 | [Portugal](portugal.md) 🇵🇹 | `"PT"` | `Portugal` | [DGT SNIC](https://snic.dgterritorio.gov.pt/) | lon/lat (EPSG:4326) |
+| [Slovenia](slovenia.md) 🇸🇮 | `"SI"` | `Slovenia` | [GURS (e-prostor)](https://www.e-prostor.gov.si/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -124,6 +128,7 @@ from plot_finder import (
     RCError,               # Lithuania (geoportal.lt) API failure
     VZDError,              # Latvia (VZD) API failure
     DGTError,              # Portugal (DGT SNIC) API failure
+    GURSError,             # Slovenia (GURS) API failure
 )
 ```
 

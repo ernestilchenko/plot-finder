@@ -23,12 +23,12 @@ plot = Plot(country="PL", plot_id="141201_1.0001.6509")
 
 === "By coordinates"
 
-    Coordinates default to **EPSG:2180** (the Polish national grid). Pass
-    `srid=` to use another CRS.
+    Input coordinates are read in **EPSG:2180** (the Polish national grid). Pass
+    `in_srid=` for another input CRS.
 
     ```python
-    Plot(country="PL", x=639231, y=486743)             # EPSG:2180
-    Plot(country="PL", x=21.0, y=52.2, srid=4326)      # lon/lat
+    Plot(country="PL", x=639231, y=486743)                # EPSG:2180 input
+    Plot(country="PL", x=21.0, y=52.2, in_srid=4326)      # lon/lat input
     ```
 
 === "By address"

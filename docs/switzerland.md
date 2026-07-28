@@ -24,12 +24,12 @@ plot = Plot(country="CH", plot_id="CH119192997709")
 
 === "By coordinates"
 
-    Coordinates are **longitude, latitude** (EPSG:4326) by default. Pass
-    `srid=2056` to provide LV95 (CH1903+) coordinates.
+    Input coordinates are **longitude, latitude** (EPSG:4326) by default. Pass
+    `in_srid=2056` to provide LV95 (CH1903+) coordinates.
 
     ```python
-    Plot(country="CH", x=8.5417, y=47.3769)               # (lon, lat)
-    Plot(country="CH", x=2683400, y=1247500, srid=2056)   # LV95
+    Plot(country="CH", x=8.5417, y=47.3769)                  # (lon, lat)
+    Plot(country="CH", x=2683400, y=1247500, in_srid=2056)   # LV95
     ```
 
 === "By address"

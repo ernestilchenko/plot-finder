@@ -24,8 +24,8 @@ plot = Plot(country="EE", plot_id="78401:114:0086")
 
 === "By coordinates"
 
-    Coordinates are **longitude, latitude** (EPSG:4326) by default. Pass
-    `srid=3301` for L-EST97 coordinates.
+    Input coordinates are **longitude, latitude** (EPSG:4326) by default. Pass
+    `in_srid=3301` for L-EST97 coordinates.
 
     ```python
     Plot(country="EE", x=24.7536, y=59.437)   # (lon, lat)
