@@ -46,6 +46,10 @@ class AdEError(Exception):
     """Base error for the Italian Agenzia delle Entrate (cartografia catastale) API."""
 
 
+class ALKISError(Exception):
+    """Base error for the German state ALKIS (Liegenschaftskataster) services."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

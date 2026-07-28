@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania**, **Latvia**, **Portugal**, **Slovenia** and **Italy** — by id, address or coordinates.
+> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania**, **Latvia**, **Portugal**, **Slovenia**, **Italy** and **Germany** — by id, address or coordinates.
 >
 > Geometry is returned in **EPSG:4326** by default (set `srid=` for another CRS).
 
@@ -181,6 +181,19 @@ print(plot.comune_code, plot.foglio, plot.particella, plot.area)
 ```
 
 Attributes: `comune_code`, `foglio`, `particella` — _coordinates/address only (no id lookup); excludes Trento & Bolzano._
+
+## Germany 🇩🇪
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="DE", x=6.9583, y=50.9413)   # lon/lat, EPSG:4326
+plot = Plot(country="DE", address="Domkloster 4, Köln")
+
+print(plot.land, plot.gemarkung, plot.parcel_number, plot.area)
+```
+
+Attributes: `land`, `gemarkung`, `flur`, `parcel_number` — _coordinates/address only; 10 of 16 states (free ALKIS)._
 
 ## Documentation
 
