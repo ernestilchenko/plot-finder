@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/latvia/">
+        <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/italy/">
       
       
-        <link rel="prev" href="../lithuania/">
+        <link rel="prev" href="../slovenia/">
       
       
-        <link rel="next" href="../portugal/">
+        <link rel="next" href="../reference/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Latvia - plot-finder</title>
+        <title>Italy - plot-finder</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#latvia" class="md-skip">
+        <a href="#italy" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Latvia
+              Italy
             
           </span>
         </div>
@@ -578,6 +578,90 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../latvia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Latvia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../portugal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portugal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slovenia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slovenia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -597,7 +681,7 @@
   <span class="md-ellipsis">
     
   
-    Latvia
+    Italy
   
 
     
@@ -615,7 +699,7 @@
   <span class="md-ellipsis">
     
   
-    Latvia
+    Italy
   
 
     
@@ -688,90 +772,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../portugal/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Portugal
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../slovenia/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Slovenia
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../italy/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Italy
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -963,37 +963,38 @@
   
 
 
-<h1 id="latvia">Latvia 🇱🇻<a class="headerlink" href="#latvia" title="Permanent link">&para;</a></h1>
-<p>Parcels in Latvia come from <strong>Valsts zemes dienests</strong> (VZD, State Land Service)
-via its public INSPIRE Cadastral Parcels WFS. Geometry is returned in EPSG:4326.</p>
+<h1 id="italy">Italy 🇮🇹<a class="headerlink" href="#italy" title="Permanent link">&para;</a></h1>
+<p>Parcels in Italy come from <strong>Agenzia delle Entrate</strong> (Catasto) via its INSPIRE
+Cadastral Parcels WFS. Geometry is returned in EPSG:4326.</p>
+<div class="admonition warning">
+<p class="admonition-title">Coordinates / address only</p>
+<p>The Agenzia delle Entrate WFS does <strong>not</strong> allow filtering by cadastral
+reference, so Italy supports lookup <strong>by coordinates or address only</strong> — a
+<code>plot_id</code> lookup raises <code>AdEError</code>.</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plot_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Plot</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;LV&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;01000540120&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;IT&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">12.4922</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">41.8902</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="querying">Querying<a class="headerlink" href="#querying" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">By id (kadastra apzīmējums)</label><label for="__tabbed_1_2">By coordinates</label><label for="__tabbed_1_3">By address</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">By coordinates</label><label for="__tabbed_1_2">By address</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>The <code>plot_id</code> is the 11-digit parcel designation <strong>kadastra apzīmējums</strong>
-(e.g. <code>01000540120</code>).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;LV&quot;</span><span class="p">,</span> <span class="n">plot_id</span><span class="o">=</span><span class="s2">&quot;01000540120&quot;</span><span class="p">)</span>
+<p>Input coordinates are <strong>longitude, latitude</strong> (EPSG:4326). The parcel
+containing the point is selected.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;IT&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">12.4922</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">41.8902</span><span class="p">)</span>   <span class="c1"># (lon, lat)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>Coordinates are <strong>longitude, latitude</strong> (EPSG:4326). Pass <code>in_srid=3059</code> for
-LKS-92 coordinates.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;LV&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">24.0917</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">56.9276</span><span class="p">)</span>   <span class="c1"># (lon, lat)</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<p>The address is geocoded with OpenStreetMap Nominatim.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;LV&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;Rīga, Latvia&quot;</span><span class="p">)</span>
+<p>The address is geocoded with OpenStreetMap Nominatim (resolves to a parcel
+only when the point falls inside one — not on a road or square).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;IT&quot;</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">&quot;Piazzale degli Uffizi, Firenze&quot;</span><span class="p">)</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
-<p>Sourced from the <code>Latvia</code> class (parsed from the designation):</p>
+<p>Sourced from the <code>Italy</code> class:</p>
 <table>
 <thead>
 <tr>
@@ -1004,28 +1005,29 @@ LKS-92 coordinates.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>territory_code</code></td>
-<td>cadastral territory</td>
-<td><code>0100</code></td>
+<td><code>comune_code</code></td>
+<td>comune cadastral (Belfiore) code</td>
+<td><code>H501</code> (Roma)</td>
 </tr>
 <tr>
-<td><code>group_code</code></td>
-<td>cadastral group</td>
-<td><code>054</code></td>
+<td><code>foglio</code></td>
+<td>sheet</td>
+<td><code>0508</code></td>
 </tr>
 <tr>
-<td><code>parcel_number</code></td>
+<td><code>particella</code></td>
 <td>parcel number</td>
-<td><code>0120</code></td>
+<td><code>B</code></td>
 </tr>
 </tbody>
 </table>
+<p>The <code>plot_id</code> is the full <code>NATIONALCADASTRALREFERENCE</code>, e.g. <code>H501A050800.B</code>.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Area</strong> is computed in <strong>EPSG:3059</strong> (LKS-92 / Latvia TM) and matches the VZD
-  <code>areaValue</code>.</li>
-<li>The WFS uses <strong>lat/lon</strong> axis order for coordinate filters; <code>plot-finder</code>
-  handles it internally.</li>
+<li><strong>Area</strong> is computed in <strong>EPSG:25832</strong> (ETRS89 / UTM 32N); no official area is
+  published by the service.</li>
+<li><strong>Coverage:</strong> nationwide <strong>except</strong> the autonomous provinces of <strong>Trento</strong> and
+  <strong>Bolzano</strong>, whose cadastre is provincial.</li>
 </ul>
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <table>
@@ -1037,12 +1039,12 @@ LKS-92 coordinates.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>VZDError</code></td>
-<td>a VZD WFS request failed</td>
+<td><code>AdEError</code></td>
+<td>a WFS request failed, or a <code>plot_id</code> lookup was attempted</td>
 </tr>
 <tr>
 <td><code>PlotNotFoundError</code></td>
-<td>no parcel at the point / for the designation</td>
+<td>no parcel at the point</td>
 </tr>
 <tr>
 <td><code>AddressNotFoundError</code></td>
