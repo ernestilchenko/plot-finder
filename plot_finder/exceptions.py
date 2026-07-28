@@ -42,6 +42,10 @@ class GURSError(Exception):
     """Base error for the Slovenian GURS (e-prostor) API."""
 
 
+class AdEError(Exception):
+    """Base error for the Italian Agenzia delle Entrate (cartografia catastale) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 

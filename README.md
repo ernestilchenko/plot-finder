@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania**, **Latvia**, **Portugal** and **Slovenia** — by id, address or coordinates.
+> Python library to find land parcels across Europe — **Poland**, **France**, **Spain**, **Netherlands**, **Switzerland**, **Estonia**, **Cyprus**, **Lithuania**, **Latvia**, **Portugal**, **Slovenia** and **Italy** — by id, address or coordinates.
 >
 > Geometry is returned in **EPSG:4326** by default (set `srid=` for another CRS).
 
@@ -168,6 +168,19 @@ print(plot.ko_name, plot.municipality, plot.area)
 ```
 
 Attributes: `ko_code`, `ko_name`, `municipality`, `parcel_number`
+
+## Italy 🇮🇹
+
+```python
+from plot_finder import Plot
+
+plot = Plot(country="IT", x=12.4922, y=41.8902)   # lon/lat, EPSG:4326
+plot = Plot(country="IT", address="Piazzale degli Uffizi, Firenze")
+
+print(plot.comune_code, plot.foglio, plot.particella, plot.area)
+```
+
+Attributes: `comune_code`, `foglio`, `particella` — _coordinates/address only (no id lookup); excludes Trento & Bolzano._
 
 ## Documentation
 

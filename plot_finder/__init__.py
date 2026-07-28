@@ -2,6 +2,7 @@ from plot_finder.countries import (
     Cyprus,
     Estonia,
     France,
+    Italy,
     Latvia,
     Lithuania,
     Netherlands,
@@ -13,6 +14,7 @@ from plot_finder.countries import (
 )
 from plot_finder.exceptions import (
     AddressNotFoundError,
+    AdEError,
     CatastroError,
     DGTError,
     DLSError,
@@ -42,7 +44,9 @@ __all__ = [
     "Latvia",
     "Portugal",
     "Slovenia",
+    "Italy",
     "AddressNotFoundError",
+    "AdEError",
     "CatastroError",
     "DGTError",
     "DLSError",

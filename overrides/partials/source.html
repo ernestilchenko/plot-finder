@@ -1,0 +1,20 @@
+{#-
+  Override: render the version statically from config.extra.version in the native
+  header slot. The default partial leaves the facts to client-side JS (GitHub
+  latest release), which is cached in the browser and goes stale — so the JS hook
+  (data-md-component="source") is intentionally omitted here.
+-#}
+<a href="{{ config.repo_url }}" title="{{ lang.t('source') }}" class="md-source">
+  <div class="md-source__icon md-icon">
+    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+  <div class="md-source__repository md-source__repository--active">
+    {{ config.repo_name }}
+    {% if config.extra.version %}
+      <ul class="md-source__facts">
+        <li class="md-source__fact md-source__fact--version">v{{ config.extra.version }}</li>
+      </ul>
+    {% endif %}
+  </div>
+</a>

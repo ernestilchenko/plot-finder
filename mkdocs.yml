@@ -51,6 +51,7 @@ nav:
       - Latvia: latvia.md
       - Portugal: portugal.md
       - Slovenia: slovenia.md
+      - Italy: italy.md
   - Reference:
       - The Plot object: reference.md
 
@@ -70,7 +71,7 @@ markdown_extensions:
       permalink: true
 
 extra:
-  version: "1.7.0"
+  version: "1.8.0"
 
 plugins:
   - search

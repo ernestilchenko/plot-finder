@@ -34,6 +34,7 @@ The last column is the CRS in which each country reads **input** coordinates.
 | [Latvia](latvia.md) 🇱🇻 | `"LV"` | `Latvia` | [VZD (kadastrs.lv)](https://www.kadastrs.lv/) | lon/lat (EPSG:4326) |
 | [Portugal](portugal.md) 🇵🇹 | `"PT"` | `Portugal` | [DGT SNIC](https://snic.dgterritorio.gov.pt/) | lon/lat (EPSG:4326) |
 | [Slovenia](slovenia.md) 🇸🇮 | `"SI"` | `Slovenia` | [GURS (e-prostor)](https://www.e-prostor.gov.si/) | lon/lat (EPSG:4326) |
+| [Italy](italy.md) 🇮🇹 | `"IT"` | `Italy` | [Agenzia delle Entrate](https://www.agenziaentrate.gov.it/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -129,6 +130,7 @@ from plot_finder import (
     VZDError,              # Latvia (VZD) API failure
     DGTError,              # Portugal (DGT SNIC) API failure
     GURSError,             # Slovenia (GURS) API failure
+    AdEError,              # Italy (Agenzia delle Entrate) API failure
 )
 ```
 

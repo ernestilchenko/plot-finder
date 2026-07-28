@@ -8,7 +8,7 @@ geometry and attributes.
 
 ```python
 Plot(
-    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"
+    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"
     plot_id=None,     # cadastral id / reference / designation
     address=None,     # free-form address (geocoded)
     x=None, y=None,   # coordinates
@@ -64,6 +64,7 @@ The remaining attributes depend on `country` and come from the matching class in
 | `Latvia` | `territory_code`, `group_code`, `parcel_number` |
 | `Portugal` | `municipality`, `parish`, `district_code` |
 | `Slovenia` | `ko_code`, `ko_name`, `municipality`, `parcel_number` |
+| `Italy` | `comune_code`, `foglio`, `particella` |
 
 They are exposed **flat** on the plot and included in `model_dump()`:
 
@@ -100,3 +101,4 @@ Both include the common fields, the country attributes and the computed
 | `VZDError` | Latvia (Valsts zemes dienests) |
 | `DGTError` | Portugal (DGT SNIC) |
 | `GURSError` | Slovenia (GURS / e-prostor) |
+| `AdEError` | Italy (Agenzia delle Entrate) |
