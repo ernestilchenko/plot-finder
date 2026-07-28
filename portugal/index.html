@@ -16,7 +16,7 @@
         <link rel="prev" href="../latvia/">
       
       
-        <link rel="next" href="../reference/">
+        <link rel="next" href="../slovenia/">
       
       
         
@@ -59,6 +59,35 @@
 
     
     
+  
+  <style>
+    .pf-version {
+      display: inline-flex;
+      align-items: center;
+      margin-left: .4rem;
+      padding: .1rem .5rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, .18);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var inner = document.querySelector(".md-header__inner");
+      if (!inner) return;
+      var badge = document.createElement("span");
+      badge.className = "pf-version";
+      badge.textContent = "v1.7.0";
+      var source = inner.querySelector(".md-header__source");
+      if (source) { inner.insertBefore(badge, source); }
+      else { inner.appendChild(badge); }
+    });
+  </script>
+
   </head>
   
   
@@ -86,6 +115,10 @@
     <div data-md-component="announce">
       
     </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
     
     
       
@@ -707,6 +740,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slovenia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slovenia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1041,7 +1102,7 @@ cadastred area).</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.7.0"}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>

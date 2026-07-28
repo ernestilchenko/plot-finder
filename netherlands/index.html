@@ -59,6 +59,35 @@
 
     
     
+  
+  <style>
+    .pf-version {
+      display: inline-flex;
+      align-items: center;
+      margin-left: .4rem;
+      padding: .1rem .5rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, .18);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var inner = document.querySelector(".md-header__inner");
+      if (!inner) return;
+      var badge = document.createElement("span");
+      badge.className = "pf-version";
+      badge.textContent = "v1.7.0";
+      var source = inner.querySelector(".md-header__source");
+      if (source) { inner.insertBefore(badge, source); }
+      else { inner.appendChild(badge); }
+    });
+  </script>
+
   </head>
   
   
@@ -86,6 +115,10 @@
     <div data-md-component="announce">
       
     </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
     
     
       
@@ -707,6 +740,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slovenia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slovenia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -917,11 +978,11 @@ It is resolved through the PDOK Locatieserver.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>Coordinates are <strong>longitude, latitude</strong> (EPSG:4326) by default. Internally
-they are converted to RD New (EPSG:28992) to query the WFS. Pass
-<code>srid=28992</code> to provide RD coordinates directly.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">4.6255</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">52.1987</span><span class="p">)</span>              <span class="c1"># (lon, lat)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">102923</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">468116</span><span class="p">,</span> <span class="n">srid</span><span class="o">=</span><span class="mi">28992</span><span class="p">)</span>   <span class="c1"># RD New</span>
+<p>Input coordinates are <strong>longitude, latitude</strong> (EPSG:4326) by default.
+Internally they are converted to RD New (EPSG:28992) to query the WFS. Pass
+<code>in_srid=28992</code> to provide RD coordinates directly.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">4.6255</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">52.1987</span><span class="p">)</span>                 <span class="c1"># (lon, lat)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">Plot</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">102923</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">468116</span><span class="p">,</span> <span class="n">in_srid</span><span class="o">=</span><span class="mi">28992</span><span class="p">)</span>   <span class="c1"># RD New</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -1047,7 +1108,7 @@ they are converted to RD New (EPSG:28992) to query the WFS. Pass
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.7.0"}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
