@@ -1,15 +1,11 @@
 # plot-finder
 
+[![PyPI](https://img.shields.io/pypi/v/plot-finder?color=3775A9&logo=pypi&logoColor=white)](https://pypi.org/project/plot-finder/)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white)
 
-> Python library to find land parcels across Europe by **id**, **address** or **coordinates**.
->
-> Geometry is returned in **EPSG:4326** by default (set `srid=` for another CRS).
-
-One `Plot` class. `country` is required and selects the cadastre; the country-specific
-attributes come from a matching class in `plot_finder.countries`.
+One `Plot` class per country — geometry, area and the local cadastral attributes.
 
 ## Installation
 
@@ -29,8 +25,19 @@ Plot(country="PL", x=639231, y=486743)                    # by coordinates
 Plot(country="PL", address="Warszawa, Marszalkowska 1")   # by address
 ```
 
-Coordinates are `lon`/`lat` in **EPSG:4326** for every country except Poland, which uses
-**EPSG:2180**. Shared attributes on every `Plot`: `geometry`, `area`, `plot_id`, `country`.
+Coordinates are `lon`/`lat` in **EPSG:4326**, except Poland (**EPSG:2180**). Set `srid=`
+for another output CRS, `in_srid=` for another input CRS.
+
+Every `Plot` has:
+
+```python
+plot.geom_wkt      # geometry as WKT
+plot.geojson       # ... or as GeoJSON
+plot.geom_extent   # bounding box
+plot.centroid      # (x, y)
+plot.area          # m²
+plot.datasource    # which cadastre answered
+```
 
 ## Coverage
 
