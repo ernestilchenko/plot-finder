@@ -4,8 +4,8 @@ import httpx
 from pydantic import BaseModel
 from shapely.geometry import Point, shape
 
-from plot_finder.countries._geo import to_4326
 from plot_finder.exceptions import DGTError, PlotNotFoundError
+from plot_finder.utils import get_features, to_4326, transform_xy
 
 _WFS_URL = "https://snic.dgterritorio.gov.pt/geoserver/snic/ows"
 _REST_URL = "https://snic.dgterritorio.gov.pt/geoportal/dgt_snic2/api/app/search/predio/nic"
@@ -15,13 +15,6 @@ _HEADERS = {
     "Referer": "https://snic.dgterritorio.gov.pt/visualizadorCadastro",
 }
 _WFS_SRID = 3857
-
-
-def _to_3857(x: float, y: float, srid: int) -> tuple[float, float]:
-    if srid == _WFS_SRID:
-        return x, y
-    from pyproj import Transformer
-    return Transformer.from_crs(f"EPSG:{srid}", f"EPSG:{_WFS_SRID}", always_xy=True).transform(x, y)
 
 
 def _wfs(extra: dict) -> list:
@@ -34,12 +27,7 @@ def _wfs(extra: dict) -> list:
         "srsName": f"EPSG:{_WFS_SRID}",
         **extra,
     }
-    try:
-        resp = httpx.get(_WFS_URL, params=params, headers=_HEADERS, timeout=40, follow_redirects=True)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise DGTError(f"DGT SNIC WFS request failed: {exc}") from exc
-    return resp.json().get("features") or []
+    return get_features(_WFS_URL, DGTError, params=params, headers=_HEADERS)
 
 
 def _rest_attrs(nic: str) -> tuple[str | None, str | None, str | None]:
@@ -63,7 +51,6 @@ class Portugal(BaseModel):
 
     code: ClassVar[str] = "PT"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 3763
     attributes: ClassVar[tuple[str, ...]] = ("municipality", "parish", "district_code")
 
     @staticmethod
@@ -72,7 +59,7 @@ class Portugal(BaseModel):
             features = _wfs({"cql_filter": f"nic='{plot_id}'", "count": 1})
             feature = features[0] if features else None
         else:
-            px, py = _to_3857(x, y, srid)
+            px, py = transform_xy(x, y, srid, _WFS_SRID)
             d = 5
             features = _wfs({"bbox": f"{px - d},{py - d},{px + d},{py + d},EPSG:{_WFS_SRID}", "count": 30})
             point = Point(px, py)

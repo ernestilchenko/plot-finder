@@ -1,9 +1,9 @@
 from typing import ClassVar
 
-import httpx
 from pydantic import BaseModel
 
 from plot_finder.exceptions import PlotNotFoundError, ULDKError
+from plot_finder.utils import get
 
 _ULDK_URL = "https://uldk.gugik.gov.pl/"
 _RESULT_FIELDS = "teryt,voivodeship,county,commune,region,parcel,geom_wkt,geom_extent,datasource"
@@ -53,22 +53,10 @@ class Poland(BaseModel):
     parcel: str | None = None
 
     code: ClassVar[str] = "PL"
-    default_srid: ClassVar[int] = 2180
-    area_crs: ClassVar[int] = 2180
+    default_srid: ClassVar[int] = 4326
     attributes: ClassVar[tuple[str, ...]] = ("voivodeship", "county", "commune", "region", "parcel")
 
     @staticmethod
     def fetch(plot_id: str | None, x: float | None, y: float | None, srid: int) -> dict:
-        params = _build_uldk_params(plot_id, x, y, srid)
-        try:
-            resp = httpx.get(_ULDK_URL, params=params, timeout=30)
-            resp.raise_for_status()
-        except httpx.HTTPError as exc:
-            raise ULDKError(f"HTTP request failed: {exc}") from exc
-
-        result = _parse_uldk_response(resp.text, plot_id, x, y)
-        if result.get("geom_wkt") and srid != 4326:
-            import shapely.wkt
-            from plot_finder.countries._geo import to_4326
-            result["geom_wkt"] = to_4326(shapely.wkt.loads(result["geom_wkt"]), srid).wkt
-        return result
+        resp = get(_ULDK_URL, ULDKError, params=_build_uldk_params(plot_id, x, y, srid), timeout=30)
+        return _parse_uldk_response(resp.text, plot_id, x, y)

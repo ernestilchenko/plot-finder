@@ -1,21 +1,15 @@
 from typing import ClassVar
 
-import httpx
 from pydantic import BaseModel
 from shapely.geometry import shape
 
-from plot_finder.countries._geo import to_4326
 from plot_finder.exceptions import GURSError, PlotNotFoundError
+from plot_finder.utils import get_features, to_4326, transform_xy
 
 _WFS_URL = "https://ipi.eprostor.gov.si/wfs-si-gurs-kn/wfs"
 _PARCELS = "SI.GURS.KN:PARCELE"
 _OBCINE = "SI.GURS.KN:PARCELE_X_RPE_OBCINE"
 _WFS_SRID = 3794
-
-
-def _to_3794():
-    from pyproj import Transformer
-    return Transformer.from_crs("EPSG:4326", f"EPSG:{_WFS_SRID}", always_xy=True)
 
 
 def _wfs(typename: str, cql_filter: str):
@@ -29,12 +23,7 @@ def _wfs(typename: str, cql_filter: str):
         "count": 1,
         "cql_filter": cql_filter,
     }
-    try:
-        resp = httpx.get(_WFS_URL, params=params, timeout=40, follow_redirects=True)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise GURSError(f"GURS WFS request failed: {exc}") from exc
-    features = resp.json().get("features") or []
+    features = get_features(_WFS_URL, GURSError, params=params)
     return features[0] if features else None
 
 
@@ -56,7 +45,6 @@ class Slovenia(BaseModel):
 
     code: ClassVar[str] = "SI"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 3794
     attributes: ClassVar[tuple[str, ...]] = ("ko_code", "ko_name", "municipality", "parcel_number")
 
     @staticmethod
@@ -65,7 +53,7 @@ class Slovenia(BaseModel):
             ko, _, parcel = plot_id.replace(" ", "-").partition("-")
             feature = _wfs(_PARCELS, f"KO_ID={ko} AND ST_PARCELE='{parcel}'")
         else:
-            east, north = (x, y) if srid == _WFS_SRID else _to_3794().transform(x, y)
+            east, north = transform_xy(x, y, srid, _WFS_SRID)
             feature = _wfs(_PARCELS, f"INTERSECTS(GEOM, POINT({east} {north}))")
 
         if feature is None:

@@ -3,9 +3,9 @@ from typing import ClassVar
 
 import httpx
 from pydantic import BaseModel
-from shapely.geometry import MultiPolygon, Polygon
 
 from plot_finder.exceptions import CatastroError, PlotNotFoundError
+from plot_finder.utils import gml_geometry
 
 _RCCOOR_URL = "http://ovc.catastro.meh.es/ovcservweb/OVCSWLocalizacionRC/OVCCoordenadas.asmx/Consulta_RCCOOR"
 _DNPRC_URL = "http://ovc.catastro.meh.es/ovcservweb/OVCSWLocalizacionRC/OVCCallejero.asmx/Consulta_DNPRC"
@@ -14,22 +14,6 @@ _WFS_URL = "http://ovc.catastro.meh.es/INSPIRE/wfsCP.aspx"
 _CAT = "{http://www.catastro.meh.es/}"
 _GML = "{http://www.opengis.net/gml/3.2}"
 _CP = "{http://inspire.ec.europa.eu/schemas/cp/4.0}"
-
-
-def _ring(elem: ET.Element) -> list[tuple[float, float]]:
-    nums = [float(v) for v in next(elem.iter(_GML + "posList")).text.split()]
-    return [(nums[i + 1], nums[i]) for i in range(0, len(nums), 2)]
-
-
-def _parse_geometry(parcel: ET.Element):
-    polys = []
-    for patch in parcel.iter(_GML + "PolygonPatch"):
-        shell = _ring(patch.find(_GML + "exterior"))
-        holes = [_ring(i) for i in patch.findall(_GML + "interior")]
-        polys.append(Polygon(shell, holes))
-    if not polys:
-        raise CatastroError("No geometry in Catastro WFS response")
-    return polys[0] if len(polys) == 1 else MultiPolygon(polys)
 
 
 def _rccoor(x: float, y: float, srid: int) -> str:
@@ -77,11 +61,11 @@ def _wfs_geometry(refcat: str) -> tuple[str, str]:
         raise CatastroError(f"Catastro WFS request failed: {exc}") from exc
 
     parcel = next(ET.fromstring(resp.content).iter(_CP + "CadastralParcel"), None)
-    if parcel is None:
+    geom = gml_geometry(parcel, swap=True) if parcel is not None else None
+    if geom is None:
         raise PlotNotFoundError(f"Parcel not found: {refcat}")
-
     ref = parcel.get(_GML + "id", "").replace("ES.SDGC.CP.", "") or ref14
-    return _parse_geometry(parcel).wkt, ref
+    return geom.wkt, ref
 
 
 class Spain(BaseModel):
@@ -92,7 +76,6 @@ class Spain(BaseModel):
 
     code: ClassVar[str] = "ES"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 25830
     attributes: ClassVar[tuple[str, ...]] = ("province", "municipality")
 
     @staticmethod

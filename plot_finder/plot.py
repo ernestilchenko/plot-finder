@@ -6,21 +6,20 @@ import shapely.wkt
 from pydantic import BaseModel, ConfigDict, computed_field, model_validator
 
 from plot_finder.countries import REGISTRY
-from plot_finder.countries._geo import reproject
 from plot_finder.exceptions import AddressNotFoundError, GeocodeError
+from plot_finder.utils import reproject
 
 _NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
-_COMMON = ("plot_id", "geom_wkt", "geom_extent", "datasource")
 
 
 class Plot(BaseModel):
     """A land parcel. ``country`` selects the cadastre and the extra attributes.
 
-    Geometry is returned in EPSG:4326 by default; set ``srid`` for another output
-    CRS. Input coordinates are read in the country's native CRS unless ``in_srid``
-    is given. Country-specific attributes (``voivodeship`` for PL, ``department``
-    for FR, ...) are sourced from the matching class in
-    :mod:`plot_finder.countries` and exposed directly on the plot::
+    Input coordinates are always ``lon``/``lat`` (EPSG:4326). Geometry is returned
+    as ``geojson`` in EPSG:4326 by default; set ``srid`` for another output CRS.
+    Country-specific attributes (``voivodeship`` for PL, ``department`` for FR,
+    ...) are sourced from the matching class in :mod:`plot_finder.countries` and
+    exposed directly on the plot::
 
         Plot(country="PL", plot_id="141201_1.0001.6509").voivodeship
         Plot(country="FR", x=-0.5792, y=44.8378).department
@@ -34,41 +33,43 @@ class Plot(BaseModel):
     x: float | None = None
     y: float | None = None
     srid: int = 4326
-    in_srid: int | None = None
-    geom_wkt: str | None = None
-    geom_extent: str | None = None
+    geojson: dict[str, Any] | None = None
     datasource: str | None = None
+
+    def _geom(self):
+        return shapely.geometry.shape(self.geojson) if self.geojson else None
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def area(self) -> float | None:
-        if not self.geom_wkt:
+        geom = self._geom()
+        if geom is None:
             return None
-        geom = shapely.wkt.loads(self.geom_wkt)
-        return round(reproject(geom, self.srid, REGISTRY[self.country].area_crs).area, 2)
+        if self.srid != 4326:
+            geom = reproject(geom, self.srid, 4326)
+        from pyproj import Geod
+        area, _ = Geod(ellps="WGS84").geometry_area_perimeter(geom)
+        return round(abs(area), 2)
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def centroid(self) -> tuple[float, float] | None:
-        if not self.geom_wkt:
+        geom = self._geom()
+        if geom is None:
             return None
-        geom = shapely.wkt.loads(self.geom_wkt)
         return geom.centroid.x, geom.centroid.y
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def geojson(self) -> dict[str, Any] | None:
-        if not self.geom_wkt:
-            return None
-        return shapely.geometry.mapping(shapely.wkt.loads(self.geom_wkt))
+    def bbox(self) -> tuple[float, float, float, float] | None:
+        geom = self._geom()
+        return geom.bounds if geom is not None else None
 
     @model_validator(mode="after")
     def _auto_fetch(self) -> "Plot":
         country = REGISTRY[self.country]
-        if self.geom_wkt is not None:
+        if self.geojson is not None:
             return self
-        if self.in_srid is None:
-            self.in_srid = country.default_srid
         if self.address and not self.plot_id and self.x is None:
             self._geocode()
         if not self.plot_id and self.x is None:
@@ -76,14 +77,17 @@ class Plot(BaseModel):
         if self.x is not None and self.y is None:
             raise ValueError("Both 'x' and 'y' must be provided")
 
-        data = country.fetch(self.plot_id, self.x, self.y, self.in_srid)
+        data = country.fetch(self.plot_id, self.x, self.y, country.default_srid)
+        if data.get("plot_id") is not None:
+            self.plot_id = data["plot_id"]
+        if data.get("datasource") is not None:
+            self.datasource = data["datasource"]
 
-        for key in _COMMON:
-            if data.get(key) is not None:
-                setattr(self, key, data[key])
-
-        if self.srid != 4326 and self.geom_wkt:
-            self.geom_wkt = reproject(shapely.wkt.loads(self.geom_wkt), 4326, self.srid).wkt
+        if data.get("geom_wkt"):
+            geom = shapely.wkt.loads(data["geom_wkt"])
+            if self.srid != 4326:
+                geom = reproject(geom, 4326, self.srid)
+            self.geojson = shapely.geometry.mapping(geom)
 
         details = country(**{name: data.get(name) for name in country.attributes})
         for name in country.attributes:
@@ -105,4 +109,3 @@ class Plot(BaseModel):
 
         self.y = float(results[0]["lat"])
         self.x = float(results[0]["lon"])
-        self.in_srid = 4326

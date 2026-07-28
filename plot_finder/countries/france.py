@@ -1,11 +1,11 @@
 import json
 from typing import ClassVar
 
-import httpx
 import shapely.geometry
 from pydantic import BaseModel
 
 from plot_finder.exceptions import IGNError, PlotNotFoundError
+from plot_finder.utils import get_features
 
 _APICARTO_URL = "https://apicarto.ign.fr/api/cadastre/parcelle"
 
@@ -21,7 +21,6 @@ class France(BaseModel):
 
     code: ClassVar[str] = "FR"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 2154
     attributes: ClassVar[tuple[str, ...]] = ("department", "insee", "commune", "section", "numero")
 
     @staticmethod
@@ -38,20 +37,9 @@ class France(BaseModel):
         else:
             params = {"geom": json.dumps({"type": "Point", "coordinates": [x, y]})}
 
-        try:
-            resp = httpx.get(_APICARTO_URL, params=params, timeout=30)
-            resp.raise_for_status()
-        except httpx.HTTPError as exc:
-            raise IGNError(f"IGN apicarto request failed: {exc}") from exc
-
-        try:
-            features = resp.json().get("features") or []
-        except ValueError as exc:
-            raise IGNError(f"Invalid JSON from IGN apicarto: {exc}") from exc
-
+        features = get_features(_APICARTO_URL, IGNError, params=params)
         if not features:
-            query = f"xy={x},{y}" if x is not None else plot_id
-            raise PlotNotFoundError(f"Parcel not found: {query}")
+            raise PlotNotFoundError(f"Parcel not found: {plot_id or f'xy={x},{y}'}")
 
         props = features[0].get("properties", {})
         return {

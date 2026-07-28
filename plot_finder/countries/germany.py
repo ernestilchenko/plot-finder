@@ -3,10 +3,10 @@ from typing import ClassVar
 
 import httpx
 from pydantic import BaseModel
-from shapely.geometry import MultiPolygon, Point, Polygon, shape
+from shapely.geometry import Point, shape
 
-from plot_finder.countries._geo import to_4326
 from plot_finder.exceptions import ALKISError, PlotNotFoundError
+from plot_finder.utils import get, get_features, gml_attrs, gml_geometry, iter_features, to_4326, transform_xy
 
 _REVERSE_URL = "https://nominatim.openstreetmap.org/reverse"
 _HEADERS = {"User-Agent": "plot-finder/1.0"}
@@ -26,35 +26,6 @@ _STATES = {
 }
 
 
-def _local(tag: str) -> str:
-    return tag.rsplit("}", 1)[-1]
-
-
-def _rings(feat: ET.Element, kind: str) -> list[list[tuple[float, float]]]:
-    rings = []
-    for holder in feat.iter():
-        if _local(holder.tag) != kind:
-            continue
-        coords: list[tuple[float, float]] = []
-        for node in holder.iter():
-            if _local(node.tag) in ("posList", "pos") and node.text:
-                nums = [float(v) for v in node.text.split()]
-                coords += [(nums[i], nums[i + 1]) for i in range(0, len(nums), 2)]
-        if len(coords) >= 4:
-            rings.append(coords)
-    return rings
-
-
-def _geometry(feat: ET.Element):
-    shells = _rings(feat, "exterior")
-    if not shells:
-        return None
-    holes = _rings(feat, "interior")
-    if len(shells) == 1:
-        return Polygon(shells[0], holes)
-    return MultiPolygon([Polygon(s) for s in shells])
-
-
 def _reverse_state(lon: float, lat: float) -> str | None:
     try:
         resp = httpx.get(
@@ -71,47 +42,30 @@ def _reverse_state(lon: float, lat: float) -> str | None:
 
 def _query(url: str, typename: str, srid: int, family: str, east: float, north: float) -> list:
     d = 6
-    bbox = f"{east - d},{north - d},{east + d},{north + d},urn:ogc:def:crs:EPSG::{srid}"
     params = {
         "SERVICE": "WFS",
         "VERSION": "2.0.0",
         "REQUEST": "GetFeature",
         "TYPENAMES": typename,
         "SRSNAME": f"urn:ogc:def:crs:EPSG::{srid}",
-        "BBOX": bbox,
+        "BBOX": f"{east - d},{north - d},{east + d},{north + d},urn:ogc:def:crs:EPSG::{srid}",
         "COUNT": 20,
     }
     if family == "berlin":
         params["OUTPUTFORMAT"] = "application/json"
-    try:
-        resp = httpx.get(url, params=params, headers=_HEADERS, timeout=60, follow_redirects=True)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise ALKISError(f"ALKIS WFS request failed: {exc}") from exc
-
-    if family == "berlin":
-        try:
-            feats = resp.json().get("features") or []
-        except ValueError as exc:
-            raise ALKISError(f"Invalid JSON from Berlin ALKIS: {exc}") from exc
+        feats = get_features(url, ALKISError, params=params, headers=_HEADERS, timeout=60)
         return [(f.get("properties", {}), shape(f["geometry"])) for f in feats]
 
+    resp = get(url, ALKISError, params=params, headers=_HEADERS, timeout=60)
     try:
         root = ET.fromstring(resp.content)
     except ET.ParseError as exc:
         raise ALKISError(f"Invalid GML from ALKIS WFS: {exc}") from exc
     out = []
-    for member in root.iter():
-        if _local(member.tag) not in ("member", "featureMember"):
-            continue
-        feat = next(iter(member), None)
-        if feat is None:
-            continue
-        geom = _geometry(feat)
-        if geom is None:
-            continue
-        attrs = {_local(e.tag): e.text.strip() for e in feat.iter() if not list(e) and e.text and e.text.strip()}
-        out.append((attrs, geom))
+    for feat in iter_features(root):
+        geom = gml_geometry(feat, swap=False)
+        if geom is not None:
+            out.append((gml_attrs(feat), geom))
     return out
 
 
@@ -140,7 +94,6 @@ class Germany(BaseModel):
 
     code: ClassVar[str] = "DE"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 3035
     attributes: ClassVar[tuple[str, ...]] = ("land", "gemarkung", "flur", "parcel_number")
 
     @staticmethod
@@ -151,12 +104,7 @@ class Germany(BaseModel):
                 "ALKIS services vary too much for a uniform id lookup."
             )
 
-        if srid == 4326:
-            lon, lat = x, y
-        else:
-            from pyproj import Transformer
-            lon, lat = Transformer.from_crs(f"EPSG:{srid}", "EPSG:4326", always_xy=True).transform(x, y)
-
+        lon, lat = transform_xy(x, y, srid, 4326)
         iso = _reverse_state(lon, lat)
         if iso not in _STATES:
             raise ALKISError(
@@ -165,8 +113,7 @@ class Germany(BaseModel):
             )
         url, typename, st_srid, family, land_code, land_name = _STATES[iso]
 
-        from pyproj import Transformer
-        east, north = Transformer.from_crs("EPSG:4326", f"EPSG:{st_srid}", always_xy=True).transform(lon, lat)
+        east, north = transform_xy(lon, lat, 4326, st_srid)
         point = Point(east, north)
         match = next((f for f in _query(url, typename, st_srid, family, east, north) if f[1].contains(point)), None)
         if match is None:

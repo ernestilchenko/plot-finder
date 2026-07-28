@@ -11,9 +11,8 @@ Plot(
     country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"|"DE"
     plot_id=None,     # cadastral id / reference / designation
     address=None,     # free-form address (geocoded)
-    x=None, y=None,   # coordinates
+    x=None, y=None,   # lon/lat coordinates (EPSG:4326)
     srid=4326,        # output geometry CRS
-    in_srid=None,     # input coordinate CRS (defaults to the country's native CRS)
 )
 ```
 
@@ -21,9 +20,8 @@ Rules:
 
 - **`country` is required** — there is no default.
 - Provide **one** of: `plot_id`, `address`, or both `x` and `y`.
+- Input coordinates are always **lon/lat (EPSG:4326)** for every country.
 - `srid` is the **output** geometry CRS — **4326 by default**, set it for another.
-- `in_srid` is the CRS of the **input** coordinates; it defaults to the country's
-  native CRS (PL → 2180, everything else → 4326).
 
 ## Common fields
 
@@ -33,18 +31,17 @@ Rules:
 | `plot_id` | `str` | Cadastral identifier for the country |
 | `address` | `str \| None` | The input address, if one was given |
 | `x`, `y` | `float \| None` | Input coordinates |
-| `srid` | `int` | CRS of the coordinates |
-| `geom_wkt` | `str` | Parcel geometry as WKT |
-| `geom_extent` | `str \| None` | Bounding box, when the source provides one |
+| `srid` | `int` | Output geometry CRS (default 4326) |
+| `geojson` | `dict` | Parcel geometry as GeoJSON |
 | `datasource` | `str` | Human-readable origin of the data |
 
 ## Computed properties
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `area` | `float` | Area in **m²**, measured in the country's metric CRS |
+| `area` | `float` | Geodesic area in **m²** (WGS84 ellipsoid) |
 | `centroid` | `(float, float)` | Centroid of the geometry |
-| `geojson` | `dict` | Geometry as a GeoJSON mapping |
+| `bbox` | `(float, float, float, float)` | Bounding box `(minx, miny, maxx, maxy)` |
 
 ## Country attributes
 
@@ -82,8 +79,8 @@ p.model_dump()        # dict
 p.model_dump_json()    # JSON string
 ```
 
-Both include the common fields, the country attributes and the computed
-`area` / `centroid` / `geojson`.
+Both include the common fields (`geojson` included), the country attributes and
+the computed `area` / `centroid` / `bbox`.
 
 ## Exceptions
 

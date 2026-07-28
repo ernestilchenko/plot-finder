@@ -1,11 +1,10 @@
 from typing import ClassVar
 
-import httpx
 from pydantic import BaseModel
 from shapely.geometry import Point, shape
 
-from plot_finder.countries._geo import to_4326
 from plot_finder.exceptions import GeoAdminError, PlotNotFoundError
+from plot_finder.utils import get, to_4326
 
 _BASE = "https://api3.geo.admin.ch/rest/services/all/MapServer"
 _PARCEL_LAYER = "ch.kantone.cadastralwebmap-farbe"
@@ -29,12 +28,7 @@ def _identify(x: float, y: float, srid: int, layer: str, geometry: bool) -> list
         "geometryFormat": "geojson",
         "sr": str(srid),
     }
-    try:
-        resp = httpx.get(f"{_BASE}/identify", params=params, timeout=40)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise GeoAdminError(f"geo.admin.ch identify failed: {exc}") from exc
-    return resp.json().get("results", [])
+    return get(f"{_BASE}/identify", GeoAdminError, params=params).json().get("results", [])
 
 
 def _find_egrid(egrid: str, srid: int) -> dict:
@@ -46,12 +40,7 @@ def _find_egrid(egrid: str, srid: int) -> dict:
         "geometryFormat": "geojson",
         "sr": str(srid),
     }
-    try:
-        resp = httpx.get(f"{_BASE}/find", params=params, timeout=40)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise GeoAdminError(f"geo.admin.ch find failed: {exc}") from exc
-    results = resp.json().get("results", [])
+    results = get(f"{_BASE}/find", GeoAdminError, params=params).json().get("results", [])
     if not results:
         raise PlotNotFoundError(f"Parcel not found: {egrid}")
     return results[0]
@@ -77,7 +66,6 @@ class Switzerland(BaseModel):
 
     code: ClassVar[str] = "CH"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 2056
     attributes: ClassVar[tuple[str, ...]] = ("canton", "municipality", "egrid", "parcel_number")
 
     @staticmethod

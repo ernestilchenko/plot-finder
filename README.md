@@ -21,19 +21,17 @@ Every country supports the same three lookup modes (where the cadastre exposes t
 from plot_finder import Plot
 
 Plot(country="PL", plot_id="141201_1.0001.6509")          # by cadastral id
-Plot(country="PL", x=639231, y=486743)                    # by coordinates
+Plot(country="PL", x=21.0122, y=52.2297)                  # by coordinates
 Plot(country="PL", address="Warszawa, Marszalkowska 1")   # by address
 ```
 
-Coordinates are `lon`/`lat` in **EPSG:4326**, except Poland (**EPSG:2180**). Set `srid=`
-for another output CRS, `in_srid=` for another input CRS.
+Coordinates are `lon`/`lat` in **EPSG:4326**. Set `srid=` for another output CRS.
 
 Every `Plot` has:
 
 ```python
-plot.geom_wkt      # geometry as WKT
-plot.geojson       # ... or as GeoJSON
-plot.geom_extent   # bounding box
+plot.geojson       # geometry as GeoJSON
+plot.bbox          # bounding box (minx, miny, maxx, maxy)
 plot.centroid      # (x, y)
 plot.area          # m²
 plot.datasource    # which cadastre answered
@@ -43,7 +41,7 @@ plot.datasource    # which cadastre answered
 
 | Country | id | coords | address | Notes |
 |---|:---:|:---:|:---:|---|
-| [🇵🇱 Poland](#-poland) | ✓ | ✓ | ✓ | coords in EPSG:2180 |
+| [🇵🇱 Poland](#-poland) | ✓ | ✓ | ✓ | |
 | [🇫🇷 France](#-france) | ✓ | ✓ | ✓ | |
 | [🇪🇸 Spain](#-spain) | ✓ | ✓ | ✓ | |
 | [🇳🇱 Netherlands](#-netherlands) | ✓ | ✓ | ✓ | |
@@ -66,7 +64,7 @@ Attributes: `voivodeship`, `county`, `commune`, `region`, `parcel`
 
 ```python
 plot = Plot(country="PL", plot_id="141201_1.0001.6509")
-plot = Plot(country="PL", x=639231, y=486743)                  # EPSG:2180
+plot = Plot(country="PL", x=21.0122, y=52.2297)
 plot = Plot(country="PL", address="Warszawa, Marszalkowska 1")
 
 print(plot.voivodeship, plot.commune, plot.area)

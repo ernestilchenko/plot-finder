@@ -1,20 +1,13 @@
 from typing import ClassVar
 
-import httpx
 from pydantic import BaseModel
 from shapely.geometry import shape
 
 from plot_finder.exceptions import PlotNotFoundError, RCError
+from plot_finder.utils import get_features, transform_xy
 
 _WFS_URL = "https://www.inspire-geoportal.lt/geoserver/cp/wfs"
 _TYPE = "cp:CP.CadastralParcel"
-
-
-def _to_4326_lonlat(x: float, y: float, srid: int) -> tuple[float, float]:
-    if srid == 4326:
-        return x, y
-    from pyproj import Transformer
-    return Transformer.from_crs(f"EPSG:{srid}", "EPSG:4326", always_xy=True).transform(x, y)
 
 
 def _wfs(cql_filter: str):
@@ -28,12 +21,7 @@ def _wfs(cql_filter: str):
         "count": 1,
         "CQL_FILTER": cql_filter,
     }
-    try:
-        resp = httpx.get(_WFS_URL, params=params, timeout=60, follow_redirects=True)
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise RCError(f"geoportal.lt WFS request failed: {exc}") from exc
-    features = resp.json().get("features") or []
+    features = get_features(_WFS_URL, RCError, params=params, timeout=60)
     return features[0] if features else None
 
 
@@ -46,7 +34,6 @@ class Lithuania(BaseModel):
 
     code: ClassVar[str] = "LT"
     default_srid: ClassVar[int] = 4326
-    area_crs: ClassVar[int] = 3346
     attributes: ClassVar[tuple[str, ...]] = ("cadastral_zone", "municipality_code", "purpose")
 
     @staticmethod
@@ -54,7 +41,7 @@ class Lithuania(BaseModel):
         if plot_id:
             feature = _wfs(f"label='{plot_id}'")
         else:
-            lon, lat = _to_4326_lonlat(x, y, srid)
+            lon, lat = transform_xy(x, y, srid, 4326)
             feature = _wfs(f"INTERSECTS(geometry, POINT({lat} {lon}))")
 
         if feature is None:

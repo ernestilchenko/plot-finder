@@ -18,12 +18,12 @@ plot.centroid      # (x, y)
 
 ## Supported countries
 
-Geometry is always returned in **EPSG:4326** (see [Coordinate systems](#coordinate-systems)).
-The last column is the CRS in which each country reads **input** coordinates.
+Coordinates are **lon/lat (EPSG:4326)** everywhere; geometry is returned in
+EPSG:4326 by default (set `srid=` for another output CRS).
 
-| Country | `country` | Attribute class | Data source | Input coords |
-|---------|-----------|-----------------|-------------|--------------|
-| [Poland](poland.md) 🇵🇱 | `"PL"` | `Poland` | [ULDK / GUGiK](https://uldk.gugik.gov.pl/) | EPSG:2180 |
+| Country | `country` | Attribute class | Data source | Coordinates |
+|---------|-----------|-----------------|-------------|-------------|
+| [Poland](poland.md) 🇵🇱 | `"PL"` | `Poland` | [ULDK / GUGiK](https://uldk.gugik.gov.pl/) | lon/lat (EPSG:4326) |
 | [France](france.md) 🇫🇷 | `"FR"` | `France` | [IGN apicarto cadastre](https://apicarto.ign.fr/api/doc/cadastre) | lon/lat (EPSG:4326) |
 | [Spain](spain.md) 🇪🇸 | `"ES"` | `Spain` | [Dirección General del Catastro](https://www.catastro.hacienda.gob.es/) | lon/lat (EPSG:4326) |
 | [Netherlands](netherlands.md) 🇳🇱 | `"NL"` | `Netherlands` | [PDOK Kadaster](https://www.pdok.nl/) | lon/lat (EPSG:4326) |
@@ -52,8 +52,7 @@ a matching class in `plot_finder.countries` (`Poland`, `France`, `Spain`,
 `Netherlands`) that:
 
 1. defines the country-specific **attributes** (e.g. `voivodeship`, `department`),
-2. knows how to **fetch** a parcel from that country's API,
-3. declares the **metric CRS** used to compute the area.
+2. knows how to **fetch** a parcel from that country's API.
 
 The `Plot` sources those attributes from the matching class and exposes them
 **flat**, next to the shared fields:
@@ -83,26 +82,19 @@ Regardless of country, every `Plot` exposes:
 
 | Property   | Type | Description |
 |------------|------|-------------|
-| `area`     | `float` | Parcel area in **m²**, computed from the geometry in the country's metric CRS |
+| `geojson`  | `dict` | Geometry as GeoJSON |
+| `area`     | `float` | Geodesic area in **m²** (WGS84 ellipsoid) |
 | `centroid` | `(float, float)` | Centroid of the geometry |
-| `geojson`  | `dict` | Geometry as a GeoJSON mapping |
-| `geom_wkt` | `str` | Geometry as WKT |
+| `bbox`     | `(float, float, float, float)` | Bounding box `(minx, miny, maxx, maxy)` |
 
 ## Coordinate systems
 
-Geometry is always returned in **EPSG:4326** (lon/lat) by default. To get it in
-another CRS, set `srid`:
+Input coordinates are **lon/lat (EPSG:4326)** for every country. Geometry is
+returned as `geojson` in EPSG:4326 by default; set `srid` for another output CRS:
 
 ```python
-Plot(country="PL", x=639231, y=486743)             # geometry in EPSG:4326
-Plot(country="PL", x=639231, y=486743, srid=2180)  # geometry in EPSG:2180
-```
-
-Input coordinates are read in each country's native CRS (e.g. EPSG:2180 for
-Poland, EPSG:4326 for the rest). Override with `in_srid`:
-
-```python
-Plot(country="CH", x=2683400, y=1247500, in_srid=2056)   # LV95 input, 4326 output
+Plot(country="PL", x=21.0122, y=52.2297)             # geometry in EPSG:4326
+Plot(country="PL", x=21.0122, y=52.2297, srid=2180)  # geometry in EPSG:2180
 ```
 
 ## Serialization
