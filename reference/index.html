@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://ernestilchenko.github.io/plot-finder/reference/">
       
       
-        <link rel="prev" href="../germany/">
+        <link rel="prev" href="../norway/">
       
       
       
@@ -207,7 +207,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.9.1</li>
+        <li class="md-source__fact md-source__fact--version">v1.10.0</li>
       </ul>
     
   </div>
@@ -258,7 +258,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.9.1</li>
+        <li class="md-source__fact md-source__fact--version">v1.10.0</li>
       </ul>
     
   </div>
@@ -712,6 +712,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../norway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Norway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1039,7 +1067,7 @@ triggers a lookup against the selected country's cadastre and fills in the
 geometry and attributes.</p>
 <h2 id="construction">Construction<a class="headerlink" href="#construction" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">Plot</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">country</span><span class="p">,</span>          <span class="c1"># required: &quot;PL&quot;|&quot;FR&quot;|&quot;ES&quot;|&quot;NL&quot;|&quot;CH&quot;|&quot;EE&quot;|&quot;CY&quot;|&quot;LT&quot;|&quot;LV&quot;|&quot;PT&quot;|&quot;SI&quot;|&quot;IT&quot;|&quot;DE&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">country</span><span class="p">,</span>          <span class="c1"># required: &quot;PL&quot;|&quot;FR&quot;|&quot;ES&quot;|&quot;NL&quot;|&quot;CH&quot;|&quot;EE&quot;|&quot;CY&quot;|&quot;LT&quot;|&quot;LV&quot;|&quot;PT&quot;|&quot;SI&quot;|&quot;IT&quot;|&quot;DE&quot;|&quot;NO&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">plot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># cadastral id / reference / designation</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">address</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>     <span class="c1"># free-form address (geocoded)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>   <span class="c1"># lon/lat coordinates (EPSG:4326)</span>
@@ -1190,6 +1218,10 @@ geometry and attributes.</p>
 <td><code>Germany</code></td>
 <td><code>land</code>, <code>gemarkung</code>, <code>flur</code>, <code>parcel_number</code></td>
 </tr>
+<tr>
+<td><code>Norway</code></td>
+<td><code>municipality</code>, <code>municipality_code</code>, <code>gnr</code>, <code>bnr</code></td>
+</tr>
 </tbody>
 </table>
 <p>They are exposed <strong>flat</strong> on the plot and included in <code>model_dump()</code>:</p>
@@ -1272,6 +1304,10 @@ the computed <code>area</code> / <code>centroid</code> / <code>bbox</code>.</p>
 <td><code>ALKISError</code></td>
 <td>Germany (state ALKIS services)</td>
 </tr>
+<tr>
+<td><code>KartverketError</code></td>
+<td>Norway (Kartverket / Matrikkelen)</td>
+</tr>
 </tbody>
 </table>
 
@@ -1329,7 +1365,7 @@ the computed <code>area</code> / <code>centroid</code> / <code>bbox</code>.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.9.1"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.10.0"}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
