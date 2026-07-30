@@ -54,6 +54,7 @@ plot.datasource    # which cadastre answered
 | [🇸🇮 Slovenia](#-slovenia) | ✓ | ✓ | — | |
 | [🇮🇹 Italy](#-italy) | — | ✓ | ✓ | excl. Trento & Bolzano |
 | [🇩🇪 Germany](#-germany) | — | ✓ | ✓ | 10 of 16 states |
+| [🇳🇴 Norway](#-norway) | ✓ | ✓ | ✓ | |
 
 <br>
 
@@ -252,6 +253,21 @@ plot = Plot(country="DE", x=6.9583, y=50.9413)
 plot = Plot(country="DE", address="Domkloster 4, Köln")
 
 print(plot.land, plot.gemarkung, plot.parcel_number, plot.area)
+```
+
+</details>
+
+<details id="-norway">
+<summary><b>🇳🇴 Norway</b></summary>
+
+Attributes: `municipality`, `municipality_code`, `gnr`, `bnr`
+
+```python
+plot = Plot(country="NO", plot_id="0301-209/494")   # kommunenr-gnr/bnr
+plot = Plot(country="NO", x=10.7330, y=59.9116)
+plot = Plot(country="NO", address="Karl Johans gate 1, Oslo")
+
+print(plot.municipality, plot.gnr, plot.bnr, plot.area)
 ```
 
 </details>

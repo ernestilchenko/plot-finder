@@ -1,9 +1,8 @@
 # Estonia 🇪🇪
 
-Parcels in Estonia come from the **Maa-amet** (Estonian Land Board). `plot-finder`
-uses the INSPIRE Cadastral Parcels **WFS** for geometry and official area, and the
-**in-ADS** gazetteer for the administrative units (county / municipality) that the
-WFS leaves unpopulated.
+Parcels in Estonia come from the **Maa-amet** (Estonian Land Board) cadastre WFS
+(`kataster:ky_kehtiv`), which returns the parcel geometry together with the
+county, municipality and settlement in a single call.
 
 ```python
 from plot_finder import Plot
@@ -51,8 +50,8 @@ Sourced from the `Estonia` class:
 
 ## Notes
 
-- **Area** is computed in **EPSG:3301** (L-EST97) and matches the Land Board's
-  official *pindala*. Geometry is returned in **EPSG:4326**.
+- **Area** is the geodesic area on the WGS84 ellipsoid; it matches the Land
+  Board's official *pindala* within rounding.
 - The WFS uses **North/East** axis order for coordinate filters; `plot-finder`
   handles the transformation internally.
 

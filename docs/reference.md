@@ -8,7 +8,7 @@ geometry and attributes.
 
 ```python
 Plot(
-    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"|"DE"
+    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"|"DE"|"NO"
     plot_id=None,     # cadastral id / reference / designation
     address=None,     # free-form address (geocoded)
     x=None, y=None,   # lon/lat coordinates (EPSG:4326)
@@ -63,6 +63,7 @@ The remaining attributes depend on `country` and come from the matching class in
 | `Slovenia` | `ko_code`, `ko_name`, `municipality`, `parcel_number` |
 | `Italy` | `comune_code`, `foglio`, `particella` |
 | `Germany` | `land`, `gemarkung`, `flur`, `parcel_number` |
+| `Norway` | `municipality`, `municipality_code`, `gnr`, `bnr` |
 
 They are exposed **flat** on the plot and included in `model_dump()`:
 
@@ -101,3 +102,4 @@ the computed `area` / `centroid` / `bbox`.
 | `GURSError` | Slovenia (GURS / e-prostor) |
 | `AdEError` | Italy (Agenzia delle Entrate) |
 | `ALKISError` | Germany (state ALKIS services) |
+| `KartverketError` | Norway (Kartverket / Matrikkelen) |

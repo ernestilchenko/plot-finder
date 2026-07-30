@@ -36,6 +36,7 @@ EPSG:4326 by default (set `srid=` for another output CRS).
 | [Slovenia](slovenia.md) 🇸🇮 | `"SI"` | `Slovenia` | [GURS (e-prostor)](https://www.e-prostor.gov.si/) | lon/lat (EPSG:4326) |
 | [Italy](italy.md) 🇮🇹 | `"IT"` | `Italy` | [Agenzia delle Entrate](https://www.agenziaentrate.gov.it/) | lon/lat (EPSG:4326) |
 | [Germany](germany.md) 🇩🇪 | `"DE"` | `Germany` | state ALKIS / INSPIRE (10 states) | lon/lat (EPSG:4326) |
+| [Norway](norway.md) 🇳🇴 | `"NO"` | `Norway` | [Kartverket (Matrikkelen)](https://www.geonorge.no/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -125,6 +126,7 @@ from plot_finder import (
     GURSError,             # Slovenia (GURS) API failure
     AdEError,              # Italy (Agenzia delle Entrate) API failure
     ALKISError,            # Germany (state ALKIS) API failure
+    KartverketError,       # Norway (Kartverket) API failure
 )
 ```
 

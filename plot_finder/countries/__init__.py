@@ -6,6 +6,7 @@ from plot_finder.countries.italy import Italy
 from plot_finder.countries.latvia import Latvia
 from plot_finder.countries.lithuania import Lithuania
 from plot_finder.countries.netherlands import Netherlands
+from plot_finder.countries.norway import Norway
 from plot_finder.countries.poland import Poland
 from plot_finder.countries.portugal import Portugal
 from plot_finder.countries.slovenia import Slovenia
@@ -16,7 +17,7 @@ REGISTRY = {
     c.code: c
     for c in (
         Poland, France, Spain, Netherlands, Switzerland,
-        Estonia, Cyprus, Lithuania, Latvia, Portugal, Slovenia, Italy, Germany,
+        Estonia, Cyprus, Lithuania, Latvia, Portugal, Slovenia, Italy, Germany, Norway,
     )
 }
 
@@ -34,5 +35,6 @@ __all__ = [
     "Slovenia",
     "Italy",
     "Germany",
+    "Norway",
     "REGISTRY",
 ]

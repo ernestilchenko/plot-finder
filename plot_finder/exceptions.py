@@ -50,6 +50,10 @@ class ALKISError(Exception):
     """Base error for the German state ALKIS (Liegenschaftskataster) services."""
 
 
+class KartverketError(Exception):
+    """Base error for the Norwegian Kartverket (Matrikkelen) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 
