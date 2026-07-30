@@ -37,6 +37,8 @@ EPSG:4326 by default (set `srid=` for another output CRS).
 | [Italy](italy.md) 🇮🇹 | `"IT"` | `Italy` | [Agenzia delle Entrate](https://www.agenziaentrate.gov.it/) | lon/lat (EPSG:4326) |
 | [Germany](germany.md) 🇩🇪 | `"DE"` | `Germany` | state ALKIS / INSPIRE (10 states) | lon/lat (EPSG:4326) |
 | [Norway](norway.md) 🇳🇴 | `"NO"` | `Norway` | [Kartverket (Matrikkelen)](https://www.geonorge.no/) | lon/lat (EPSG:4326) |
+| [Denmark](denmark.md) 🇩🇰 | `"DK"` | `Denmark` | [DAWA / SDFI (Matriklen)](https://dawadocs.dataforsyningen.dk/) | lon/lat (EPSG:4326) |
+| [Belgium](belgium.md) 🇧🇪 | `"BE"` | `Belgium` | [FPS Finance CadGIS](https://finances.belgium.be/) | lon/lat (EPSG:4326) |
 
 ## Installation
 
@@ -127,6 +129,8 @@ from plot_finder import (
     AdEError,              # Italy (Agenzia delle Entrate) API failure
     ALKISError,            # Germany (state ALKIS) API failure
     KartverketError,       # Norway (Kartverket) API failure
+    DAWAError,             # Denmark (DAWA / SDFI) API failure
+    CadGISError,           # Belgium (FPS Finance CadGIS) API failure
 )
 ```
 

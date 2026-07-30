@@ -55,6 +55,8 @@ plot.datasource    # which cadastre answered
 | [🇮🇹 Italy](#-italy) | — | ✓ | ✓ | excl. Trento & Bolzano |
 | [🇩🇪 Germany](#-germany) | — | ✓ | ✓ | 10 of 16 states |
 | [🇳🇴 Norway](#-norway) | ✓ | ✓ | ✓ | |
+| [🇩🇰 Denmark](#-denmark) | ✓ | ✓ | ✓ | |
+| [🇧🇪 Belgium](#-belgium) | ✓ | ✓ | ✓ | |
 
 <br>
 
@@ -268,6 +270,36 @@ plot = Plot(country="NO", x=10.7330, y=59.9116)
 plot = Plot(country="NO", address="Karl Johans gate 1, Oslo")
 
 print(plot.municipality, plot.gnr, plot.bnr, plot.area)
+```
+
+</details>
+
+<details id="-denmark">
+<summary><b>🇩🇰 Denmark</b></summary>
+
+Attributes: `municipality`, `ejerlav`, `matrikelnr`
+
+```python
+plot = Plot(country="DK", plot_id="2000179-7000q")   # ejerlavkode-matrikelnr
+plot = Plot(country="DK", x=12.5683, y=55.6761)
+plot = Plot(country="DK", address="Rådhuspladsen 1, København")
+
+print(plot.municipality, plot.ejerlav, plot.matrikelnr, plot.area)
+```
+
+</details>
+
+<details id="-belgium">
+<summary><b>🇧🇪 Belgium</b></summary>
+
+Attributes: `nis_code`, `section`, `parcel_number`
+
+```python
+plot = Plot(country="BE", plot_id="41009A0063/00D000")   # capakey
+plot = Plot(country="BE", x=4.40262, y=51.21945)
+plot = Plot(country="BE", address="Grote Markt 1, Antwerpen")
+
+print(plot.nis_code, plot.section, plot.parcel_number, plot.area)
 ```
 
 </details>

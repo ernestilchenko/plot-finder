@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plot-finder"
-version = "1.10.0"
-description = "Find land parcels in Poland, France, Spain, Netherlands, Switzerland, Estonia, Cyprus, Lithuania, Latvia, Portugal, Slovenia, Italy, Germany and Norway by id, address or coordinates"
+version = "1.11.0"
+description = "Find land parcels across 16 European countries (PL, FR, ES, NL, CH, EE, CY, LT, LV, PT, SI, IT, DE, NO, DK, BE) by id, address or coordinates"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
     { name = "Ernest Ilchenko" },
 ]
-keywords = ["cadastre", "parcel", "plot", "geodesy", "poland", "france", "spain", "netherlands", "switzerland", "estonia", "cyprus", "lithuania", "latvia", "portugal", "slovenia", "italy", "germany", "norway", "uldk", "ign", "catastro", "kadaster", "swisstopo", "alkis"]
+keywords = ["cadastre", "parcel", "plot", "geodesy", "poland", "france", "spain", "netherlands", "switzerland", "estonia", "cyprus", "lithuania", "latvia", "portugal", "slovenia", "italy", "germany", "norway", "denmark", "belgium", "uldk", "ign", "catastro", "kadaster", "swisstopo", "alkis", "dawa", "cadgis"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",

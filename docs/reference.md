@@ -8,7 +8,7 @@ geometry and attributes.
 
 ```python
 Plot(
-    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"|"DE"|"NO"
+    country,          # required: "PL"|"FR"|"ES"|"NL"|"CH"|"EE"|"CY"|"LT"|"LV"|"PT"|"SI"|"IT"|"DE"|"NO"|"DK"|"BE"
     plot_id=None,     # cadastral id / reference / designation
     address=None,     # free-form address (geocoded)
     x=None, y=None,   # lon/lat coordinates (EPSG:4326)
@@ -64,6 +64,8 @@ The remaining attributes depend on `country` and come from the matching class in
 | `Italy` | `comune_code`, `foglio`, `particella` |
 | `Germany` | `land`, `gemarkung`, `flur`, `parcel_number` |
 | `Norway` | `municipality`, `municipality_code`, `gnr`, `bnr` |
+| `Denmark` | `municipality`, `ejerlav`, `matrikelnr` |
+| `Belgium` | `nis_code`, `section`, `parcel_number` |
 
 They are exposed **flat** on the plot and included in `model_dump()`:
 
@@ -103,3 +105,5 @@ the computed `area` / `centroid` / `bbox`.
 | `AdEError` | Italy (Agenzia delle Entrate) |
 | `ALKISError` | Germany (state ALKIS services) |
 | `KartverketError` | Norway (Kartverket / Matrikkelen) |
+| `DAWAError` | Denmark (DAWA / SDFI) |
+| `CadGISError` | Belgium (FPS Finance CadGIS) |

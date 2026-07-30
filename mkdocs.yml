@@ -54,6 +54,8 @@ nav:
       - Italy: italy.md
       - Germany: germany.md
       - Norway: norway.md
+      - Denmark: denmark.md
+      - Belgium: belgium.md
   - Reference:
       - The Plot object: reference.md
 
@@ -73,7 +75,7 @@ markdown_extensions:
       permalink: true
 
 extra:
-  version: "1.10.0"
+  version: "1.11.0"
 
 plugins:
   - search

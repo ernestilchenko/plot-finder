@@ -27,7 +27,7 @@ class Plot(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    country: Literal["PL", "FR", "ES", "NL", "CH", "EE", "CY", "LT", "LV", "PT", "SI", "IT", "DE", "NO"]
+    country: Literal["PL", "FR", "ES", "NL", "CH", "EE", "CY", "LT", "LV", "PT", "SI", "IT", "DE", "NO", "DK", "BE"]
     plot_id: str | None = None
     address: str | None = None
     x: float | None = None

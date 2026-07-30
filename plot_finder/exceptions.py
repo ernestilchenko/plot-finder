@@ -54,6 +54,14 @@ class KartverketError(Exception):
     """Base error for the Norwegian Kartverket (Matrikkelen) API."""
 
 
+class DAWAError(Exception):
+    """Base error for the Danish DAWA / SDFI (Matriklen) API."""
+
+
+class CadGISError(Exception):
+    """Base error for the Belgian FPS Finance CadGIS (INSPIRE) API."""
+
+
 class PlotNotFoundError(Exception):
     """Raised when no parcel is found for the given query."""
 
