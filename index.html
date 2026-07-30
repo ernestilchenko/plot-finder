@@ -207,7 +207,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.10.0</li>
+        <li class="md-source__fact md-source__fact--version">v1.11.0</li>
       </ul>
     
   </div>
@@ -258,7 +258,7 @@
     ernestilchenko/plot-finder
     
       <ul class="md-source__facts">
-        <li class="md-source__fact md-source__fact--version">v1.10.0</li>
+        <li class="md-source__fact md-source__fact--version">v1.11.0</li>
       </ul>
     
   </div>
@@ -875,6 +875,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="denmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Denmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="belgium/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Belgium
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1232,6 +1288,20 @@ EPSG:4326 by default (set <code>srid=</code> for another output CRS).</p>
 <td><a href="https://www.geonorge.no/">Kartverket (Matrikkelen)</a></td>
 <td>lon/lat (EPSG:4326)</td>
 </tr>
+<tr>
+<td><a href="denmark/">Denmark</a> 🇩🇰</td>
+<td><code>"DK"</code></td>
+<td><code>Denmark</code></td>
+<td><a href="https://dawadocs.dataforsyningen.dk/">DAWA / SDFI (Matriklen)</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
+<tr>
+<td><a href="belgium/">Belgium</a> 🇧🇪</td>
+<td><code>"BE"</code></td>
+<td><code>Belgium</code></td>
+<td><a href="https://finances.belgium.be/">FPS Finance CadGIS</a></td>
+<td>lon/lat (EPSG:4326)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
@@ -1322,7 +1392,9 @@ returned as <code>geojson</code> in EPSG:4326 by default; set <code>srid</code> 
 <a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">AdEError</span><span class="p">,</span>              <span class="c1"># Italy (Agenzia delle Entrate) API failure</span>
 <a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="n">ALKISError</span><span class="p">,</span>            <span class="c1"># Germany (state ALKIS) API failure</span>
 <a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">KartverketError</span><span class="p">,</span>       <span class="c1"># Norway (Kartverket) API failure</span>
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="p">)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>    <span class="n">DAWAError</span><span class="p">,</span>             <span class="c1"># Denmark (DAWA / SDFI) API failure</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>    <span class="n">CadGISError</span><span class="p">,</span>           <span class="c1"># Belgium (FPS Finance CadGIS) API failure</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="p">)</span>
 </code></pre></div>
 <p>See the <a href="reference/">reference</a> for the full field list and model details.</p>
 
@@ -1380,7 +1452,7 @@ returned as <code>geojson</code> in EPSG:4326 by default; set <code>srid</code> 
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.10.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "1.11.0"}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
